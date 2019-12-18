@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Corp.Integration.AppService.EpOffRampServiceBC.WcfMessagingService" CodeBehind="WcfMessagingService.svc.cs" %>
