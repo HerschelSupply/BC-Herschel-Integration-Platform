@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BC_API_Calls</RootNamespace>
-    <AssemblyName>BC_API_Calls</AssemblyName>
+    <RootNamespace>BC.Integration.APICalls</RootNamespace>
+    <AssemblyName>BC.Integration.APICalls</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -136,9 +136,7 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-copy /y bin\debug\*.dll "C:\HIP Herschel Integration Platform\0.DLL Bin"
-
-"%25ProgramFiles%25\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\gacutil.exe" /i "$(TargetPath)"</PostBuildEvent>
+copy /y bin\debug\*.dll "C:\BC Herschel Integration Platform\0.DLL Bin"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

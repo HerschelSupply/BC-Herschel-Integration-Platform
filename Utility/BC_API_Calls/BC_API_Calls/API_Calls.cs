@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using Corp.Integration.Interfaces;
 
-namespace BC_API_Calls
+namespace BC.Integration.APICalls
 {
     public class API_Calls
     {
