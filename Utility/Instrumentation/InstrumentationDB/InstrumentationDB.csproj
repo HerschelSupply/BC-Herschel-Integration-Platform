@@ -81,8 +81,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-copy /y bin\debug\*.dll "C:\BC Herschel Integration Platform\0.DLL Bin"
-
-"%25ProgramFiles%25\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\gacutil.exe" /i "$(TargetPath)"</PostBuildEvent>
+copy /y bin\debug\*.dll "C:\BC Herschel Integration Platform\0.DLL Bin"</PostBuildEvent>
   </PropertyGroup>
 </Project>

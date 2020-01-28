@@ -24,7 +24,7 @@ namespace BC.Integration.Utility
         #endregion
 
         /// <summary>
-        /// Class constructor used to pass configuration data.
+        /// Class constructor used to pass configuration data.BC.Integration.MsgEnvelope.dll
         /// </summary>
         /// <param name="configuration">Collection of configuration data needed to connect to and manage the database interaction.</param>
         public AuroraConnector (List<KeyValuePair<string, string>> configuration)
@@ -574,9 +574,9 @@ namespace BC.Integration.Utility
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("Exception occured trying to connect to the DB Corp.Integration.Utility.AuroraConnector.ExecuteNonQuery");
+                Trace.WriteLine("Exception occured trying to connect to the DB BC.Integration.Utility.AuroraConnector.ExecuteNonQuery");
                 if (retryExceptions == null)
-                    retryExceptions = new Exception("Error tring to insert data into the DB (Corp.Integration.Utility.AuroraConnector.ExecuteNonQuery)", ex);
+                    retryExceptions = new Exception("Error tring to insert data into the DB (BC.Integration.Utility.AuroraConnector.ExecuteNonQuery)", ex);
                 else
                     retryExceptions = new Exception(ex.Message, retryExceptions);
                 rowcount = 0;
@@ -605,7 +605,7 @@ namespace BC.Integration.Utility
             catch (Exception ex)
             {
                 
-                Trace.WriteLineIf(tracingEnabled, "Exception occured trying to connect to the DB 'Corp.Integration.Utility.AuroraConnector.ExistsExecuteScalar'");
+                Trace.WriteLineIf(tracingEnabled, "Exception occured trying to connect to the DB 'BC.Integration.Utility.AuroraConnector.ExistsExecuteScalar'");
                 if (retryExceptions == null)
                     retryExceptions = new Exception("Error tring to insert data into the DB", ex);
                 else
