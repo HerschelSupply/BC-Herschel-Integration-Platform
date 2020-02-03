@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="a25204f6-2c03-495b-8eba-da48262f4fc4" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:51715/SalesDocOffRamp.xamlx" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="SalesDocOffRamp.xsd" MetadataType="Schema" ID="6d3cefe0-8dc7-45a9-9209-2b9ba5111185" SourceId="1" SourceUrl="http://localhost:51715/SalesDocOffRamp.xamlx?xsd=xsd0" />
+    <MetadataFile FileName="SalesDocOffRamp.wsdl" MetadataType="Wsdl" ID="f55283a4-17c4-4190-a001-b0d9c61e68a7" SourceId="1" SourceUrl="http://localhost:51715/SalesDocOffRamp.xamlx?wsdl" />
+    <MetadataFile FileName="SalesDocOffRamp.disco" MetadataType="Disco" ID="c7fa477f-ad58-4f44-af7c-78495e6df206" SourceId="1" SourceUrl="http://localhost:51715/SalesDocOffRamp.xamlx?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

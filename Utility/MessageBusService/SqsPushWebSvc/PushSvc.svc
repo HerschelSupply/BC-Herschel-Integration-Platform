@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Corp.Integration.Utility.SqsPushWebSvc.PushSvc" CodeBehind="PushSvc.svc.cs" %>
