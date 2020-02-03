@@ -10,7 +10,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using Corp.Integration.Interfaces;
+using BC.Integration.Interfaces;
 
 namespace BC.Integration.APICalls
 {
@@ -69,7 +69,7 @@ namespace BC.Integration.APICalls
                     if (errors.HasValues)
                     {
                         //return "";
-                        throw new Exception("The UPC was not found. BlueCherry Corp.Integration.Utility.BC_API_Calls.GetUPC");
+                        throw new Exception("The UPC was not found. BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC");
                     }
 
                     JArray data = (JArray)jObj.SelectToken("data");
@@ -82,8 +82,8 @@ namespace BC.Integration.APICalls
             catch (WebException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the UPC value from BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to get the UPC value from BlueCherry Corp.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
-                throw new Exception("An exception occured trying to get the UPC value from BlueCherry Corp.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
+                instrumentation.LogGeneralException("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
+                throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
             }
         } 
 
@@ -140,8 +140,8 @@ namespace BC.Integration.APICalls
             catch (WebException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to validate if an order exists in BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to validate if an order exists in BlueCherry Corp.Integration.Utility.BC_API_Calls.OrderExists. ", ex);
-                throw new Exception("An exception occured trying to validate if an order exists in BlueCherry Corp.Integration.Utility.BC_API_Calls.OrderExists. ", ex);
+                instrumentation.LogGeneralException("An exception occured trying to validate if an order exists in BlueCherry BC.Integration.Utility.BC_API_Calls.OrderExists. ", ex);
+                throw new Exception("An exception occured trying to validate if an order exists in BlueCherry BC.Integration.Utility.BC_API_Calls.OrderExists. ", ex);
 
             }
         }
@@ -169,7 +169,7 @@ namespace BC.Integration.APICalls
             if (OrderExists(po_num))
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to post an order into BlueCherry");
-                throw new Exception("An exception occured trying to post an order into BlueCherry Corp.Integration.Utility.BC_API_Calls. The PO_Number:" + po_num + " already exists in BC.");
+                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls. The PO_Number:" + po_num + " already exists in BC.");
             }
             else
             {
@@ -220,8 +220,8 @@ namespace BC.Integration.APICalls
                 catch (WebException ex)
                 {
                     Trace.WriteLine("BC_API_Calls: Exception occured trying to post an order into BlueCherry");
-                    instrumentation.LogGeneralException("An exception occured trying to post an order into BlueCherry Corp.Integration.Utility.BC_API_Calls.Post.", ex);
-                    throw new Exception("An exception occured trying to post an order into BlueCherry Corp.Integration.Utility.BC_API_Calls.Post.", ex);
+                    instrumentation.LogGeneralException("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
+                    throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
 
                 }
             }
@@ -246,7 +246,7 @@ namespace BC.Integration.APICalls
             /*if (OrderExists(po_num))
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to post a shipment confirmation into BlueCherry");
-                throw new Exception("An exception occured trying to post an order into BlueCherry Corp.Integration.Utility.BC_API_Calls. The PO_Number:" + po_num + " already exists in BC.");
+                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls. The PO_Number:" + po_num + " already exists in BC.");
             }
             else
             {*/
@@ -297,8 +297,8 @@ namespace BC.Integration.APICalls
                 catch (WebException ex)
                 {
                     Trace.WriteLine("BC_API_Calls: Exception occured trying to post a shipment confirmation into BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to post an order into BlueCherry Corp.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
-                throw new Exception("An exception occured trying to post an order into BlueCherry Corp.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
+                instrumentation.LogGeneralException("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
+                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
 
                 }
             //}
