@@ -4,21 +4,22 @@ using System.Diagnostics;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 using System.Configuration;
-using Corp.Integration.Interfaces;
-using Corp.Integration.Utility;
+using BC.Integration.Interfaces;
+using BC.Integration.Utility;
 using System.Xml;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
-using Corp.Integration.Canonical.SaleChannelOrder;
+using BC.Integration.Canonical.SaleChannelOrder;
 using System.Data.SqlClient;
 using System.Data;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using BC_API_Calls;
+using BC.Integration.Canonical.SaleChannelOrder.New;
 
-namespace Corp.Integration.AppService.EpOnRampServiceBC
+namespace BC.Integration.AppService.EpOnRampServiceBC
 {
     public class Process
     {
@@ -138,7 +139,7 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
         #endregion
 
         /// <summary>
-        /// Process Data is the main method in the Corp.Integration.AppService.EpOnRampServiceBC class.  It implements the following steps;
+        /// Process Data is the main method in the BC.Integration.AppService.EpOnRampServiceBC class.  It implements the following steps;
         /// -Resolves the Unity DI classes.
         /// -Overrides local property setting with the central configuration using the IConfiguration component.
         /// -Connect to the source system and checks to see if there are available files
@@ -192,7 +193,7 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process BC data from EP_Integratios database. (Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method)", ex);
+                            throw new Exception("An Exception occurred while trying to retrieve and process BC data from EP_Integratios database. (BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method)", ex);
                         }
                     }
                     else
@@ -212,7 +213,7 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process Tigers Local Sales files. (Corp.Integration.AppService.GPSalesOrderSvc.Process.ProcessData method)" + ex.ToString(), ex);
+                            throw new Exception("An Exception occurred while trying to retrieve and process Tigers Local Sales files. (BC.Integration.AppService.GPSalesOrderSvc.Process.ProcessData method)" + ex.ToString(), ex);
                         }
 
                     }
@@ -224,8 +225,8 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
                 }
                 catch (Exception ex)
                 {
-                    Trace.WriteLine(tracingExceptionPrefix + "An exception was raised when calling the Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method. Exception message: " + ex.Message);
-                    instrumentation.LogGeneralException("An exception was raised when calling the Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method.", ex);
+                    Trace.WriteLine(tracingExceptionPrefix + "An exception was raised when calling the BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method. Exception message: " + ex.Message);
+                    instrumentation.LogGeneralException("An exception was raised when calling the BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method.", ex);
                 }
                 finally
                 {
@@ -236,8 +237,8 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
             catch (Exception ex)
             {
                 //Since the implementation of DI raised the exception we can not log the exception using the instrumentation component.
-                Trace.WriteLine(tracingExceptionPrefix + "An exception was raised when calling the Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method trying to resolve the Unity DI components. Exception message: " + ex.Message);
-                throw new Exception("An exception occured in the Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method trying to resolve the Unity DI components.", ex);
+                Trace.WriteLine(tracingExceptionPrefix + "An exception was raised when calling the BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method trying to resolve the Unity DI components. Exception message: " + ex.Message);
+                throw new Exception("An exception occured in the BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessData method trying to resolve the Unity DI components.", ex);
             }
         }
 
@@ -246,14 +247,14 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
         private void ProcessEConnectXML(string data, string activationGuid)
         {
             String docId = "";
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  Start Processing File.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  Start Processing File.");
             //Create initial msg envelope to represent the start of the service process and call Instrumenation
             XmlDocument msg = msgMgr.CreateOnRampMessage(processName, serviceId, serviceVersion, serviceOperationId, msgType, messageVersion, messageFormat, batchName);
             instrumentation.LogActivity(msg);
             //Log Activation Association with Interchange
             instrumentation.AssociateActivationWithInterchages(new Guid(activationGuid.Substring(0, 36)), msgMgr.EntryPointEnvelope.Interchange.InterchangeId);
             
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Corp.Integration.AppService.EpOnRampServiceBC.ProcessData.  Convert XML message to an object.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpOnRampServiceBC.ProcessData.  Convert XML message to an object.");
             try
             {
                  using (TextReader sr = new StringReader(data))
@@ -303,9 +304,9 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
             }
             catch (Exception ex)
             {
-                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  The creation of the canonical message failed. The message wasn't sent to the queue. DocumentId: " + docId + " Exception message: " + ex.Message);
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  The creation of the canonical message failed. The message wasn't sent to the queue. DocumentId: " + docId + " Exception message: " + ex.Message);
                 instrumentation.LogGeneralException("An exception occured while processing a message in the " +
-                "Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId + " The current XML message processed is - " + data
+                "BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId + " The current XML message processed is - " + data
                  , ex);
 
                 //Notification Log entry...
@@ -328,14 +329,14 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
         private void ProcessXML(string data, string activationGuid)
         {
             String docId = "";
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  Start Processing File.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  Start Processing File.");
             //Create initial msg envelope to represent the start of the service process and call Instrumenation
             XmlDocument msg = msgMgr.CreateOnRampMessage(processName, serviceId, serviceVersion, serviceOperationId, msgType, messageVersion, messageFormat, batchName);
             instrumentation.LogActivity(msg);
             //Log Activation Association with Interchange
             instrumentation.AssociateActivationWithInterchages(new Guid(activationGuid.Substring(0, 36)), msgMgr.EntryPointEnvelope.Interchange.InterchangeId);
 
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Corp.Integration.AppService.EpOnRampServiceBC.ProcessData.  Convert XML message to an object.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpOnRampServiceBC.ProcessData.  Convert XML message to an object.");
             try
             {
                 using (TextReader sr = new StringReader(data))
@@ -410,9 +411,9 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
             }
             catch (Exception ex)
             {
-                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  The creation of the canonical message failed. The message wasn't sent to the queue. DocumentId: " + docId + " Exception message: " + ex.Message);
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  The creation of the canonical message failed. The message wasn't sent to the queue. DocumentId: " + docId + " Exception message: " + ex.Message);
                 instrumentation.LogGeneralException("An exception occured while processing a message in the " +
-                "Corp.Integration.AppService.EpOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId + " The current XML message processed is - " + data
+                "BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId + " The current XML message processed is - " + data
                  , ex);
 
                 //Notification Log entry...
@@ -432,7 +433,7 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
 
         }
         /// <summary>
-        /// Map sales order data from eConnect XML to Canonical message from this dll 'Corp.Integration.Canonical.SalesChannelOrder'
+        /// Map sales order data from eConnect XML to Canonical message from this dll 'BC.Integration.Canonical.SalesChannelOrder'
         /// </summary>
         /// <param name="salesOrder"></param>
         /// <returns></returns>
@@ -572,13 +573,13 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
 
                 Trace.WriteLine(tracingExceptionPrefix + " An error occured while trying to map the EP batch message to the SalesChannelOrder message in MapSalesOrdersToCanonical()");
                 throw new Exception("An error occured while trying to map the EP sales order batch message to the SalesChannelOrder message" +
-                    "in the Corp.Integration.AppService.EpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
+                    "in the BC.Integration.AppService.EpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
                     "number is: " + salesOrder.SOPTransactionType.TaSopHdrIvcInsert.SOPNUMBE, ex);
             }
         }
 
         /// <summary>
-        /// Maps new sales order data from JMS to Canonical message from this dll 'Corp.Integration.Canonical.SalesChannelOrder'
+        /// Maps new sales order data from JMS to Canonical message from this dll 'BC.Integration.Canonical.SalesChannelOrder'
         /// Order = CanonicalSalesChannelOrder,  NewOrder.Order = JMS Object
         /// </summary>
         /// <param name="salesOrder"></param>
@@ -692,7 +693,7 @@ namespace Corp.Integration.AppService.EpOnRampServiceBC
             {
                 Trace.WriteLine(tracingExceptionPrefix + " An error occured while trying to map the EP batch message to the SalesChannelOrder message in MapSalesOrdersToCanonical()");
                 throw new Exception("An error occured while trying to map the EP sales order batch message to the SalesChannelOrder message" +
-                    "in the Corp.Integration.AppService.EpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
+                    "in the BC.Integration.AppService.EpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
                     "number is: " + salesOrder.Header.OrderNumber, ex);
             }
         }

@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 /*IncomingXML - [ep_ImportedOrders_BC]*/
 
-namespace Corp.Integration.AppService.EpOnRampServiceBC
+namespace BC.Integration.AppService.EpOnRampServiceBC
 {
 
     [XmlRoot(ElementName = "Header")]

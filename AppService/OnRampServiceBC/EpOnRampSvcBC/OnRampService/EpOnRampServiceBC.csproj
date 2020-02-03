@@ -10,8 +10,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Corp.Integration.AppService.EpOnRampServiceBC</RootNamespace>
-    <AssemblyName>Corp.Integration.AppService.EpOnRampServiceBC</AssemblyName>
+    <RootNamespace>BC.Integration.AppService.EpOnRampServiceBC</RootNamespace>
+    <AssemblyName>BC.Integration.AppService.EpOnRampServiceBC</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,42 +43,42 @@
   <ItemGroup>
     <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\AWSSDK.Core.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\AWSSDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="AWSSDK.SQS, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\AWSSDK.SQS.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\AWSSDK.SQS.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Canonical.SalesChannelOrder.New">
+      <HintPath>..\..\..\..\0.DLL Bin\BC.Integration.Canonical.SalesChannelOrder.New.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\0.DLL Bin\BC.Integration.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.MsgEnvelope">
+      <HintPath>..\..\..\..\0.DLL Bin\BC.Integration.MsgEnvelope.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\0.DLL Bin\BC.Integration.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="BC_API_Calls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\0.DLL Bin\BC_API_Calls.dll</HintPath>
     </Reference>
-    <Reference Include="Corp.Integration.Canonical.SalesChannelOrder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Corp.Integration.Canonical.SalesChannelOrder.dll</HintPath>
-    </Reference>
-    <Reference Include="Corp.Integration.Interfaces">
-      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Corp.Integration.MsgEnvelope">
-      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.MsgEnvelope.dll</HintPath>
-    </Reference>
-    <Reference Include="Corp.Integration.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.Utilities.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

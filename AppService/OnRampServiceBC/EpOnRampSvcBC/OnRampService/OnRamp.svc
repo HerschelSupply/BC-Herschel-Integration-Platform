@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Corp.Integration.AppService.EpOnRampServiceBC.OnRamp" CodeBehind="OnRamp.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="BC.Integration.AppService.EpOnRampServiceBC.OnRamp" CodeBehind="OnRamp.svc.cs" %>

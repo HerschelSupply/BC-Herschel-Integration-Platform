@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using System.Linq;
 using System.Web;
 
-namespace Corp.Integration.AppService.EpOnRampServiceBC
+namespace BC.Integration.AppService.EpOnRampServiceBC
 {
         [XmlRoot(ElementName = "taCreateCustomerAddress")]
         public class TaCreateCustomerAddress
