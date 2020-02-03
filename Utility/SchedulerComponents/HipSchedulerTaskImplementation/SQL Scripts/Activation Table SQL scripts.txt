@@ -1,0 +1,94 @@
+﻿CREATE TABLE `ActivationLog` (
+  `ServiceActivationId` int(11) NOT NULL AUTO_INCREMENT,
+  `ActivationGuid` varchar(40) NOT NULL,
+  `Server` varchar(45) DEFAULT NULL,
+  `IsBlocked` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'IsBlocked identifies when an activation happens but the queue or source is already being processed on the server so that the activation is blocked.',
+  `Service` varchar(45) DEFAULT NULL,
+  `StartTimeStamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `EndTimeStamp` datetime DEFAULT NULL COMMENT 'This field will be null if an exception occurs during processing unless multiple interchanges will be associated with the activation.',
+  PRIMARY KEY (`ServiceActivationId`),
+  UNIQUE KEY `ServiceActivationId_UNIQUE` (`ServiceActivationId`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1 COMMENT='Tracks the activation of services even if it doesn''t result in messages being processed.'
+
+
+CREATE TABLE `ActivationInterchangeJoin` (
+  `ActivationInterchangeId` int(11) NOT NULL AUTO_INCREMENT,
+  `ActivationGuid` varchar(40) NOT NULL,
+  `InterchangeGuid` varchar(40) NOT NULL,
+  PRIMARY KEY (`ActivationInterchangeId`),
+  UNIQUE KEY `ActivationInterchangeId_UNIQUE` (`ActivationInterchangeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1 COMMENT='Allows the sevice activations to be accosiated with the interchanges that the activation generated.'
+
+
+
+CREATE DEFINER=`Martin`@`%` PROCEDURE `ActivationLogInsert`(activationGuid varchar(40),
+										serverName varchar(45),
+										service varchar(45),
+										isBlocked tinyint(1))
+BEGIN
+
+INSERT INTO `HipMgmt`.`ActivationLog`
+(`ActivationGuid`,
+`Server`,
+`Service`,
+`IsBlocked`)
+VALUES
+(activationGuid,
+serverName,
+service,
+isBlocked);
+
+END
+
+
+
+CREATE DEFINER=`Martin`@`%` PROCEDURE `ActivationLogEndUpdate`(activationGuid varchar(40))
+BEGIN
+
+UPDATE `HipMgmt`.`ActivationLog`
+SET
+`ActivationLog`.`EndTimeStamp` = CURRENT_TIMESTAMP
+WHERE (`ActivationLog`.`ActivationGuid` = activationGuid);
+
+END
+
+
+
+CREATE DEFINER=`Martin`@`%` PROCEDURE `ActivationInterchangeJoinInsert`(activationGuid varchar(40),
+													interchangeGuid varchar(40))
+BEGIN
+
+INSERT INTO `HipMgmt`.`ActivationInterchangeJoin`
+(`ActivationGuid`,
+`InterchangeGuid`)
+VALUES
+(activationGuid,
+interchangeGuid);
+
+END
+
+
+CREATE DEFINER=`Martin`@`%` PROCEDURE `ActivationStatus`(activationGuid varchar(40))
+BEGIN
+
+DECLARE ActivationStatus varchar(30);
+
+SET @ActivationCount = (SELECT Count(`ActivationLog`.`ServiceActivationId`)
+					FROM `HipMgmt`.`ActivationLog`
+					WHERE `ActivationLog`.`ActivationGuid` = activationGuid);
+                    
+IF @ActivationCount = 0 THEN SET ActivationStatus = 'Activation Failed';
+
+ELSEIF @ActivationCount > 1 THEN SET ActivationStatus = 'Multiple Activations';
+
+ELSEIF (SELECT `ActivationLog`.`EndTimeStamp`
+		FROM `HipMgmt`.`ActivationLog`
+		WHERE `ActivationLog`.`ActivationGuid` = activationGuid) IS null THEN SET ActivationStatus = 'Running';
+
+ELSE SET ActivationStatus = 'Activation Completed';
+
+END IF;
+
+SELECT ActivationStatus;
+
+END
