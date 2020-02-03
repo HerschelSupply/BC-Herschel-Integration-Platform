@@ -10,8 +10,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Corp.Integration.AppService.EpOffRampServiceBC</RootNamespace>
-    <AssemblyName>Corp.Integration.AppService.EpOffRampServiceBC</AssemblyName>
+    <RootNamespace>BC.Integration.AppService.EpOffRampServiceBC</RootNamespace>
+    <AssemblyName>BC.Integration.AppService.EpOffRampServiceBC</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -41,19 +41,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BC.Integration.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.MsgEnvelope">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.MsgEnvelope.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="BC_API_Calls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\0.DLL Bin\BC_API_Calls.dll</HintPath>
-    </Reference>
-    <Reference Include="Corp.Integration.Interfaces">
-      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Corp.Integration.MsgEnvelope">
-      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.MsgEnvelope.dll</HintPath>
-    </Reference>
-    <Reference Include="Corp.Integration.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity">

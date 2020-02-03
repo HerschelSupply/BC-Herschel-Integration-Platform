@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
-using Corp.Integration.Interfaces;
-using Corp.Integration.Utility;
+using BC.Integration.Interfaces;
+using BC.Integration.Utility;
 using System.Configuration;
 using System.Xml;
 using System.Xml.Xsl;
@@ -20,7 +20,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using BC_API_Calls;
 
-namespace Corp.Integration.AppService.EpOffRampServiceBC
+namespace BC.Integration.AppService.EpOffRampServiceBC
 {
 
     public class ProcessDoc
@@ -150,7 +150,7 @@ namespace Corp.Integration.AppService.EpOffRampServiceBC
                 catch (Exception ex)
                 {
                     Trace.WriteLine(tracingExceptionPrefix + "Occurred: " + ex.Message);
-                    instrumentation.LogGeneralException("Error occurred in the Corp.Integration.AppService.EpOffRampServiceBC.ProcessDoc.Execute method. " +
+                    instrumentation.LogGeneralException("Error occurred in the BC.Integration.AppService.EpOffRampServiceBC.ProcessDoc.Execute method. " +
                         "The processing of the received message caused the component to fail and processing to stop. Message ID: " + msgID, ex);
                      return false;
                 }
@@ -165,7 +165,7 @@ namespace Corp.Integration.AppService.EpOffRampServiceBC
                 Trace.WriteLine(tracingExceptionPrefix + "Occurred: " + ex.Message);
                 //Since the implementation of DI raised the exception we can not log the exception using the instrumentation component.
                 //This would be a configuration error so retrun an exception to calling service.
-                throw new Exception("An exception occurred in the Corp.Integration.AppService.EpOffRampServiceBC.ProcessDoc.Execute method trying to resolve the Unity DI components.  Please check the service configuration.", ex);
+                throw new Exception("An exception occurred in the BC.Integration.AppService.EpOffRampServiceBC.ProcessDoc.Execute method trying to resolve the Unity DI components.  Please check the service configuration.", ex);
             }
 
             return true;
@@ -197,7 +197,7 @@ namespace Corp.Integration.AppService.EpOffRampServiceBC
             }
             catch (Exception ex)
             {
-                throw new Exception("An exception occured implementing the XSLT mapping in the Corp.Integration.AppService.EPOffRampServiceBC.", ex);
+                throw new Exception("An exception occured implementing the XSLT mapping in the BC.Integration.AppService.EPOffRampServiceBC.", ex);
             }
         }
 
@@ -241,8 +241,8 @@ namespace Corp.Integration.AppService.EpOffRampServiceBC
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(tracingPrefix + "An exception occured trying to resolve the XSLT map path in the Corp.Integration.AppService.EpOffRampServiceBC.ProcessDoc.GetXsltMap. Exception message: " + ex.Message);
-                throw new Exception("An exception occured trying to resolve the XSLT map path in the Corp.Integration.AppService.EpOffRampServiceBC.ProcessDoc.GetXsltMap.", ex);
+                Trace.WriteLine(tracingPrefix + "An exception occured trying to resolve the XSLT map path in the BC.Integration.AppService.EpOffRampServiceBC.ProcessDoc.GetXsltMap. Exception message: " + ex.Message);
+                throw new Exception("An exception occured trying to resolve the XSLT map path in the BC.Integration.AppService.EpOffRampServiceBC.ProcessDoc.GetXsltMap.", ex);
             }
         }
 
