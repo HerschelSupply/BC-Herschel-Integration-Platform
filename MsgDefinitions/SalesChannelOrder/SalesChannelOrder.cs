@@ -1375,7 +1375,7 @@ namespace BC.Integration.Canonical.SaleChannelOrder.New
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://Corp.Integration.Schema.ECommerce.SalesChannelOrder.New")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder.New")]
     public partial class OrderDiscounts
     {
         private string discountCodeField;

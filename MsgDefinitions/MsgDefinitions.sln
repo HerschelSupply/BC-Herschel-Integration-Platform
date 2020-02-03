@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesChannelOrder.New", "SalesChannelOrder\SalesChannelOrder.New.csproj", "{8EB07ACF-47A9-49EA-B948-6D754B3C4178}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgEnvelope", "MsgEnvelope\MsgEnvelope.csproj", "{066F61D0-81C1-4283-AAC5-7B3070772F36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanonicalShippingConfirmation.Tigers", "CanonicalShippingConfirmation\CanonicalShippingConfirmation.Tigers.csproj", "{70FA85F5-9301-4663-B569-9AE9F8315A31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{8EB07ACF-47A9-49EA-B948-6D754B3C4178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EB07ACF-47A9-49EA-B948-6D754B3C4178}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EB07ACF-47A9-49EA-B948-6D754B3C4178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{066F61D0-81C1-4283-AAC5-7B3070772F36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066F61D0-81C1-4283-AAC5-7B3070772F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066F61D0-81C1-4283-AAC5-7B3070772F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066F61D0-81C1-4283-AAC5-7B3070772F36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70FA85F5-9301-4663-B569-9AE9F8315A31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70FA85F5-9301-4663-B569-9AE9F8315A31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70FA85F5-9301-4663-B569-9AE9F8315A31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70FA85F5-9301-4663-B569-9AE9F8315A31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
