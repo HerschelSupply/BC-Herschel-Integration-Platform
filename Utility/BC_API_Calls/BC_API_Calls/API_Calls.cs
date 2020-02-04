@@ -69,7 +69,7 @@ namespace BC.Integration.APICalls
                     if (errors.HasValues)
                     {
                         //return "";
-                        throw new Exception("The UPC was not found. BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC");
+                        throw new Exception("The UPC  was not found. Style: "+style+ " Color: " + color + " Size: " + size + ". BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC");
                     }
 
                     JArray data = (JArray)jObj.SelectToken("data");
@@ -211,7 +211,7 @@ namespace BC.Integration.APICalls
                         {
                             errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
                         }
-                        throw new Exception(errorDesc);
+                        throw new Exception(errorDesc + " PO Number: " + po_num);
                     }
 
                     return responseString;
@@ -230,30 +230,27 @@ namespace BC.Integration.APICalls
         /// <summary>
         /// Shipment Confirmation 945 Inbound Endpoint - NOT TESTED YET!!
         /// </summary>
+
         public static string PostShipmentConfirmation(string value)
         {
-            /* Turns orderDetail to an Array, even when there's only one line item.*/
-            value = value.Replace("<orderDetail>", "<orderDetail xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
+             //Turns orderDetail to an Array, even when there's only one line item.
+             value = value.Replace("<pickDetail>", "<pickDetail xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
+            value = value.Replace("<cartonHeader>", "<cartonHeader xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
+            value = value.Replace("<cartonDetail>", "<cartonDetail xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
 
             Uri url = new Uri(ORDERSHIPMENT_Iendpoint);
             XmlDocument doc = new XmlDocument();
 
 
             doc.LoadXml(value);
-            string po_num = doc.DocumentElement.SelectSingleNode("//po_num").InnerText;
+            string pick_num = doc.DocumentElement.SelectSingleNode("//pick_num").InnerText;
 
 
-            /*if (OrderExists(po_num))
-            {
-                Trace.WriteLine("BC_API_Calls: Exception occured trying to post a shipment confirmation into BlueCherry");
-                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls. The PO_Number:" + po_num + " already exists in BC.");
-            }
-            else
-            {*/
+            
 
                 string json = JsonConvert.SerializeXmlNode(doc);
 
-                json = json.Replace("http://_x002E_Schemas.DestinationSchema.BC_InboundOrder", "");
+                json = json.Replace("http://Schemas.DestinationSchema.BC_ShipmentConfirmation", "");
                 json = json.Replace("\"@xmlns:ns0\":\"\",", "");
                 json = json.Replace("{\"ns0:Root\":", "[");
                 json = json.Replace("}}", "}]");
@@ -288,7 +285,7 @@ namespace BC.Integration.APICalls
                         {
                             errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
                         }
-                        throw new Exception(errorDesc);
+                        throw new Exception(errorDesc + " Pick Number: "+ pick_num);
                     }
 
                     return responseString;
@@ -301,9 +298,9 @@ namespace BC.Integration.APICalls
                 throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
 
                 }
-            //}
+           
         }
-
+        
         #endregion
     }
 }
