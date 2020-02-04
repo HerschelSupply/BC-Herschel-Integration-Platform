@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("The Push Web Service provides an access point to initiate the Push exexutable service via the HTTP load balancer.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Herschel Supply Co")]
-[assembly: AssemblyProduct("BC Herschel Integration Platform")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyProduct("Herschel Integration Platform")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

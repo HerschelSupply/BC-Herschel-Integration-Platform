@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BC.Integration.Utility.HipWcfDestinationService {
+namespace Corp.Integration.Utility.HipWcfDestinationService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -23,12 +23,12 @@ namespace BC.Integration.Utility.HipWcfDestinationService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IWcfMessagingServiceChannel : BC.Integration.Utility.HipWcfDestinationService.IWcfMessagingService, System.ServiceModel.IClientChannel {
+    public interface IWcfMessagingServiceChannel : Corp.Integration.Utility.HipWcfDestinationService.IWcfMessagingService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class WcfMessagingServiceClient : System.ServiceModel.ClientBase<BC.Integration.Utility.HipWcfDestinationService.IWcfMessagingService>, BC.Integration.Utility.HipWcfDestinationService.IWcfMessagingService {
+    public partial class WcfMessagingServiceClient : System.ServiceModel.ClientBase<Corp.Integration.Utility.HipWcfDestinationService.IWcfMessagingService>, Corp.Integration.Utility.HipWcfDestinationService.IWcfMessagingService {
         
         public WcfMessagingServiceClient() {
         }

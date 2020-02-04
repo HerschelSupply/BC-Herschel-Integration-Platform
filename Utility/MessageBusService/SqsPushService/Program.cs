@@ -5,15 +5,15 @@ using Microsoft.Practices.Unity.Configuration;
 using System.Configuration;
 using Amazon.SQS;
 using Amazon.SQS.Model;
-using BC.Integration.Interfaces;
-using BC.Integration;
+using Corp.Integration.Interfaces;
+using Corp.Integration;
 using System.Threading;
 using System.Xml;
 using System.ServiceModel;
 using System.Diagnostics;
 using System.Web;
 
-namespace BC.Integration.Utility
+namespace Corp.Integration.Utility
 {
     class Program
     {
@@ -163,7 +163,7 @@ namespace BC.Integration.Utility
                 }
                 catch (Exception ex)
                 {
-                    instrumentation.LogGeneralException("Error occured in the BC.Integration.Utility.SqsPushService.ProcessController method " +
+                    instrumentation.LogGeneralException("Error occured in the Corp.Integration.Utility.SqsPushService.ProcessController method " +
                         "processing messages from the SQS queue that caused the whole component to fail and all message processing to stop.", ex);
                 }
                 finally
@@ -177,7 +177,7 @@ namespace BC.Integration.Utility
             catch (Exception ex)
             {
                 //Since the implementation of DI raised the exception we can not log the exception using the instrumentation component.
-                throw new Exception("An exception occured in the BC.Integration.Utility.SqsPushService ProcessController method trying to resolve the Unity DI components.", ex);
+                throw new Exception("An exception occured in the Corp.Integration.Utility.SqsPushService ProcessController method trying to resolve the Unity DI components.", ex);
             }
         }
 
@@ -245,7 +245,7 @@ namespace BC.Integration.Utility
                     if (!success)
                     {
                         //Log the failure to send but do not block other messages form being processed.
-                        instrumentation.LogMessagingException("An exception was raised calling the BC.Integration.Utility.SqsPushService.ProcessQueues method." +
+                        instrumentation.LogMessagingException("An exception was raised calling the Corp.Integration.Utility.SqsPushService.ProcessQueues method." +
                             "Failed Pass message to destination service.  The message Document ID was " + msgMgr.ReceivedEnvelope.Msg.DocumentId + ".  URL: " + destinationUrl + " after " + serviceRetryCount + " retries with an interval of " + serviceRetryInterval + " seconds.", doc, retryExceptions);
                         Trace.WriteLineIf(tracingEnabled, "Push Service: Failed to pass message to destination service.  URL: " + destinationUrl + ". Exception message: " + retryExceptions.Message);
                     }
@@ -277,7 +277,7 @@ namespace BC.Integration.Utility
                 catch (Exception ex)
                 {
                     Trace.WriteLineIf(tracingEnabled, "Push Service: Logging exception that caused the system to fail.");
-                    instrumentation.LogGeneralException("Error occured in the BC.Integration.Utility.SqsPushService.ProcessQueues method " +
+                    instrumentation.LogGeneralException("Error occured in the Corp.Integration.Utility.SqsPushService.ProcessQueues method " +
                                         "processing a messages from the SQS queue (" + queueName + ") that caused the message to fail. " +
                                         "The SQS message ID on the queue is; " + msgQueueID + ".", ex);
                     //This is to stop the code from going into an infinite loop if the queue does not exist or is unavailable.

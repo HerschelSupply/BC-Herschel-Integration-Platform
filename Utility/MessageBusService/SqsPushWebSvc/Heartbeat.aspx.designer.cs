@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BC.Integration.Utility.SqsPushWebSvc
+namespace Corp.Integration.Utility.SqsPushWebSvc
 {
 
 
