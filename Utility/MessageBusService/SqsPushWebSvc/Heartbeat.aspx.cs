@@ -6,7 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
 
-namespace Corp.Integration.Utility.SqsPushWebSvc
+namespace BC.Integration.Utility.SqsPushWebSvc
 {
     public partial class Heartbeat : System.Web.UI.Page
     {

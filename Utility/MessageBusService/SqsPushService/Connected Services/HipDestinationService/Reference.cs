@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Corp.Integration.Utility.HipDestinationService {
+namespace BC.Integration.Utility.HipDestinationService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -17,10 +17,10 @@ namespace Corp.Integration.Utility.HipDestinationService {
         
         // CODEGEN: Generating message contract since the operation ReceiveMessage is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ReceiveMessage", ReplyAction="http://tempuri.org/IService/ReceiveMessageResponse")]
-        Corp.Integration.Utility.HipDestinationService.ReceiveMessageResponse ReceiveMessage(Corp.Integration.Utility.HipDestinationService.ReceiveMessageRequest request);
+        BC.Integration.Utility.HipDestinationService.ReceiveMessageResponse ReceiveMessage(BC.Integration.Utility.HipDestinationService.ReceiveMessageRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ReceiveMessage", ReplyAction="http://tempuri.org/IService/ReceiveMessageResponse")]
-        System.Threading.Tasks.Task<Corp.Integration.Utility.HipDestinationService.ReceiveMessageResponse> ReceiveMessageAsync(Corp.Integration.Utility.HipDestinationService.ReceiveMessageRequest request);
+        System.Threading.Tasks.Task<BC.Integration.Utility.HipDestinationService.ReceiveMessageResponse> ReceiveMessageAsync(BC.Integration.Utility.HipDestinationService.ReceiveMessageRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -58,12 +58,12 @@ namespace Corp.Integration.Utility.HipDestinationService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IServiceChannel : Corp.Integration.Utility.HipDestinationService.IService, System.ServiceModel.IClientChannel {
+    public interface IServiceChannel : BC.Integration.Utility.HipDestinationService.IService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ServiceClient : System.ServiceModel.ClientBase<Corp.Integration.Utility.HipDestinationService.IService>, Corp.Integration.Utility.HipDestinationService.IService {
+    public partial class ServiceClient : System.ServiceModel.ClientBase<BC.Integration.Utility.HipDestinationService.IService>, BC.Integration.Utility.HipDestinationService.IService {
         
         public ServiceClient() {
         }
@@ -85,26 +85,26 @@ namespace Corp.Integration.Utility.HipDestinationService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        Corp.Integration.Utility.HipDestinationService.ReceiveMessageResponse Corp.Integration.Utility.HipDestinationService.IService.ReceiveMessage(Corp.Integration.Utility.HipDestinationService.ReceiveMessageRequest request) {
+        BC.Integration.Utility.HipDestinationService.ReceiveMessageResponse BC.Integration.Utility.HipDestinationService.IService.ReceiveMessage(BC.Integration.Utility.HipDestinationService.ReceiveMessageRequest request) {
             return base.Channel.ReceiveMessage(request);
         }
         
         public System.Nullable<bool> ReceiveMessage(string @string) {
-            Corp.Integration.Utility.HipDestinationService.ReceiveMessageRequest inValue = new Corp.Integration.Utility.HipDestinationService.ReceiveMessageRequest();
+            BC.Integration.Utility.HipDestinationService.ReceiveMessageRequest inValue = new BC.Integration.Utility.HipDestinationService.ReceiveMessageRequest();
             inValue.@string = @string;
-            Corp.Integration.Utility.HipDestinationService.ReceiveMessageResponse retVal = ((Corp.Integration.Utility.HipDestinationService.IService)(this)).ReceiveMessage(inValue);
+            BC.Integration.Utility.HipDestinationService.ReceiveMessageResponse retVal = ((BC.Integration.Utility.HipDestinationService.IService)(this)).ReceiveMessage(inValue);
             return retVal.boolean;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<Corp.Integration.Utility.HipDestinationService.ReceiveMessageResponse> Corp.Integration.Utility.HipDestinationService.IService.ReceiveMessageAsync(Corp.Integration.Utility.HipDestinationService.ReceiveMessageRequest request) {
+        System.Threading.Tasks.Task<BC.Integration.Utility.HipDestinationService.ReceiveMessageResponse> BC.Integration.Utility.HipDestinationService.IService.ReceiveMessageAsync(BC.Integration.Utility.HipDestinationService.ReceiveMessageRequest request) {
             return base.Channel.ReceiveMessageAsync(request);
         }
         
-        public System.Threading.Tasks.Task<Corp.Integration.Utility.HipDestinationService.ReceiveMessageResponse> ReceiveMessageAsync(string @string) {
-            Corp.Integration.Utility.HipDestinationService.ReceiveMessageRequest inValue = new Corp.Integration.Utility.HipDestinationService.ReceiveMessageRequest();
+        public System.Threading.Tasks.Task<BC.Integration.Utility.HipDestinationService.ReceiveMessageResponse> ReceiveMessageAsync(string @string) {
+            BC.Integration.Utility.HipDestinationService.ReceiveMessageRequest inValue = new BC.Integration.Utility.HipDestinationService.ReceiveMessageRequest();
             inValue.@string = @string;
-            return ((Corp.Integration.Utility.HipDestinationService.IService)(this)).ReceiveMessageAsync(inValue);
+            return ((BC.Integration.Utility.HipDestinationService.IService)(this)).ReceiveMessageAsync(inValue);
         }
     }
 }

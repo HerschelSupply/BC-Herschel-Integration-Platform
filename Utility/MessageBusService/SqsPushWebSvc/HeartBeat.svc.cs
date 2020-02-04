@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Configuration;
 
-namespace Corp.Integration.Utility.SqsPushWebSvc
+namespace BC.Integration.Utility.SqsPushWebSvc
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "HeartBeat" in code, svc and config file together.
     // NOTE: In order to launch WCF Test Client for testing this service, please select HeartBeat.svc or HeartBeat.svc.cs at the Solution Explorer and start debugging.

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 using Amazon.SQS;
 using Amazon.SQS.Model;
-using Corp.Integration.Interfaces;
+using BC.Integration.Interfaces;
 using System.Diagnostics;
 
-namespace Corp.Integration.Utility
+namespace BC.Integration.Utility
 {
     public class SqsPublishService : IPublishService
     {

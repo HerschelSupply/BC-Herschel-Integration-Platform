@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Heartbeat.aspx.cs" Inherits="Corp.Integration.Utility.SqsPushWebSvc.Heartbeat" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Heartbeat.aspx.cs" Inherits="BC.Integration.Utility.SqsPushWebSvc.Heartbeat" %>
 
 <!DOCTYPE html>
 

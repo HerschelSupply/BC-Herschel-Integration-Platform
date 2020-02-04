@@ -7,8 +7,8 @@
     <ProjectGuid>{DC06574B-1D2E-4884-9B6F-A7EFDDA6DB12}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Corp.Integration.Utility</RootNamespace>
-    <AssemblyName>Corp.Integration.Utility.SqsPublishService</AssemblyName>
+    <RootNamespace>BC.Integration.Utility</RootNamespace>
+    <AssemblyName>BC.Integration.Utility.SqsPublishService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -43,12 +43,11 @@
     <Reference Include="AWSSDK.SQS, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.SQS.3.3.2.7\lib\net45\AWSSDK.SQS.dll</HintPath>
     </Reference>
-    <Reference Include="Corp.Integration.Interfaces">
-      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.Interfaces.dll</HintPath>
+    <Reference Include="BC.Integration.Interfaces">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Corp.Integration.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.Utilities.dll</HintPath>
+    <Reference Include="BC.Integration.Utilities">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -73,7 +72,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-copy /y bin\debug\*.dll "C:\HIP Herschel Integration Platform\0.DLL Bin"
+copy /y bin\debug\*.dll "C:\BC Herschel Integration Platform\0.DLL Bin"
 
 "%25ProgramFiles%25\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\gacutil.exe" /i "$(TargetPath)"
 </PostBuildEvent>
