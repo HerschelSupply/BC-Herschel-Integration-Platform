@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgEnvelope", "MsgEnvelope\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanonicalShippingConfirmation.Tigers", "CanonicalShippingConfirmation\CanonicalShippingConfirmation.Tigers.csproj", "{70FA85F5-9301-4663-B569-9AE9F8315A31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanonicalShippingConfirmation.NRI", "CanonicalShippingConfirmationNRI\CanonicalShippingConfirmation.NRI.csproj", "{3800A6B9-8AB9-41EC-B7C8-13B9C7400ED7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{70FA85F5-9301-4663-B569-9AE9F8315A31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70FA85F5-9301-4663-B569-9AE9F8315A31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70FA85F5-9301-4663-B569-9AE9F8315A31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3800A6B9-8AB9-41EC-B7C8-13B9C7400ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3800A6B9-8AB9-41EC-B7C8-13B9C7400ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3800A6B9-8AB9-41EC-B7C8-13B9C7400ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3800A6B9-8AB9-41EC-B7C8-13B9C7400ED7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
