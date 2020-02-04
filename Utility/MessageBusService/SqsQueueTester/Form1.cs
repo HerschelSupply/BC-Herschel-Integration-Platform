@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using Corp.Integration.Utility;
+using BC.Integration.Utility;
 
 namespace SqsQueueTester
 {
