@@ -91,10 +91,10 @@ namespace BC.Integration.Canonical.NRI
             try
             {
                 XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-                ns.Add(string.Empty, "http://_x002E_Schemas.SourceSchema.ShippingConfirmation");
+                ns.Add(string.Empty, "http://BC.Integration.Schema.ShippingConfirmation.NRI");
 
 
-                XmlSerializer serializer = new XmlSerializer(doc.GetType(), "http://_x002E_Schemas.SourceSchema.ShippingConfirmation");
+                XmlSerializer serializer = new XmlSerializer(doc.GetType(), "http://BC.Integration.Schema.ShippingConfirmation.NRI");
                 tw = new XmlTextWriter(sw);
                 serializer.Serialize(tw, doc, ns);
             }
