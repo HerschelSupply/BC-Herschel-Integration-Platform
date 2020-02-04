@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using BC_API_Calls;
+using BC.Integration.APICalls;
 
 namespace BC.Integration.AppService.EpOffRampServiceBC
 {
