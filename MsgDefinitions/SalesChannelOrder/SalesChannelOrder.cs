@@ -240,6 +240,8 @@ namespace BC.Integration.Canonical.SaleChannelOrder.New
 
         private decimal discountField;
 
+        private string discountCodeField;
+
         private string priceCodeField;
 
         private decimal freightField;
@@ -737,6 +739,19 @@ namespace BC.Integration.Canonical.SaleChannelOrder.New
             set
             {
                 this.discountField = value;
+            }
+        }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string DiscountCode
+        {
+            get
+            {
+                return this.discountCodeField;
+            }
+            set
+            {
+                this.discountCodeField = value;
             }
         }
         /// <remarks/>
@@ -1381,6 +1396,7 @@ namespace BC.Integration.Canonical.SaleChannelOrder.New
         private string discountCodeField;
         private string discountItemNumberField;
         private string displayNameField;
+        private string promoNameField;
 
 
         /// <remarks/>
@@ -1424,6 +1440,20 @@ namespace BC.Integration.Canonical.SaleChannelOrder.New
             set
             {
                 this.displayNameField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PromoName
+        {
+            get
+            {
+                return this.promoNameField;
+            }
+            set
+            {
+                this.promoNameField = value;
             }
         }
     }
