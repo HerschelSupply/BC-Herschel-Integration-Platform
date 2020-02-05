@@ -53,16 +53,25 @@
     <Reference Include="BC.Integration.Utilities">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="BC.Integration.Utility.CentralConfiguration">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.CentralConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utility.InstrumentationDB">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.InstrumentationDB.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utility.SqsPublishService">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.SqsPublishService.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\0.DLL Bin\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\0.DLL Bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
@@ -87,7 +96,6 @@
   <ItemGroup>
     <Content Include="WcfMessagingService.svc" />
     <Content Include="Web.config" />
-    <Content Include="XSLT\HerschelToBC_Return.xsl" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IWcfMessagingService.cs" />
@@ -99,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="XSLT\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Web.Debug.config">

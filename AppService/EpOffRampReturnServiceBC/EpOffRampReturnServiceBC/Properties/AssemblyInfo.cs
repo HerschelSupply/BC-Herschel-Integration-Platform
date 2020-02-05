@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ReturnOffRampBC")]
+[assembly: AssemblyTitle("EpOffRampReturnServiceBC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Herschel Supply Co")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("61e6e80e-ee66-47ae-90ba-e9720bb38dca")]
+[assembly: Guid("064135f8-dc4e-413c-a1a9-5e7d21876cd8")]
 
 // Version information for an assembly consists of the following four values:
 //
