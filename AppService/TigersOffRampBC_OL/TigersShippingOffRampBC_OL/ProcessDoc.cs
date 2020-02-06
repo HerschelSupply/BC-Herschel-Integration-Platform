@@ -121,6 +121,7 @@ namespace BC.Integration.AppService.TigersShippingOffRampBC_OL
 
                     //Map message to BC structure
                     string msgBody = msgMgr.ReceivedEnvelope.Body;
+                   
                     string outgoingMessage;
                     try
                     {
@@ -178,6 +179,12 @@ namespace BC.Integration.AppService.TigersShippingOffRampBC_OL
             {
                 XmlWriterSettings wSettings = new XmlWriterSettings();
                 wSettings.OmitXmlDeclaration = true;
+
+                // Add the namespace for the Biztalk Map Message          
+                XmlDocument doc = (XmlDocument)JsonConvert.DeserializeXmlNode(msgBody.Replace("&quot;", @""""), "CanonicalShippingConfirmation");
+                doc.DocumentElement.SetAttribute("xmlns", "http://BC.Integration.Schema.ShippingConfirmation.TigersOL");
+                msgBody = doc.OuterXml;
+
 
                 Trace.WriteLineIf(tracingEnabled, "Start creating the BC message.");
                 string output;
