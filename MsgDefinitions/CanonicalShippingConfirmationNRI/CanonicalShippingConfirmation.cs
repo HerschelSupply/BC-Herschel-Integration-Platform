@@ -22,7 +22,7 @@ namespace BC.Integration.Canonical.NRI
 
     public partial class CanonicalShippingConfirmation
     {
-        [JsonProperty("PickNum")]
+        [JsonProperty("pickNum")]
         public string PickNum { get; set; }
 
         [JsonProperty("orderNbr")]
@@ -84,7 +84,7 @@ namespace BC.Integration.Canonical.NRI
         /// </summary>
         /// <param name="doc">The invoice document object to be serialized</param>
         /// <returns>XML string representation of the invoice document</returns>
-        public string ConvertShippingConfirmationToString(CanonicalShippingConfirmation doc)
+        /*public string ConvertShippingConfirmationToString(CanonicalShippingConfirmation doc)
         {
             StringWriter sw = new StringWriter();
             XmlTextWriter tw = null;
@@ -111,7 +111,7 @@ namespace BC.Integration.Canonical.NRI
                 }
             }
             return sw.ToString();
-        }
+        }*/
     }
 
     public partial class LineItem

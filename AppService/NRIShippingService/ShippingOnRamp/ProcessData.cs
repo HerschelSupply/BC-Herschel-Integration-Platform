@@ -279,8 +279,8 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                         }
 
                         //Map to the canonical structure
-                        //string canonicalMsg;
-                        CanonicalShippingConfirmation canonicalMsg = new CanonicalShippingConfirmation();
+                       
+                        string canonicalMsg;
 
                         try
                         {
@@ -315,7 +315,7 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                         //Create envelope and add canonical message to the envelope
                         HipKeyValuePairCollection filterCol = new HipKeyValuePairCollection(filter);
                         //outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, "", filterCol, null,  canonicalMsg, i, null, documentNumber);
-                        outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, "", filterCol, null, canonicalMsg.ConvertShippingConfirmationToString(canonicalMsg), i, null, documentNumber);
+                        outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, "", filterCol, null, canonicalMsg.ToString(), i, null, documentNumber);
 
                         //Place message on the message bus
                         int retryCount = 0;
@@ -396,8 +396,8 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                         SaveMessageToFile(Nri.CancelledShippingOrder.Serialize.OrderToJson(message), serviceId + "." + documentNumber + "." + site, false);
                     }
                     //Map to the canonical structure
-                    //string canonicalMsg;
-                    CanonicalShippingConfirmation canonicalMsg = new CanonicalShippingConfirmation();
+                    string canonicalMsg;
+                    
                     try
                     {
                         canonicalMsg = Mapper.ConvertCancelled(message);
@@ -431,7 +431,7 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                     //Create envelope and add canonical message to the envelope
                     HipKeyValuePairCollection filterCol = new HipKeyValuePairCollection(filter);
                     HipKeyValuePairCollection processCol = new HipKeyValuePairCollection(process);
-                    outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, "", filterCol, null, canonicalMsg.ConvertShippingConfirmationToString(canonicalMsg), i, null, documentNumber);
+                    outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, "", filterCol, null, canonicalMsg.ToString(), i, null, documentNumber);
 
                     //Place message on the message bus
                     int retryCount = 0;

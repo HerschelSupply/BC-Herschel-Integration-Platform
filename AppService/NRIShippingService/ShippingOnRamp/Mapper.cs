@@ -14,7 +14,7 @@ namespace BC.Integration.AppService.NriShippingOnRampService
         /// <param name="message">NRI shipping confiramtion</param>
         /// <returns>canonical shipping confirmation</returns>
         //public static string ConvertShipmentConfirm(Nri.ShippingConfirmation.ShippingConfirmation message, string siteMapping)
-        public static CanonicalShippingConfirmation ConvertShipmentConfirm(Nri.ShippingConfirmation.ShippingConfirmation message, string siteMapping)
+        public static string ConvertShipmentConfirm(Nri.ShippingConfirmation.ShippingConfirmation message, string siteMapping)
         {
             //Add code to convert message to the canonical format
             CanonicalShippingConfirmation canonical = new CanonicalShippingConfirmation();
@@ -176,8 +176,8 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                 canonical.Cartons.Add(canonicalCarton);
             }
 
-            //return SerializeCanonicalShippingConfirmation.ToJson(canonical);
-            return canonical;
+            return SerializeCanonicalShippingConfirmation.ToJson(canonical);
+            
         }
 
         private static string GetDataSiteId(Nri.ShippingConfirmation.ShippingConfirmation message)
@@ -216,7 +216,7 @@ namespace BC.Integration.AppService.NriShippingOnRampService
         /// </summary>
         /// <param name="message">Cancelled shipping order</param>
         /// <returns>zero shipped canonical shipping confirmation.</returns>
-        public static CanonicalShippingConfirmation ConvertCancelled (Nri.CancelledShippingOrder.CancelledShippingOrder message)         
+        public static string ConvertCancelled (Nri.CancelledShippingOrder.CancelledShippingOrder message)         
         {
             //Add code to convert message to the canonical format
             CanonicalShippingConfirmation canonical = new CanonicalShippingConfirmation();
@@ -290,9 +290,9 @@ namespace BC.Integration.AppService.NriShippingOnRampService
             }
 
 
-            return canonical;
+           
 
-            //return SerializeCanonicalShippingConfirmation.ToJson(canonical);
+            return SerializeCanonicalShippingConfirmation.ToJson(canonical);
         }
     }
 }
