@@ -143,6 +143,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
         /// </summary>
         public void ProcessData(string activationGuid)
         {
+            //this is process data
             try
             {
                 CreateDiComponents();
