@@ -1,0 +1,9 @@
+diff a/MsgDefinitions/MsgEnvelope/MsgEnvelope.cs b/MsgDefinitions/MsgEnvelope/MsgEnvelope.cs	(rejected hunks)
+@@ -601,6 +601,7 @@
+             {
+                 HipKeyValuePair pr = new HipKeyValuePair();
+                 pr.Key = str.Substring(0, str.IndexOf('|'));
++                pr.Value = str.Substring(str.IndexOf('|') + 1);
+                 list.Add(pr);
+             }
+         }

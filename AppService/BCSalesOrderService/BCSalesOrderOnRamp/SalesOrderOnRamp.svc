@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Corp.Integration.AppService.GPSalesOrderSvc.SalesOrderOnRamp" CodeBehind="SalesOrderOnRamp.svc.cs" %>
