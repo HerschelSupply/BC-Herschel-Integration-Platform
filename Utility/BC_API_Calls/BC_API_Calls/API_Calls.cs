@@ -89,7 +89,7 @@ namespace BC.Integration.APICalls
         public API_Calls()
         {
    
-            ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "C:\\HIP Herschel Integration Platform\\Utility\\BC_API_Calls\\BC_API_Calls\\web.config" };
+            ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "C:\\BC Herschel Integration Platform\\Utility\\BC_API_Calls\\BC_API_Calls\\web.config" };
             localConfig = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
             CreateDiComponents();
