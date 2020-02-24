@@ -43,40 +43,53 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BC.Integration.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BC.Integration.Interfaces">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="BC.Integration.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BC.Integration.MsgEnvelope">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.MsgEnvelope.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utilities">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="BC.Integration.Utility.CentralConfiguration">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.CentralConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utility.InstrumentationDB">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.InstrumentationDB.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\0.DLL Bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config">
@@ -85,11 +98,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API_Calls.cs" />
+    <Compile Include="BCException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="HerschelSig.pfx" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -136,7 +152,9 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-copy /y bin\debug\*.dll "C:\BC Herschel Integration Platform\0.DLL Bin"</PostBuildEvent>
+copy /y bin\debug\*.dll "C:\BC Herschel Integration Platform\0.DLL Bin"
+
+"%25ProgramFiles%25\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\gacutil.exe" /i "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
