@@ -407,6 +407,7 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
         /// </summary>
         /// <param name="salesOrder"></param>
         /// <returns></returns>
+        
         private Order MapEconnectXMLToCanonical(EConnect salesOrder)
         {
             try
@@ -415,12 +416,12 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 Order order = new Order();
                 order.Header = new OrderHeader();
 
-
+                API_Calls APIcalls = new API_Calls();
 
                 //Populate the message header
                 order.Process = processName;
                 order.Header.OrderNumber = salesOrder.SOPTransactionType.TaSopHdrIvcInsert.SOPNUMBE;
-                order.Header.SiteId = Convert.ToInt32(salesOrder.SOPTransactionType.TaSopHdrIvcInsert.LOCNCODE);
+                order.Header.SiteId = Convert.ToInt32(APIcalls.AllocateBasedOnState(salesOrder.SOPTransactionType.TaCreateCustomerAddress.STATE, salesOrder.SOPTransactionType.TaCreateCustomerAddress.COUNTRY));
                 order.Header.CurrencyId = salesOrder.SOPTransactionType.TaSopHdrIvcInsert.CURNCYID;
                 order.Header.TaxRegistrationNumber = "";
                 order.Header.CarrierCode = "";
@@ -480,10 +481,10 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                         item.Colour = sku[1];
                         item.Size = sku[2];
 
-                        item.SiteId = Convert.ToInt32(salesOrder.SOPTransactionType.TaSopHdrIvcInsert.LOCNCODE);
+                        item.SiteId = order.Header.SiteId;
                         item.DiscountCode = "";
                         item.TaxExempt = "N";
-                        item.UPC = API_Calls.GetUPC(item.Fabric, item.Colour, item.Size);
+                        item.UPC = "";//API_Calls.GetUPC(item.Fabric, item.Colour, item.Size);
 
                         order.LineItems.Add(item);
                     }
@@ -534,20 +535,14 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
             }
             catch (Exception ex)
             {
-                /*if (ex.Source == "BC_API_Calls")
-                {
-                    Exception api_exc = new Exception();
-                    api_exc.Source = "BC_API_Calls";
-                    throw new Exception(ex.Message.ToString(), api_exc);
-                }*/
-
+                
                 Trace.WriteLine(tracingExceptionPrefix + " An error occured while trying to map the EP batch message to the SalesChannelOrder message in MapSalesOrdersToCanonical()");
                 throw new Exception("An error occured while trying to map the EP sales order batch message to the SalesChannelOrder message" +
                     "in the BC.Integration.AppService.EpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
                     "number is: " + salesOrder.SOPTransactionType.TaSopHdrIvcInsert.SOPNUMBE, ex);
             }
         }
-
+        
         /// <summary>
         /// Maps new sales order data from JMS to Canonical message from this dll 'BC.Integration.Canonical.SalesChannelOrder'
         /// Order = CanonicalSalesChannelOrder,  NewOrder.Order = JMS Object
@@ -558,7 +553,9 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
         {
             try
             {
-                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Start mapping the BC sales order transaction");                
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Start mapping the BC sales order transaction");
+
+                API_Calls APIcalls = new API_Calls();
 
                 Order order = new Order();
                 order.Header = new OrderHeader();
@@ -567,7 +564,7 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 //Populate the message header
                 order.Process = processName;
                 order.Header.OrderNumber = salesOrder.Header.OrderNumber;
-                order.Header.SiteId = Convert.ToInt32(Mapper.MapStoreNameToSiteId(salesOrder.Header.StoreCode));
+                order.Header.SiteId = Convert.ToInt32(APIcalls.AllocateBasedOnState(salesOrder.Shipments.Shipment.ShippingAddress.Region, salesOrder.Shipments.Shipment.ShippingAddress.Country));
                 order.Header.CurrencyId = salesOrder.Header.Currency;
                 order.Header.TaxRegistrationNumber = "";
                 order.Header.CarrierCode = Mapper.MapShipmentCarrierToCarrierCode(salesOrder.Shipments.Shipment.ShipmentCarrier);
