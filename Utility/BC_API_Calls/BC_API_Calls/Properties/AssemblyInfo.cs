@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Contains all the BlueCherry API Calls")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Herschel Supply Co")]
-[assembly: AssemblyProduct("Herschel Integration Platform")]
+[assembly: AssemblyProduct("BC Herschel Integration Platform")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
