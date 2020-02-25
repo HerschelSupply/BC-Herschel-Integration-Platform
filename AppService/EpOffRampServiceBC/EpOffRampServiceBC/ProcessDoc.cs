@@ -132,7 +132,9 @@ namespace BC.Integration.AppService.EpOffRampServiceBC
                         outgoingMessage = CreateBCMsg(msgBody);
 
                         //post the message to BC
-                         API_Calls.PostOrder(outgoingMessage);
+                        
+                        API_Calls APICalls = new API_Calls();
+                        APICalls.PostOrder(outgoingMessage);
                     }
                     catch (Exception ex)
                     {
