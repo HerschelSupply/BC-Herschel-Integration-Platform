@@ -89,7 +89,7 @@ namespace BC.Integration.APICalls
         public API_Calls()
         {
    
-            ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "C:\\HIP Herschel Integration Platform\\Utility\\BC_API_Calls\\BC_API_Calls\\web.config" };
+            ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "C:\\BC Herschel Integration Platform\\Utility\\BC_API_Calls\\BC_API_Calls\\web.config" };
             localConfig = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
             CreateDiComponents();
@@ -295,7 +295,7 @@ namespace BC.Integration.APICalls
         public bool OrderExists(string po_num)
         {
 
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetUPC OrderExists started checking if order exists.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".OrderExists started checking if order exists.");
 
             bool exists = false;
             try
@@ -329,18 +329,22 @@ namespace BC.Integration.APICalls
                             else
                             {
                                 errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
+                                throw new BlueCherryException(errorDesc);
                             }
                         }
-                        throw new BlueCherryException(errorDesc);
+                        
                     }
 
-                    JArray data = (JArray)jObj.SelectToken("data");
-
-                    if (data.HasValues)
+                    else if (jObj.SelectToken("data") != null)
                     {
-                        exists = true;
+                        //JArray data = (JArray)jObj.SelectToken("data");
+
+                        //if (data.HasValues)
+                        //{
+                            exists = true;
+                        //}
+                        
                     }
-                    exists = false;
                 }
             }
             catch (BlueCherryException ex)
@@ -352,7 +356,7 @@ namespace BC.Integration.APICalls
             }
             finally
             {
-                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetUPC OrderExists completed checking if order exists.");
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".OrderExists completed checking if order exists.");
 
                 instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and OrderExists method complete.");
