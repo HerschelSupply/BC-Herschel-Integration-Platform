@@ -84,6 +84,10 @@ namespace BC.Integration.APICalls
         private bool CA_East_Enabled;
         private bool CA_West_Enabled;
 
+        //Shipping 
+        private string SHIPPING_endpoint;
+        private string SHIPPING_param_name;
+
 
 
         public API_Calls()
@@ -141,6 +145,9 @@ namespace BC.Integration.APICalls
             CA_East_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["CA_East_Enabled"].Value));
             CA_West_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["CA_West_Enabled"].Value));
 
+            //Shipping
+            SHIPPING_endpoint = localConfig.AppSettings.Settings["SHIPPING_endpoint"].Value;
+            SHIPPING_param_name = localConfig.AppSettings.Settings["SHIPPING_param_name"].Value;
         }
 
         private void CreateDiComponents()
@@ -366,9 +373,65 @@ namespace BC.Integration.APICalls
             return exists;
         }
 
-      
+        /// <summary>
+        /// Shipping outbound endpoint
+        /// </summary>
+        public string GetShipper(string ship_name)
+        {
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetUPC start retrieving UPC.");
 
-    
+            string shipper = "";
+            try
+            {
+                string uri = SHIPPING_endpoint + "?" + SHIPPING_param_name + "=" + ship_name ;
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.Headers.Add(authKey, authValue);
+                /*Servers sometimes compress their responses to save on bandwidth, when this happens, you need to decompress the response before attempting to read it.
+                 Fortunately, the .NET framework can do this automatically, however, we have to turn the setting on. */
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+
+                    var jObj = JObject.Parse(reader.ReadToEnd());
+                    // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
+                    JArray errors = (JArray)jObj.SelectToken("Errors");
+
+                    if (errors.HasValues)
+                    {
+                        //return "";
+                        throw new BlueCherryException("The Shipper  was not found. Ship_name: " + ship_name + ". BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper");
+                    }
+
+                    JArray data = (JArray)jObj.SelectToken("data");
+                    shipper = data[0].SelectToken("shipper").ToString();
+
+
+                    //return reader.ReadToEnd();
+                }
+
+            }
+            catch (BlueCherryException ex)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the Shipper value from BlueCherry");
+                instrumentation.LogGeneralException("An exception occured trying to get the Shipper value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
+                throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
+            }
+            finally
+            {
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetShipper completed retrieving Shipper code.");
+
+                instrumentation.FlushActivity();
+                Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetShipper method complete.");
+            }
+
+            return shipper;
+        }
+
+
 
         public string GetCustomerFromSite(string site)
         {
