@@ -567,7 +567,8 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 order.Header.SiteId = Convert.ToInt32(APIcalls.AllocateBasedOnState(salesOrder.Shipments.Shipment.ShippingAddress.Region, salesOrder.Shipments.Shipment.ShippingAddress.Country));
                 order.Header.CurrencyId = salesOrder.Header.Currency;
                 order.Header.TaxRegistrationNumber = "";
-                order.Header.CarrierCode = Mapper.MapShipmentCarrierToCarrierCode(salesOrder.Shipments.Shipment.ShipmentCarrier);
+                //order.Header.CarrierCode = Mapper.MapShipmentCarrierToCarrierCode(salesOrder.Shipments.Shipment.ShipmentCarrier);
+                order.Header.CarrierCode = APIcalls.GetShipper(salesOrder.Shipments.Shipment.ShipmentCarrier);
                 order.Header.PaymentType = "";
                 order.Header.CustomerId = salesOrder.Customer.CustomerId;
                 order.Header.CustomerPONum = salesOrder.Customer.CustomerId;
@@ -600,7 +601,7 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 }
 
                 //----- DISCOUNTS ------
-                order.Header.DiscountCode = "";
+                string orderCouponCode = "";
                 order.Discounts = new List<OrderDiscounts>();
                 List<int> orderDiscounts = new List<int>();
                 string discPattern = @"(\d+)%"; // takes the discount percentage. 
@@ -631,13 +632,13 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                     if (promos.Coupons.Code != null)
                     {
                         discount.DiscountCode = promos.Coupons.Code;
-                        order.Header.DiscountCode += promos.Coupons.Code + ", ";
+                        orderCouponCode += promos.Coupons.Code + ", ";
                     }
 
                     order.Discounts.Add(discount);
                 }
 
-                order.Header.DiscountCode = order.Header.DiscountCode=="" ? "" : order.Header.DiscountCode.Substring(0, order.Header.DiscountCode.Length - 2);
+                orderCouponCode = orderCouponCode == "" ? "" : orderCouponCode.Substring(0, orderCouponCode.Length - 2);
                 order.LineItems = new List<OrderLineItem>();
 
                 //Loop through the line items in the transaction and create the associated items in the canonical msg
@@ -677,6 +678,17 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                         item.Size = sku[2];
 
                         item.SiteId = order.Header.SiteId;
+
+                        //add the order coupon code to every item except to GWP
+                        if (so_item.ItemCode.Contains("GWP"))
+                        {
+                            item.CouponCode = "";
+                        }
+                        else
+                        {                            
+                            item.CouponCode = orderCouponCode;
+                        }
+
                         // GWP or Items with line discount
                         if (so_item.DiscountLines != null)
                         {
