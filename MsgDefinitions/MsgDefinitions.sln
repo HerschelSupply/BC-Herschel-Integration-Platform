@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanonicalShippingConfirmati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesChannelOrder.Return", "CanonicalReturn\SalesChannelOrder.Return.csproj", "{7AB0AD83-36C5-4F5E-9176-CB8AE79B69EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Ep", "Inventory\Inventory.Ep.csproj", "{072F22E7-D567-4875-A8B1-9249AF0361F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7AB0AD83-36C5-4F5E-9176-CB8AE79B69EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AB0AD83-36C5-4F5E-9176-CB8AE79B69EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AB0AD83-36C5-4F5E-9176-CB8AE79B69EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{072F22E7-D567-4875-A8B1-9249AF0361F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{072F22E7-D567-4875-A8B1-9249AF0361F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{072F22E7-D567-4875-A8B1-9249AF0361F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{072F22E7-D567-4875-A8B1-9249AF0361F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
