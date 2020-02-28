@@ -89,6 +89,11 @@ namespace BC.Integration.APICalls
         private string SHIPPING_param_name;
 
 
+        //carrier code
+        private static string ShipmentCarrierToCarrierCodeMapping;
+        private static Dictionary<string, string> shipmentCarrierToCarrierCode;
+
+
 
         public API_Calls()
         {
@@ -148,9 +153,15 @@ namespace BC.Integration.APICalls
             //Shipping
             SHIPPING_endpoint = localConfig.AppSettings.Settings["SHIPPING_endpoint"].Value;
             SHIPPING_param_name = localConfig.AppSettings.Settings["SHIPPING_param_name"].Value;
+
+            //carrier code
+            ShipmentCarrierToCarrierCodeMapping = localConfig.AppSettings.Settings["ShipmentCarrierToCarrierCodeMapping"].Value;
+
+
+          
         }
 
-        private void CreateDiComponents()
+    private void CreateDiComponents()
         {
             //Create Unity container for DI and create DI components
             container = new UnityContainer();
@@ -572,8 +583,48 @@ namespace BC.Integration.APICalls
             return secondary;
         }
 
+ 
+        /// <summary>
+        /// Shipping outbound endpoint
+        /// </summary>
         /// 
+        public string ConvertShipmenMethodForEast(string site, string shipmentMethod)
+        {
+              string newShipMethod =  shipmentMethod;
+              if(site == "12" || site == "22")
+              {
+                    try
+                    {
+                        if (shipmentCarrierToCarrierCode == null)
+                        {
+                            shipmentCarrierToCarrierCode = new Dictionary<string, string>();
+                            string[] codes = ShipmentCarrierToCarrierCodeMapping.Split(',');
+                            foreach (string code in codes)
+                            {
+                                string[] vals = code.Split('|');
+                                shipmentCarrierToCarrierCode.Add(vals[0], vals[1]);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("While trying to convert shipment carrier: " + shipmentMethod + " to a Herschel carrier code an error occurred.  Please" +
+                            " verify the EpOnRampSvcBC  has a configuration for this EP store name.", ex);
+                    }
 
+                    string value;
+                    if (shipmentCarrierToCarrierCode.TryGetValue(shipmentMethod, out value))
+                    {
+                       newShipMethod = value;
+                    }
+              }
+            else
+              {
+                  newShipMethod = shipmentMethod;
+              }
+              
+            return newShipMethod;
+        }
         private Dictionary<string,string> InitializeWarehousePairs()
         {
             Dictionary<string, string> warehousePairs = new Dictionary<string, string>();
