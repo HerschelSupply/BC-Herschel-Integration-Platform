@@ -4,11 +4,13 @@ using System.Diagnostics;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 using System.Configuration;
-using BC.Integration.Interfaces;
-using BC.Integration.Utility;
 using System.Xml;
 using System.IO;
+using BC.Integration.Utility;
+using BC.Integration;
+using BC.Integration.Interfaces;
 using BC.Integration.Canonical.CanonicalReturn;
+using BC.Integration.APICalls;
 
 namespace BC.Integration.AppService.EpReturnOnRampServiceBC
 {
@@ -132,7 +134,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
         #endregion
 
         /// <summary>
-        /// Process Data is the main method in the BC.Integration.AppService.EpReturnOnRampServiceBC class.  It implements the following steps;
+        /// Process Data is the main method in the 'BC.Integration.AppService.EpReturnOnRampServiceBC class.  It implements the following steps;
         /// -Resolves the Unity DI classes.
         /// -Overrides local property setting with the central configuration using the IConfiguration component.
         /// -Connect to the source system and checks to see if there are available files
@@ -166,7 +168,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process BC data from EP_Integratios database. (BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method)", ex);
+                            throw new Exception("An Exception occurred while trying to retrieve and process BC data from EP_Integratios database. ('BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method)", ex);
                         }
                     }
                     else
@@ -183,7 +185,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process Tigers Local Sales files. (BC.Integration.AppService.GPSalesOrderSvc.Process.ProcessData method)" + ex.ToString(), ex);
+                            throw new Exception("An Exception occurred while trying to retrieve and process Tigers Local Sales files. (BC.Integration.AppServiceGPSalesOrderSvc.Process.ProcessData method)" + ex.ToString(), ex);
                         }
 
                     }
@@ -195,8 +197,8 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                 }
                 catch (Exception ex)
                 {
-                    Trace.WriteLine(tracingExceptionPrefix + "An exception was raised when calling the BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method. Exception message: " + ex.Message);
-                    instrumentation.LogGeneralException("An exception was raised when calling the BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method.", ex);
+                    Trace.WriteLine(tracingExceptionPrefix + "An exception was raised when calling the 'BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method. Exception message: " + ex.Message);
+                    instrumentation.LogGeneralException("An exception was raised when calling the 'BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method.", ex);
                 }
                 finally
                 {
@@ -207,8 +209,8 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             catch (Exception ex)
             {
                 //Since the implementation of DI raised the exception we can not log the exception using the instrumentation component.
-                Trace.WriteLine(tracingExceptionPrefix + "An exception was raised when calling the BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method trying to resolve the Unity DI components. Exception message: " + ex.Message);
-                throw new Exception("An exception occured in the BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method trying to resolve the Unity DI components.", ex);
+                Trace.WriteLine(tracingExceptionPrefix + "An exception was raised when calling the 'BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method trying to resolve the Unity DI components. Exception message: " + ex.Message);
+                throw new Exception("An exception occured in the 'BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method trying to resolve the Unity DI components.", ex);
             }
         }
 
@@ -218,14 +220,14 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
         private void ProcessXML(string data, string activationGuid)
         {
             String docId = "";
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessFile.  Start Processing File.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " 'BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessFile.  Start Processing File.");
             //Create initial msg envelope to represent the start of the service process and call Instrumenation
             XmlDocument msg = msgMgr.CreateOnRampMessage(processName, serviceId, serviceVersion, serviceOperationId, msgType, messageVersion, messageFormat, batchName);
             instrumentation.LogActivity(msg);
             //Log Activation Association with Interchange
           //  instrumentation.AssociateActivationWithInterchages(new Guid(activationGuid.Substring(0, 36)), msgMgr.EntryPointEnvelope.Interchange.InterchangeId);
 
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpReturnOnRampServiceBC.ProcessData.  Convert XML message to an object.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + " 'BC.Integration.AppService.EpReturnOnRampServiceBC.ProcessData.  Convert XML message to an object.");
             try
             {
                 using (TextReader sr = new StringReader(data))
@@ -233,10 +235,10 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
 
                     Return canonicalReturn = new Return();
 
-                  /*  XmlSerializer serializer = new XmlSerializer(typeof(JMS.ReturnJMS));
-                    MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-                    returnJMS = (JMS.ReturnJMS)serializer.Deserialize(memStream);
-                    */
+                    /*  XmlSerializer serializer = new XmlSerializer(typeof(JMS.ReturnJMS));
+                      MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+                      returnJMS = (JMS.ReturnJMS)serializer.Deserialize(memStream);
+                      */
                     var serializer_ = new System.Xml.Serialization.XmlSerializer(typeof(JMS.ReturnJMS));
                     JMS.ReturnJMS returnJMS = (JMS.ReturnJMS)serializer_.Deserialize(sr);
                     canonicalReturn = MapReturnJMSToCanonical(returnJMS);
@@ -258,15 +260,16 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                     instrumentation.LogActivity(outgoingMessage, queueUrl, retryCount);
                     Trace.WriteLineIf(tracingEnabled, tracingPrefix + " End processing: " + docId);
 
-                }
 
+
+                }
             }
             catch (Exception ex)
             {
                 string exMessage = ex.Message;
-                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessFile.  The creation of the canonical message failed. The message wasn't sent to the queue. DocumentId: " + docId + " Exception message: " + ex.Message);
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppServiceEpReturn.OnRampServiceBC.Process.ProcessFile.  The creation of the canonical message failed. The message wasn't sent to the queue. DocumentId: " + docId + " Exception message: " + ex.Message);
                 instrumentation.LogGeneralException("An exception occured while processing a message in the " +
-                "BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId
+                "'BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId
                  , ex);
 
                 //Notification Log entry...
@@ -284,7 +287,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                     "CSV filename: " + batchName + " failed with the following error, " + ex.Message, docId);
                 }
 
-                 SaveMessageToFile(ex.Message + "\r\n" + data, serviceId + "." + docId + ".Mapping", true, "Return");
+                SaveMessageToFile(ex.Message + "\r\n" + data, serviceId + "." + docId + ".Mapping", true, "Return");
 
             }
 
@@ -301,7 +304,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
 
             Return canonicalReturn = new Return();
 
-            try
+            try 
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Start mapping the BC sales order transaction");
 
@@ -315,19 +318,22 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                 canonicalReturn.Header.TaxRegistrationNumber = "";
                 canonicalReturn.Header.CarrierCode = Mapper.MapShipmentCarrierToCarrierCode(returnMessage.Shipments.Shipment.ShipmentCarrier);
                 canonicalReturn.Header.PaymentType = "";
-                canonicalReturn.Header.CustomerId = returnMessage.Customer.CustomerId;
-
-                switch(returnMessage.Header.StoreCode)
+                try
                 {
-                    case "herschel_gb":canonicalReturn.Header.CustomerId = "ONLNUK001";
-                        break;
-                    case "herschel_eu": canonicalReturn.Header.CustomerId = "ONLNEU001";
-                        break;
-                    case "herschel_usa": canonicalReturn.Header.CustomerId = "ONLNUS001";
-                        break;
-                    case "herschel_ca": canonicalReturn.Header.CustomerId = "ONLNCA001";
-                        break;
 
+                    API_Calls helper = new API_Calls();
+                    canonicalReturn.Header.CustomerId = helper.GetCustomerFromSite(canonicalReturn.Header.SiteId.ToString());
+
+               
+                }
+                catch (BlueCherryException ex)
+                {
+
+                    throw ex;
+                }
+                catch(Exception ex)
+                {
+                    throw ex;
                 }
 
                 canonicalReturn.Header.CustomerPONum = returnMessage.Customer.CustomerId;
@@ -396,8 +402,23 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                         sku.ItemSubtotalPrice = item.ItemSubtotalPrice;
                         sku.AmountBeforeTax = item.AmountBeforeTax;
                         sku.AmountInludingTax = item.AmountIncludingTax;
+                        sku.ReturnReason = item.ReturnReason;
 
 
+                        try
+                        {
+                            //unable to get invoice number
+                            // API_Calls helper = new API_Calls();
+                            // lineItem.OrderInvoiceNumber = helper.GetInvoiceNumberFromOrder(canonicalReturn.Header.OrderNumber);
+                            lineItem.OrderInvoiceNumber = "12345";
+
+
+                        }
+                        catch (BlueCherryException ex)
+                        {
+
+                            throw ex;
+                        }
                         lineItem.AddSku(sku);
                     }
                    
@@ -429,6 +450,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                     canonicalReturn.Addresses.Add(billingAddress);
 
 
+
                 }
 
 
@@ -439,7 +461,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
 
                 Trace.WriteLine(tracingExceptionPrefix + " An error occured while trying to map the EP batch message to the SalesChannelOrder message in MapSalesOrdersToCanonical()");
                 throw new Exception("An error occured while trying to map the EP sales order batch message to the SalesChannelOrder message" +
-                    "in the BC.Integration.AppService.EpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
+                    "in the BC.Integration.AppServiceEpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
                     "number is: " + returnMessage.Header.OrderNumber, ex);
             }
 
@@ -547,6 +569,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             config = container.Resolve<IConfiguration>();
             configuration = config.PopulateConfigurationCollectionFromAppConfig();
             OverrideConfigProperties(config);
+            PopulateLocalVaribale();
             instrumentation = container.Resolve<IInstrumentation>();
             instrumentation.Configuration = configuration;
             publishService = container.Resolve<IPublishService>();
