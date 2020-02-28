@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 using System.Configuration;
 using System.Xml;
 using System.Xml.Xsl;
-using System.Xml.XPath;
 using System.Diagnostics;
-using System.Web;
 using System.IO;
-using System.Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Xml.Linq;
-using System.Web.Script.Serialization;
 using BC.Integration.APICalls;
 using BC.Integration.Utility;
 using BC.Integration.Interfaces;
@@ -97,6 +86,10 @@ namespace BC.Integration.AppService.EpOffRampReturnServiceBC
         // and return the value from the Execute method.
         public bool Execute(string receiveMsg)
         {
+
+        
+          
+
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + "Starting ProcessSalesDoc workflow activity Execute method...");
             
             string msgID = "Message Unread";
@@ -143,7 +136,7 @@ namespace BC.Integration.AppService.EpOffRampReturnServiceBC
                         API_Calls helper = new API_Calls();
                         helper.PostReturn(outgoingMessage);
 
-                      
+
                     }
                     catch (Exception ex)
                     {
