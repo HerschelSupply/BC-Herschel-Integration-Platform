@@ -133,7 +133,8 @@ namespace BC.Integration.AppService.ShippingOffRampBC
                         outgoingMessage = CreateBCMsg(msgBody);
 
                         //post the message to BC
-                        API_Calls.PostShipmentConfirmation(outgoingMessage);
+                        API_Calls API_calls = new API_Calls();
+                        API_calls.PostShipmentConfirmation(outgoingMessage);
                     }
                     catch (Exception ex)
                     {
