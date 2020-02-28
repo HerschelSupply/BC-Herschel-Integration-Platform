@@ -47,7 +47,12 @@
     <Reference Include="AWSSDK.SQS">
       <HintPath>..\..\..\0.DLL Bin\AWSSDK.SQS.dll</HintPath>
     </Reference>
-    <Reference Include="BC.Integration.Canonical.SalesChannelOrder.Return">
+    <Reference Include="BC.Integration.APICalls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.APICalls.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Canonical.SalesChannelOrder.Return, Version=0.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Canonical.SalesChannelOrder.Return.dll</HintPath>
     </Reference>
     <Reference Include="BC.Integration.Interfaces">
@@ -65,9 +70,6 @@
     <Reference Include="BC.Integration.Utility.InstrumentationDB">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.InstrumentationDB.dll</HintPath>
     </Reference>
-    <Reference Include="BC.Integration.Utility.SqsPublishService">
-      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.SqsPublishService.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.dll</HintPath>
@@ -75,9 +77,12 @@
     <Reference Include="Microsoft.Practices.Unity.Configuration">
       <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\0.DLL Bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Security" />

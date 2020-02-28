@@ -840,7 +840,7 @@ namespace BC.Integration.Canonical.CanonicalReturn
         private decimal shippingCost;
         private decimal shippingDiscount;
         private decimal lessRestockAmount;
-
+        private string orderInvoiceNumber;
         private string receivedBy;
         private List<ReturnSKU> SKUList;
 
@@ -856,6 +856,17 @@ namespace BC.Integration.Canonical.CanonicalReturn
             set
             {
                 this.returnId = value;
+            }
+        }
+        public string OrderInvoiceNumber
+        {
+            get
+            {
+                return this.orderInvoiceNumber;
+            }
+            set
+            {
+                this.orderInvoiceNumber = value;
             }
         }
 
@@ -901,7 +912,7 @@ namespace BC.Integration.Canonical.CanonicalReturn
             }
         }
 
- 
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ReturnStatus
@@ -996,7 +1007,7 @@ namespace BC.Integration.Canonical.CanonicalReturn
             }
         }
 
- 
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public decimal ShippingDiscount
@@ -1046,6 +1057,7 @@ namespace BC.Integration.Canonical.CanonicalReturn
         private decimal itemSubtotalPrice;
         private decimal amountBeforeTax;
         private decimal amountIncludingTax;
+        private string returnReason;
 
 
         /// <remarks/>
@@ -1059,6 +1071,19 @@ namespace BC.Integration.Canonical.CanonicalReturn
             set
             {
                 this.returnSKUId = value;
+            }
+        }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ReturnReason
+        {
+            get
+            {
+                return this.returnReason;
+            }
+            set
+            {
+                this.returnReason = value;
             }
         }
 

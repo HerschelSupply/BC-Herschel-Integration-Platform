@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
-using BC.Integration.Interfaces;
-using BC.Integration.Utility;
 using System.Configuration;
 using System.Xml;
 using System.Xml.Xsl;
@@ -18,8 +16,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using BC.Integration.APICalls;
 using System.Xml.Linq;
+using System.Web.Script.Serialization;
+using BC.Integration.APICalls;
+using BC.Integration.Utility;
+using BC.Integration.Interfaces;
 
 namespace BC.Integration.AppService.EpOffRampReturnServiceBC
 {
@@ -136,17 +137,20 @@ namespace BC.Integration.AppService.EpOffRampReturnServiceBC
                         //additional flexibility.
 
                         outgoingMessage = CreateBCMsg(msgBody);
-                        // final.LoadXml(outgoingMessage);
-                        // jsonText = JsonConvert.SerializeXmlNode(final);
+
 
                         //post the message to BC
-                        API_Calls.PostReturn(outgoingMessage);
+                        API_Calls helper = new API_Calls();
+                        helper.PostReturn(outgoingMessage);
+
+                      
                     }
                     catch (Exception ex)
                     {
                         Trace.WriteLine(tracingExceptionPrefix + "Occurred when calling Mapper.Convert() to create the outgoing message. Exception message: " + ex.Message);
                         throw new Exception("Error occurred when calling Mapper.Convert() to create the outgoing message.", ex);
                     }
+
 
                    
 
