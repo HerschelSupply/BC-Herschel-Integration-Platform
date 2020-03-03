@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
 using System.Configuration;
 using Amazon.SQS;
-using Amazon.SQS.Model;
 using BC.Integration.Interfaces;
 using BC.Integration;
+using Amazon.SQS;
+using Amazon.SQS.Model;
 using System.Threading;
 using System.Xml;
 using System.ServiceModel;
 using System.Diagnostics;
 using System.Web;
+using Microsoft.Practices.Unity.Configuration;
+using Amazon.SQS.Model;
 
 namespace BC.Integration.Utility
 {

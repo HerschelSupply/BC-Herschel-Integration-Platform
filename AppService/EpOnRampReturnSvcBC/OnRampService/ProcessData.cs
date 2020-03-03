@@ -7,7 +7,6 @@ using System.Configuration;
 using System.Xml;
 using System.IO;
 using BC.Integration.Utility;
-using BC.Integration;
 using BC.Integration.Interfaces;
 using BC.Integration.Canonical.CanonicalReturn;
 using BC.Integration.APICalls;
@@ -353,7 +352,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                 canonicalReturn.Header.Freight = 0;
                 canonicalReturn.Header.TaxAmount = Convert.ToDecimal(returnMessage.Header.TotalTaxes);
                 canonicalReturn.Header.Discount = Convert.ToDecimal(returnMessage.Header.TotalDiscountAmount);
-
+             //   canonicalReturn.Header.TaxAmount = 0; //initialize tax a mount to zero because the header might not be corret
                 //tax exempt 
                 foreach (var payment in returnMessage.Payments.Payment)
                 {
@@ -398,7 +397,8 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                         sku.ReceivedQuantity = item.ReceivedQuantity;
                         sku.ReturnAmount = item.ReturnAmount;
                         sku.UnitPrice = item.UnitPrice;
-                        sku.Tax = item.Tax;
+                        sku.Tax = item.Tax; 
+                      //  canonicalReturn.Header.TaxAmount += item.Tax; //take taxes from the returned item instead
                         sku.ItemSubtotalPrice = item.ItemSubtotalPrice;
                         sku.AmountBeforeTax = item.AmountBeforeTax;
                         sku.AmountInludingTax = item.AmountIncludingTax;
@@ -410,7 +410,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                             //unable to get invoice number
                             // API_Calls helper = new API_Calls();
                             // lineItem.OrderInvoiceNumber = helper.GetInvoiceNumberFromOrder(canonicalReturn.Header.OrderNumber);
-                            lineItem.OrderInvoiceNumber = "12345";
+                            lineItem.OrderInvoiceNumber = "100175";
 
 
                         }
@@ -449,8 +449,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                     canonicalReturn.Addresses.Add(shippingAddress);
                     canonicalReturn.Addresses.Add(billingAddress);
 
-
-
+             
                 }
 
 
