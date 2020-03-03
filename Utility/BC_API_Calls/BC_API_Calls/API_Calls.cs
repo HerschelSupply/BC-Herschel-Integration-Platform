@@ -93,6 +93,9 @@ namespace BC.Integration.APICalls
         private static string ShipmentCarrierToCarrierCodeMapping;
         private static Dictionary<string, string> shipmentCarrierToCarrierCode;
 
+        //Inventory
+        private static string CUTSOLDBYLOC_endpoint;
+
 
 
         public API_Calls()
@@ -157,8 +160,12 @@ namespace BC.Integration.APICalls
             //carrier code
             ShipmentCarrierToCarrierCodeMapping = localConfig.AppSettings.Settings["ShipmentCarrierToCarrierCodeMapping"].Value;
 
+            //Inventory
+            CUTSOLDBYLOC_endpoint = localConfig.AppSettings.Settings["CUTSOLDBYLOC_endpoint"].Value;
 
-          
+
+
+
         }
 
     private void CreateDiComponents()
@@ -442,7 +449,65 @@ namespace BC.Integration.APICalls
             return shipper;
         }
 
+        /// <summary>
+        /// Cut Sold by location outbound endpoint
+        /// </summary>
+        public JArray GetCutSoldByLocation()
+        {
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCutSoldByLocation start retrieving UPC.");
 
+            JArray data = null;
+            try
+            {
+                string uri = CUTSOLDBYLOC_endpoint;
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.Headers.Add(authKey, authValue);
+                /*Servers sometimes compress their responses to save on bandwidth, when this happens, you need to decompress the response before attempting to read it.
+                 Fortunately, the .NET framework can do this automatically, however, we have to turn the setting on. */
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+
+                    var jObj = JObject.Parse(reader.ReadToEnd());
+                    // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
+                    JArray errors = (JArray)jObj.SelectToken("Errors");
+
+                    if (errors.HasValues)
+                    {
+                       /* string errorDetail = "";
+                        foreach (var error in errors)
+                        {
+                            errorDetail += error.
+                        }*/
+                        throw new BlueCherryException("The data was not found. BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation");
+                    }
+
+                    data = (JArray)jObj.SelectToken("data");
+
+
+                }
+
+            }
+            catch (BlueCherryException ex)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the inventory by location value from BlueCherry.");
+                instrumentation.LogGeneralException("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
+                throw new Exception("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
+            }
+            finally
+            {
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCutSoldByLocation completed retrieving Shipper code.");
+
+                instrumentation.FlushActivity();
+                Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetCutSoldByLocation method complete.");
+            }
+
+            return data;
+        }
 
         public string GetCustomerFromSite(string site)
         {
