@@ -22,26 +22,44 @@ namespace BC.Integration.Canonical.Inventory.Ep
         public string Product_id { get; set; }
 
         [JsonProperty("open")]
-        public string Open { get; set; }
+        public int Open { get; set; }
 
         [JsonProperty("picked")]
-        public string Picked { get; set; }
+        public int Picked { get; set; }
 
         [JsonProperty("invoiced")]
-        public string Invoiced { get; set; }
+        public int Invoiced { get; set; }
 
         [JsonProperty("unshipped")]
-        public string Unshipped { get; set; }
+        public int Unshipped { get; set; }
 
         [JsonProperty("qoh")]
-        public string Qoh { get; set; }
+        public int Qoh { get; set; }
 
         [JsonProperty("available_qoh")]
-        public string Available_qoh { get; set; }
+        public int Available_qoh { get; set; }
 
         [JsonProperty("ots_inventory")]
-        public string Ots_inventory { get; set; }
+        public int Ots_inventory { get; set; }
 
 
+    }
+
+    public partial class CanonicalInventory
+    {
+        public static CanonicalInventory FromJson(string json) => JsonConvert.DeserializeObject<CanonicalInventory>(json, Converter.Settings);
+    }
+    public static class SerializeCanonicalInventory
+    {
+        public static string ToJson(this Inventory self) => JsonConvert.SerializeObject(self, Converter.Settings);
+    }
+
+    public class Converter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            DateParseHandling = DateParseHandling.None,
+        };
     }
 }
