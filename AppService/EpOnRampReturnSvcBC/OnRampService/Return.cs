@@ -380,6 +380,8 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             public TaxLines TaxLines { get; set; }
             [XmlElement(ElementName = "ReturnReason")]
             public string ReturnReason { get; set; }
+            [XmlElement(ElementName = "ReceivedState")]
+            public string ReceivedState { get; set; }
         }
 
         [XmlRoot(ElementName = "ReturnSkus", Namespace = "http://com.elasticpath/repo/order")]

@@ -252,6 +252,10 @@ namespace BC.Integration.Canonical.CanonicalReturn
 
         private bool itHasDiscountField;
 
+        private string exchangeOrderIdField;
+
+        private bool isForExchangeOrderField;
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string OrderNumber
@@ -263,6 +267,32 @@ namespace BC.Integration.Canonical.CanonicalReturn
             set
             {
                 this.orderNumberField = value;
+            }
+        }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ExchangeOrderId
+        {
+            get
+            {
+                return this.exchangeOrderIdField;
+            }
+            set
+            {
+                this.exchangeOrderIdField = value;
+            }
+        }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool IsForExchangeOrder
+        {
+            get
+            {
+                return this.isForExchangeOrderField;
+            }
+            set
+            {
+                this.isForExchangeOrderField = value;
             }
         }
 
@@ -1059,6 +1089,7 @@ namespace BC.Integration.Canonical.CanonicalReturn
         private decimal amountBeforeTax;
         private decimal amountIncludingTax;
         private string returnReason;
+        private string receivedState;
 
 
         /// <remarks/>
@@ -1087,7 +1118,19 @@ namespace BC.Integration.Canonical.CanonicalReturn
                 this.returnReason = value;
             }
         }
-
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ReceivedState
+        {
+            get
+            {
+                return this.receivedState;
+            }
+            set
+            {
+                this.receivedState = value;
+            }
+        }
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ReturnItemCode

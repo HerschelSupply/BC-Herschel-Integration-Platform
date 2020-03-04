@@ -340,7 +340,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                 canonicalReturn.Header.isStaffOrder = false;
                 canonicalReturn.Header.itHasDiscount = false;
                 canonicalReturn.Header.itHasGiftCard = false;
-
+                canonicalReturn.Header.IsForExchangeOrder = false;
                 canonicalReturn.Header.OrderDate = Convert.ToDateTime(returnMessage.Header.CreatedDate);
                 canonicalReturn.Header.QuoteExpirationDate = DateTime.Now;
                 canonicalReturn.Header.CancelDate = Convert.ToDateTime("1900-01-01");
@@ -380,8 +380,13 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                     lineItem.RmaCode = returnLine.RmaCode;
                     lineItem.ReturnStatus = returnLine.Status;
                     lineItem.ReturnType = returnLine.ReturnType;
+                    if(lineItem.ReturnType == "EXCHANGE")
+                    {
+                        canonicalReturn.Header.IsForExchangeOrder = true;
+                    }
                     lineItem.IsPhysicalReturn = returnLine.PhysicalReturn;
                     lineItem.ExchangeOrderId = returnLine.ExchangeOrderId;
+                    canonicalReturn.Header.ExchangeOrderId = lineItem.ExchangeOrderId;
                     lineItem.ShippingCost = returnLine.ShippingCost;
                     lineItem.ShippingDiscount = returnLine.ShippingDiscount;
                     lineItem.LessRestockAmount = returnLine.LessRestockAmount;
@@ -398,11 +403,12 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                         sku.ReturnAmount = item.ReturnAmount;
                         sku.UnitPrice = item.UnitPrice;
                         sku.Tax = item.Tax; 
-                      //  canonicalReturn.Header.TaxAmount += item.Tax; //take taxes from the returned item instead
+                        canonicalReturn.Header.TaxAmount += item.Tax; //take taxes from the returned item instead
                         sku.ItemSubtotalPrice = item.ItemSubtotalPrice;
                         sku.AmountBeforeTax = item.AmountBeforeTax;
                         sku.AmountInludingTax = item.AmountIncludingTax;
                         sku.ReturnReason = item.ReturnReason;
+                        sku.ReceivedState = item.ReceivedState;
 
 
                         try
