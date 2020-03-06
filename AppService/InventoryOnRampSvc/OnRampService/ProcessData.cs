@@ -12,6 +12,7 @@ using BC.Integration.Canonical.Inventory.Ep;
 using System.Linq;
 using BC.Integration.APICalls;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace BC.Integration.InventoryOnRamp
 {
@@ -26,7 +27,6 @@ namespace BC.Integration.InventoryOnRamp
         IConfiguration config;
         IInstrumentation instrumentation;
         IPublishService publishService;
-        IFtpIntegrator integrator;
         UnityContainer container;
 
         //Key service Properties that should never change from design time
@@ -53,10 +53,8 @@ namespace BC.Integration.InventoryOnRamp
         //Messaging Queue Properties
         private string queueUrl = "";
 
-        //private string batchData = "";
         private MessageManager msgMgr = new MessageManager();
         private string batchName = "";
-        //private string documentNumber;
         private XmlDocument outgoingMessage;
         private string messageFormat = "xml";
         private int serviceVersion = 1;
@@ -146,21 +144,19 @@ namespace BC.Integration.InventoryOnRamp
                 {
                     //Log Activation Start
                     instrumentation.LogActivation(serviceId, new Guid(activationGuid.Substring(0, 36)), false);
+                    string data = "";
 
-                    
                     //Get data from Source System or Local File Pickup
-                    if(!localFileSource)
+                    if (!localFileSource)
                     {
                         try
                         {
-                            //Use FTP integrator component to get file from FTP server
-                           // integrator.CreateSession(configuration);
-
+                           
                             //Get data from BC
                             API_Calls APIcalls = new API_Calls();
 
                             string json = @"[{
-                                'location': '20',
+                                'location': '11',
                                 'division': 'HSC',
                                 'upc': '828432006540',
                                 'product_id':'10026-00055-OS',
@@ -170,10 +166,11 @@ namespace BC.Integration.InventoryOnRamp
                                 'unshipped':'0',
                                 'qoh':'100',
                                 'available_qoh':'100',
-                                'ots_inventory':'95'
+                                'ots_inventory':'95',
+                                'extraFields':'t1'
                              },
                             {
-                                'location': '20',
+                                'location': '11',
                                 'division': 'HSC',
                                 'upc': '828432010295',
                                 'product_id':'10005-00001-OS',
@@ -183,50 +180,78 @@ namespace BC.Integration.InventoryOnRamp
                                 'unshipped':'0',
                                 'qoh':'100',
                                 'available_qoh':'100',
-                                'ots_inventory':'90'
-                             }     
+                                'ots_inventory':'90',
+                                'extraFields':'t2'
+                             } ,
+                            {
+                                'location': '21',
+                                'division': 'HSC',
+                                'upc': '828432010295',
+                                'product_id':'10005-00001-OS',
+                                'open':'10',
+                                'picked':'0',
+                                'invoiced':'0',
+                                'unshipped':'0',
+                                'qoh':'100',
+                                'available_qoh':'100',
+                                'ots_inventory':'90',
+                                'extraFields':'t3'
+                             }
                             ]";
 
-                            JArray data = JArray.Parse(json);
-
+                          // data = JArray.Parse(json);
                             //JArray data =  APIcalls.GetCutSoldByLocation();
 
+                            Inventory[] items = JsonConvert.DeserializeObject<Inventory[]>(json);
+                            var groupedByLoc = items.GroupBy(i => i.Location).ToList();
 
-                            foreach (var item in data)
+                            foreach (var item in groupedByLoc)
                             {
-                                ProcessSourceData(item, activationGuid);
-                                    //Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Files found.  Filename: " + batchName);
+                                string location = item.FirstOrDefault().Location;
+                                string jsonMsg = JsonConvert.SerializeObject(item);
+
+                                ProcessSourceData(jsonMsg, location, activationGuid);
+                                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Data found. ");
                             }
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process Baozun CSV Sales files. (BC.Integration.InventoryOnRamp.Process.ProcessData method)", ex);
-                        }
-                        finally
-                        {
-                            //integrator.CloseSession();
+                            throw new Exception("An Exception occurred while trying to retrieve and process Inventory data from BC API. (BC.Integration.InventoryOnRamp.Process.ProcessData method)", ex);
                         }
                     }
                     else
                     {
-                       /* try
+                      try
                         {
                             //Get local file data
                             data = GetFileSourceData(pickupFileFolderPath);
-                            ProcessFile(data, activationGuid);
                             batchName = "LocalFile";
+
+                            Inventory[] items = JsonConvert.DeserializeObject<Inventory[]>(data);
+                            var groupedByLoc = items.GroupBy(i => i.Location).ToList();
+
+                            foreach (var item in groupedByLoc)
+                            {
+                                string location = item.FirstOrDefault().Location;
+                                string jsonMsg = JsonConvert.SerializeObject(item);
+
+                                ProcessSourceData(jsonMsg, location, activationGuid);
+                                Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Files found.  Filename: " + batchName);
+                            }                            
+
+                            
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process Baozun Local Sales files. (BC.Integration.InventoryOnRamp.Process.ProcessData method)", ex);
-                        }*/
+                            throw new Exception("An Exception occurred while trying to retrieve and process Inventory local files. (BC.Integration.InventoryOnRamp.Process.ProcessData method)", ex);
+                        }
                     }
 
                     //______________________________________________________________________________________________
 
                     //Log Activation End (This step will be skipped if an exception occurs)
                     instrumentation.LogActivationEnd(new Guid(activationGuid.Substring(0, 36)));
-                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + " End processing Baozun CSV batch file.");
+                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + " End processing Inventory data.");
                 }
                 catch (Exception ex)
                 {
@@ -247,9 +272,9 @@ namespace BC.Integration.InventoryOnRamp
             }
         }
 
-        private void ProcessSourceData(JToken data, string activationGuid)
+        private void ProcessSourceData(string canonicalMsg, string location, string activationGuid)
         {
-            string itemNumber = data.Value<string>("product_id");
+                        
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.InventoryOnRamp.Process.ProcessFile.  Start Processing Source data.");
             //Create initial msg envelope to represent the start of the service process and call Instrumenation
             XmlDocument msg = msgMgr.CreateOnRampMessage(processName, serviceId, serviceVersion, serviceOperationId, msgType, messageVersion, messageFormat, batchName);
@@ -261,13 +286,13 @@ namespace BC.Integration.InventoryOnRamp
                 try
                 {
 
-                    //Call a method to process each transaction and map to the Sales Document
-                    string canonicalMsg = MapInventoryToCanonical(data);
+                //Call a method to process each transaction and map to the Sales Document
+                //string canonicalMsg =  MapInventoryToCanonical(data);
 
                     //Create envelope and add canonical message to the envelope
                     HipKeyValuePairCollection filterCol = new HipKeyValuePairCollection(filterKeyValuePairs);
                     HipKeyValuePairCollection processCol = new HipKeyValuePairCollection(processKeyValuePairs);
-                    outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, topic, filterCol, processCol, canonicalMsg.ToString(), 1, null, "");
+                    outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, topic, filterCol, processCol, canonicalMsg, 1, null, "");
 
                     int retryCount = 0;
                     //Place message on the message bus
@@ -280,7 +305,7 @@ namespace BC.Integration.InventoryOnRamp
                     string textBody = "";
 
                     textBody = canonicalMsg;
-                    SaveMessageToFile(textBody, serviceId + "." + itemNumber , false); 
+                    SaveMessageToFile(textBody, serviceId + "."  , false); 
 
                         /*string site = "TM";
                         string textBody = "RAW\r\n";
@@ -295,7 +320,7 @@ namespace BC.Integration.InventoryOnRamp
 
                     //Log Activity
                     instrumentation.LogActivity(outgoingMessage, queueUrl, retryCount);
-                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + " End processing: " + itemNumber);
+                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + " End processing location: " + location);
                     
                 }
                 catch (Exception ex)
@@ -303,7 +328,7 @@ namespace BC.Integration.InventoryOnRamp
                     Trace.WriteLine(tracingExceptionPrefix + " An exception occured while processing data in BC.Integration.InventoryOnRamp.Process.ProcessSourceData. Exception message: " + ex.Message);
                     instrumentation.LogMessagingException("An exception occured while processing a message in the " +
                         "BC.Integration.InventoryOnRamp.Process.ProcessSourceData method. The current process is - " + processName +
-                        " SKU being processed is " + data.Value<string>("product_id") + ".", outgoingMessage, ex);
+                        "Processing SiteId: "+ location, outgoingMessage, ex);
                 }
             
         }
@@ -332,7 +357,7 @@ namespace BC.Integration.InventoryOnRamp
             instrumentation.WriteMsgToFile(path, null, message, fileName, null);
         }
 
-        public  string MapInventoryToCanonical(JToken data)
+        /*public  string MapInventoryToCanonical(JToken data)
         {
             try
             {
@@ -363,7 +388,7 @@ namespace BC.Integration.InventoryOnRamp
                 throw new Exception("An error occured while trying to map the Inventory message to the CanonicalInventory message" +
                     "in the BC.Integration.InventoryOnRamp.MapInventoryToCanonical method. The SKU is: " + data.Value<string>("Product_id"), ex);
             }
-        }
+        }*/
 
         
         /// <summary>
@@ -407,18 +432,12 @@ namespace BC.Integration.InventoryOnRamp
             foreach (string file in fileNames)
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Get file messages.  Filename: " + file);
-                if (file.Substring(file.LastIndexOf("\\") + 1, 2).ToUpper() != "ST")
-                {
+               
                     string fileText = File.ReadAllText(file);
                     fileText = fileText.TrimEnd('\r', '\n');
                     data += fileText + "\r\n";
                     //Remove file after processing
-                }
-                else
-                {
-                    Trace.WriteLineIf(tracingEnabled, tracingExceptionPrefix + " File skipped as the name starts with ST signifying it is a Sales Tender file.  Filename: " + file);
-                    instrumentation.LogGeneralException("File skipped as the name starts with ST signifying it is a Sales Tender file.  Filename: " + file, new Exception(""));
-                }
+               
                File.Delete(file);
             }
             data = data.Trim();
@@ -434,7 +453,6 @@ namespace BC.Integration.InventoryOnRamp
             //Create Unity container for DI and create DI components
             container = new UnityContainer();
             container.LoadConfiguration();
-            //integrator = container.Resolve<IFtpIntegrator>();
             config = container.Resolve<IConfiguration>();
             configuration = config.PopulateConfigurationCollectionFromAppConfig();
             OverrideConfigProperties(config);

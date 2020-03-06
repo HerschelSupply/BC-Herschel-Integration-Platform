@@ -420,8 +420,13 @@ namespace BC.Integration.APICalls
 
                     if (errors.HasValues)
                     {
+                        string errorDesc="";
                         //return "";
-                        throw new BlueCherryException("The Shipper  was not found. Ship_name: " + ship_name + ". BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper");
+                        foreach (JToken error in errors)
+                        {
+                            errorDesc += error.Value<string>("ErrorMessage") + " ";
+                        }
+                        throw new BlueCherryException("ErrorMessage:" + errorDesc + " Ship_name: " + ship_name + ". BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper");
                     }
 
                     JArray data = (JArray)jObj.SelectToken("data");
@@ -478,12 +483,12 @@ namespace BC.Integration.APICalls
 
                     if (errors.HasValues)
                     {
-                       /* string errorDetail = "";
-                        foreach (var error in errors)
+                        string errorDesc = "";
+                        foreach (JToken error in errors)
                         {
-                            errorDetail += error.
-                        }*/
-                        throw new BlueCherryException("The data was not found. BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation");
+                            errorDesc += error.Value<string>("ErrorMessage") + " ";
+                        }
+                        throw new BlueCherryException("ErrorMessage: " + errorDesc + " BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation");
                     }
 
                     data = (JArray)jObj.SelectToken("data");
@@ -538,8 +543,12 @@ namespace BC.Integration.APICalls
 
                     if (errors.HasValues)
                     {
-                        //return "";
-                        throw new BlueCherryException("The customer number was not found. Location: " + site + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite");
+                        string errorDesc = "";
+                        foreach (JToken error in errors)
+                        {
+                            errorDesc += error.Value<string>("ErrorMessage") + " ";
+                        }
+                        throw new BlueCherryException("ErrorMessage:"+ errorDesc+" Location: " + site + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite");
                     }
 
                     JArray data = (JArray)jObj.SelectToken("data");
@@ -593,8 +602,12 @@ namespace BC.Integration.APICalls
 
                     if (errors.HasValues)
                     {
-                        //return "";
-                        throw new BlueCherryException("The order number was not found. Order Number: " + poNumber + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder");
+                        string errorDesc = "";
+                        foreach (JToken error in errors)
+                        {
+                            errorDesc += error.Value<string>("ErrorMessage") + " ";
+                        }
+                        throw new BlueCherryException("ErrorMessage:"+ errorDesc +" Order Number: " + poNumber + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder");
                     }
 
                     JArray data = (JArray)jObj.SelectToken("data");
@@ -833,7 +846,7 @@ namespace BC.Integration.APICalls
         {
             XmlDocument originalDoc = new XmlDocument();
             originalDoc.LoadXml(value);
-            instrumentation.LogActivity(originalDoc);
+           // instrumentation.LogActivity(originalDoc);
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostOrder start posting order.");
 
             var responseString ="";
@@ -932,7 +945,7 @@ namespace BC.Integration.APICalls
 
             XmlDocument originalDoc = new XmlDocument();
             originalDoc.LoadXml(value);
-            instrumentation.LogActivity(originalDoc);
+            //instrumentation.LogActivity(originalDoc);
 
             String responseString = "";
             //Turns orderDetail to an Array, even when there's only one line item.
@@ -1014,7 +1027,7 @@ namespace BC.Integration.APICalls
         {
             XmlDocument originalDoc = new XmlDocument();
             originalDoc.LoadXml(value);
-            instrumentation.LogActivity(originalDoc); ;
+           // instrumentation.LogActivity(originalDoc); ;
 
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE +".PostResturn start posting return.");
 
