@@ -65,6 +65,8 @@ namespace BC.Integration.InventoryOnRamp
         private string tracingMessageFolderPath = "";
         private string pickupFileFolderPath = "";
 
+
+        private string BCLocationIdsToProcess = ConfigurationManager.AppSettings["BCLocationIdsToProcess"];
         #endregion
 
         #region Configuration methods
@@ -199,19 +201,22 @@ namespace BC.Integration.InventoryOnRamp
                              }
                             ]";
 
-                          // data = JArray.Parse(json);
-                            //JArray data =  APIcalls.GetCutSoldByLocation();
+                            string[] locations = BCLocationIdsToProcess.Split(',');
 
-                            Inventory[] items = JsonConvert.DeserializeObject<Inventory[]>(json);
-                            var groupedByLoc = items.GroupBy(i => i.Location).ToList();
-
-                            foreach (var item in groupedByLoc)
+                            foreach (var location in locations)
                             {
-                                string location = item.FirstOrDefault().Location;
-                                string jsonMsg = JsonConvert.SerializeObject(item);
+                                // Inventory[] items = JsonConvert.DeserializeObject<Inventory[]>(json);
+                                Inventory[] items = JsonConvert.DeserializeObject<Inventory[]>(APIcalls.GetCutSoldByLocation(location));
+                                //var groupedByLoc = items.GroupBy(i => i.Location).ToList();
 
-                                ProcessSourceData(jsonMsg, location, activationGuid);
-                                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Data found. ");
+                                //foreach (var item in groupedByLoc)
+                                //{
+                                    //string location = item.FirstOrDefault().Location;
+                                    string jsonMsg = JsonConvert.SerializeObject(items);
+
+                                    ProcessSourceData(jsonMsg, location, activationGuid);
+                                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Data found. ");
+                                //}
                             }
                         }
                         catch (Exception ex)

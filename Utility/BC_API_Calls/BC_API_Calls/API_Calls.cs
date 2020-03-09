@@ -95,6 +95,7 @@ namespace BC.Integration.APICalls
 
         //Inventory
         private static string CUTSOLDBYLOC_endpoint;
+        private static string CUTSOLDBYLOC_param_loc;
 
 
 
@@ -162,6 +163,7 @@ namespace BC.Integration.APICalls
 
             //Inventory
             CUTSOLDBYLOC_endpoint = localConfig.AppSettings.Settings["CUTSOLDBYLOC_endpoint"].Value;
+            CUTSOLDBYLOC_param_loc = localConfig.AppSettings.Settings["CUTSOLDBYLOC_param_loc"].Value;
 
 
 
@@ -457,14 +459,14 @@ namespace BC.Integration.APICalls
         /// <summary>
         /// Cut Sold by location outbound endpoint
         /// </summary>
-        public JArray GetCutSoldByLocation()
+        public string GetCutSoldByLocation(string siteId)
         {
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCutSoldByLocation start retrieving UPC.");
 
-            JArray data = null;
+            string data = null;
             try
             {
-                string uri = CUTSOLDBYLOC_endpoint;
+                string uri = CUTSOLDBYLOC_endpoint+"?"+ CUTSOLDBYLOC_param_loc+"="+siteId;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
                 request.Headers.Add(authKey, authValue);
@@ -491,7 +493,7 @@ namespace BC.Integration.APICalls
                         throw new BlueCherryException("ErrorMessage: " + errorDesc + " BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation");
                     }
 
-                    data = (JArray)jObj.SelectToken("data");
+                    data = jObj.SelectToken("data").ToString();
 
 
                 }
@@ -893,21 +895,12 @@ namespace BC.Integration.APICalls
                     responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
                     var jObj = JObject.Parse(responseString);
-
+                                       
                     // validates if there are any errors 
                     JArray errors = (JArray)jObj.SelectToken("Errors");
                     string errorDesc = "";
 
 
-
-                    if (errors.HasValues)
-                    {
-                        foreach (var item in errors)
-                        {
-                            errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
-                        }
-                        throw new BlueCherryException(errorDesc + " PO Number: " + po_num);
-                    }
                     instrumentation.LogActivity(originalDoc, DESTINATION, 0);
 
                    

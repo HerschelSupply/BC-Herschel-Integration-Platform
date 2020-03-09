@@ -22,25 +22,25 @@ namespace BC.Integration.Canonical.Inventory.Ep
         public string Product_id { get; set; }
 
         [JsonProperty("open")]
-        public int Open { get; set; }
+        public string Open { get; set; }
 
         [JsonProperty("picked")]
-        public int Picked { get; set; }
+        public string Picked { get; set; }
 
         [JsonProperty("invoiced")]
-        public int Invoiced { get; set; }
+        public string Invoiced { get; set; }
 
         [JsonProperty("unshipped")]
-        public int Unshipped { get; set; }
+        public string Unshipped { get; set; }
 
         [JsonProperty("qoh")]
-        public int Qoh { get; set; }
+        public string Qoh { get; set; }
 
         [JsonProperty("available_qoh")]
-        public int Available_qoh { get; set; }
+        public string Available_qoh { get; set; }
 
         [JsonProperty("ots_inventory")]
-        public int Ots_inventory { get; set; }
+        public string Ots_inventory { get; set; }
 
 
     }
