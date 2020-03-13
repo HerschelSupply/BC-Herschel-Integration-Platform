@@ -302,6 +302,9 @@ namespace BC.Integration.InventoryOnRamp
                     int retryCount = 0;
                     //Place message on the message bus
                     //CR8: Update Dynamic Routing
+                    
+
+
                     PublishMessage(outgoingMessage.InnerXml, filterCol);
 
                     //Save a copy of message
@@ -310,7 +313,7 @@ namespace BC.Integration.InventoryOnRamp
                     string textBody = "";
 
                     textBody = canonicalMsg;
-                    SaveMessageToFile(textBody, serviceId + "."  , false); 
+                    SaveMessageToFile(textBody, location +"_"+ DateTime.Now.ToString("yyyyMMdd")  , false); 
 
                         /*string site = "TM";
                         string textBody = "RAW\r\n";

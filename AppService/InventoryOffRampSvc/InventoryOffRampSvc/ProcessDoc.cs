@@ -15,6 +15,7 @@ using System.Web;
 using System.IO;
 using Apache.NMS;
 using Apache.NMS.Util;
+using Newtonsoft.Json.Linq;
 
 
 namespace BC.Integration.AppService.InventoryOffRampSvc
@@ -139,7 +140,7 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
                         // create the Ep Message
                         Trace.WriteLineIf(tracingEnabled, tracingPrefix + "Creating EP message...");
 
-                        outgoingMessage =  Mapper.ConvertToEPMessage(outgoingMessage);
+                        outgoingMessage =  ConvertToEPMessage(outgoingMessage);
 
                         Trace.WriteLineIf(tracingEnabled, tracingPrefix + "End EP message creation...");
 
@@ -225,7 +226,46 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
             return true;
         }
 
-        
+
+        /// <summary>
+        /// Converts Canonical shipping confirmation into a EP shipping confirmation message.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns>EP shipping confirmation</returns>
+        public  string ConvertToEPMessage(string message)
+        {
+            string epMessage = "itemnmbr,qtyonhand\r\n";
+                       
+                JArray data = JArray.Parse(message);
+
+              foreach (var item in data)
+              {
+                try
+                {
+                    if (item.Value<string>("location") == null || item.Value<string>("product_id") == null || item.Value<string>("qoh") == null)
+                    {
+                        throw new Exception("Location, product_id and qoh are required fields. Current values: Location=" + item.Value<string>("location") + ", ProductId=" + item.Value<string>("product_id") + ", QOH=" + item.Value<string>("qoh"));
+                       
+                    }
+                    else
+                    {
+                        epMessage += item.Value<string>("product_id") + "," + item.Value<string>("qoh") + "\r\n";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + "EXCEPTION Occurred: " + ex.Message);
+                    instrumentation.LogGeneralException(tracingPrefix + "Error occurred in the BC.Integration.AppService.InventoryOffRampSvc.ConvertToEPMessage method. "
+                     , ex);
+                }
+              }
+
+           
+
+            return epMessage;
+
+
+        }
 
         /// <summary>
         /// Instantiates the objects that are used via dependency injection

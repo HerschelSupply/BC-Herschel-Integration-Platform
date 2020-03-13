@@ -12,25 +12,7 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
     {
 
         private static string warehouseSettings = ConfigurationManager.AppSettings["WarehouseSettings"];
-        /// <summary>
-        /// Converts Canonical shipping confiramtion into a EP shipping confirmation message.
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns>EP shipping confirmation</returns>
-        public static string ConvertToEPMessage(string message)
-        {
-            string epMessage = "itemnmbr,qtyonhand\r\n";
-
-            JArray data = JArray.Parse(message);
-
-            foreach (var item in data)
-            {
-                epMessage += item.Value<string>("product_id") + "," + item.Value<string>("qoh") + "\r\n";
-            }
-
-
-            return epMessage;
-        }
+        
 
         public static WarehouseSettings GetWarehouseCodes(string message)
         {
