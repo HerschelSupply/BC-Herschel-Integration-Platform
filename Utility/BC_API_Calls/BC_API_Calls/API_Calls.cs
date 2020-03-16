@@ -101,70 +101,76 @@ namespace BC.Integration.APICalls
 
         public API_Calls()
         {
-   
-            ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "C:\\BC Herschel Integration Platform\\Utility\\BC_API_Calls\\BC_API_Calls\\web.config" };
-            localConfig = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+            try
+            {
+                ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "C:\\BC Herschel Integration Platform\\Utility\\BC_API_Calls\\BC_API_Calls\\web.config" };
+                localConfig = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
-            CreateDiComponents();
+                CreateDiComponents();
 
-            string m = localConfig.AppSettings.Settings["ProcessName"].Value;
-            processName = localConfig.AppSettings.Settings["ProcessName"].Value; //Set to the value of the incoming message. 
-            messageType = localConfig.AppSettings.Settings["ServiceId"].Value; //Set to the value of the incoming message.
-                                                                          //Key service Properties that should never change from design time
-            serviceId = localConfig.AppSettings.Settings["ServiceId"].Value;
-            serviceVersion = Convert.ToDecimal(localConfig.AppSettings.Settings["ServiceVersion"].Value);
-            serviceOperationId = localConfig.AppSettings.Settings["ServiceOperationId"].Value;
-            servicePostOperationId = localConfig.AppSettings.Settings["ServicePostOperationId"].Value;
-            centralConfigConnString = localConfig.AppSettings.Settings["CentralConfigConnString"].Value;
+                string m = localConfig.AppSettings.Settings["ProcessName"].Value;
+                processName = localConfig.AppSettings.Settings["ProcessName"].Value; //Set to the value of the incoming message. 
+                messageType = localConfig.AppSettings.Settings["ServiceId"].Value; //Set to the value of the incoming message.
+                                                                                   //Key service Properties that should never change from design time
+                serviceId = localConfig.AppSettings.Settings["ServiceId"].Value;
+                serviceVersion = Convert.ToDecimal(localConfig.AppSettings.Settings["ServiceVersion"].Value);
+                serviceOperationId = localConfig.AppSettings.Settings["ServiceOperationId"].Value;
+                servicePostOperationId = localConfig.AppSettings.Settings["ServicePostOperationId"].Value;
+                centralConfigConnString = localConfig.AppSettings.Settings["CentralConfigConnString"].Value;
 
-            //Local processing properties
-            tracingPrefix = localConfig.AppSettings.Settings["TracingPrefix"].Value + ": ";
-            tracingExceptionPrefix = localConfig.AppSettings.Settings["TracingPrefix"].Value + ".EXCEPTION : ";
+                //Local processing properties
+                tracingPrefix = localConfig.AppSettings.Settings["TracingPrefix"].Value + ": ";
+                tracingExceptionPrefix = localConfig.AppSettings.Settings["TracingPrefix"].Value + ".EXCEPTION : ";
 
-            //Auth
-            authKey = localConfig.AppSettings.Settings["authKey"].Value;
-            authValue = localConfig.AppSettings.Settings["authValue"].Value;
-
-
-            //UPC 
-
-            UPC_endpoint = localConfig.AppSettings.Settings["UPC_endpoint"].Value;
-            UPC_param_style = localConfig.AppSettings.Settings["UPC_param_style"].Value;
-            UPC_param_color = localConfig.AppSettings.Settings["UPC_param_color"].Value;
-            UPC_param_size = localConfig.AppSettings.Settings["UPC_param_size"].Value;
-
-            //Customer 
-            Customer_endpoint = localConfig.AppSettings.Settings["Customer_endpoint"].Value;
-            Customer_param_location = localConfig.AppSettings.Settings["Customer_param_location"].Value;
-
-            //Order
-            ORDER_Iendpoint = localConfig.AppSettings.Settings["ORDER_Iendpoint"].Value.ToString();
-            RETURN_Iendpoint = localConfig.AppSettings.Settings["RETURN_Iendpoint"].Value.ToString();
-            ORDER_endpoint = localConfig.AppSettings.Settings["ORDER_endpoint"].Value.ToString();
-            ORDER_param_po_num = localConfig.AppSettings.Settings["ORDER_param_po_num"].Value.ToString();
-            ORDER_DetailsOEndpoint = localConfig.AppSettings.Settings["ORDER_DetailsOEndpoint"].Value.ToString();
+                //Auth
+                authKey = localConfig.AppSettings.Settings["authKey"].Value;
+                authValue = localConfig.AppSettings.Settings["authValue"].Value;
 
 
-            //OrderShipment 945
-            ORDERSHIPMENT_Iendpoint = localConfig.AppSettings.Settings["ORDERSHIPMENT_Iendpoint"].Value.ToString();
+                //UPC 
 
-            //allocation
-            US_East_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["US_East_Enabled"].Value));
-            US_West_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["US_West_Enabled"].Value));
-            CA_East_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["CA_East_Enabled"].Value));
-            CA_West_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["CA_West_Enabled"].Value));
+                UPC_endpoint = localConfig.AppSettings.Settings["UPC_endpoint"].Value;
+                UPC_param_style = localConfig.AppSettings.Settings["UPC_param_style"].Value;
+                UPC_param_color = localConfig.AppSettings.Settings["UPC_param_color"].Value;
+                UPC_param_size = localConfig.AppSettings.Settings["UPC_param_size"].Value;
 
-            //Shipping
-            SHIPPING_endpoint = localConfig.AppSettings.Settings["SHIPPING_endpoint"].Value;
-            SHIPPING_param_name = localConfig.AppSettings.Settings["SHIPPING_param_name"].Value;
+                //Customer 
+                Customer_endpoint = localConfig.AppSettings.Settings["Customer_endpoint"].Value;
+                Customer_param_location = localConfig.AppSettings.Settings["Customer_param_location"].Value;
 
-            //carrier code
-            ShipmentCarrierToCarrierCodeMapping = localConfig.AppSettings.Settings["ShipmentCarrierToCarrierCodeMapping"].Value;
+                //Order
+                ORDER_Iendpoint = localConfig.AppSettings.Settings["ORDER_Iendpoint"].Value.ToString();
+                RETURN_Iendpoint = localConfig.AppSettings.Settings["RETURN_Iendpoint"].Value.ToString();
+                ORDER_endpoint = localConfig.AppSettings.Settings["ORDER_endpoint"].Value.ToString();
+                ORDER_param_po_num = localConfig.AppSettings.Settings["ORDER_param_po_num"].Value.ToString();
+                ORDER_DetailsOEndpoint = localConfig.AppSettings.Settings["ORDER_DetailsOEndpoint"].Value.ToString();
 
-            //Inventory
-            CUTSOLDBYLOC_endpoint = localConfig.AppSettings.Settings["CUTSOLDBYLOC_endpoint"].Value;
-            CUTSOLDBYLOC_param_loc = localConfig.AppSettings.Settings["CUTSOLDBYLOC_param_loc"].Value;
 
+                //OrderShipment 945
+                ORDERSHIPMENT_Iendpoint = localConfig.AppSettings.Settings["ORDERSHIPMENT_Iendpoint"].Value.ToString();
+
+                //allocation
+                US_East_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["US_East_Enabled"].Value));
+                US_West_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["US_West_Enabled"].Value));
+                CA_East_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["CA_East_Enabled"].Value));
+                CA_West_Enabled = Convert.ToBoolean(Convert.ToInt16(localConfig.AppSettings.Settings["CA_West_Enabled"].Value));
+
+                //Shipping
+                SHIPPING_endpoint = localConfig.AppSettings.Settings["SHIPPING_endpoint"].Value;
+                SHIPPING_param_name = localConfig.AppSettings.Settings["SHIPPING_param_name"].Value;
+
+                //carrier code
+                ShipmentCarrierToCarrierCodeMapping = localConfig.AppSettings.Settings["ShipmentCarrierToCarrierCodeMapping"].Value;
+
+                //Inventory
+                CUTSOLDBYLOC_endpoint = localConfig.AppSettings.Settings["CUTSOLDBYLOC_endpoint"].Value;
+                CUTSOLDBYLOC_param_loc = localConfig.AppSettings.Settings["CUTSOLDBYLOC_param_loc"].Value;
+            }
+            catch (Exception ex)
+            {
+               instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "BC API",
+                   "An exception was raised when instantiating BC_APICalls class.  " + ex.Message, "");
+            }
 
 
 
@@ -287,13 +293,11 @@ namespace BC.Integration.APICalls
 
                     if (errors.HasValues)
                     {
-                        //return "";
                         throw new BlueCherryException("The UPC  was not found. Style: " + style + " Color: " + color + " Size: " + size + ". BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC");
                     }
 
                     JArray data = (JArray)jObj.SelectToken("data");
                     upc = data[0].SelectToken("upc").ToString();
-
 
                     //return reader.ReadToEnd();
                 }
@@ -302,14 +306,17 @@ namespace BC.Integration.APICalls
             catch (BlueCherryException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the UPC value from BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
+              
+                throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
+            }
+            catch (Exception ex)
+            {
                 throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
             }
             finally
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetUPC completed retrieving UPC.");
 
-                instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetUPC method complete.");
             }
 
@@ -442,14 +449,14 @@ namespace BC.Integration.APICalls
             catch (BlueCherryException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the Shipper value from BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to get the Shipper value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
+                //instrumentation.LogGeneralException("An exception occured trying to get the Shipper value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
                 throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
             }
             finally
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetShipper completed retrieving Shipper code.");
 
-                instrumentation.FlushActivity();
+               // instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetShipper method complete.");
             }
 
@@ -502,14 +509,14 @@ namespace BC.Integration.APICalls
             catch (BlueCherryException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the inventory by location value from BlueCherry.");
-                instrumentation.LogGeneralException("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
+                //instrumentation.LogGeneralException("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
                 throw new Exception("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
             }
             finally
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCutSoldByLocation completed retrieving Shipper code.");
 
-                instrumentation.FlushActivity();
+                //instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetCutSoldByLocation method complete.");
             }
 
@@ -563,14 +570,14 @@ namespace BC.Integration.APICalls
             catch (WebException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the UPC value from BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. ", ex);
+                //instrumentation.LogGeneralException("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. ", ex);
                 throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. ", ex);
             }
             finally
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCustomerFromSite completed retrieving customer from site.");
 
-                instrumentation.FlushActivity();
+                //instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetCustomerFromSite method complete.");
             }
 
@@ -622,13 +629,13 @@ namespace BC.Integration.APICalls
             catch (WebException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the invoice number from BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to get the Invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
+               // instrumentation.LogGeneralException("An exception occured trying to get the Invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
                 throw new Exception("An exception occured trying to get the invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
             }
             finally
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetInvoiceNumberFromOrder cmpleted retrieving invoice number from PO.");
-                instrumentation.FlushActivity();
+                //instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetInvoiceNumberFromOrder method complete.");
             }
 
@@ -786,10 +793,11 @@ namespace BC.Integration.APICalls
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".AllocateBasedOnState start allocating site.");
 
             string allocateTo = state;
-            Dictionary<string, string> warehousePairs = InitializeWarehousePairs();
+            Dictionary<string, string> warehousePairs;
 
             try
             {
+                warehousePairs = InitializeWarehousePairs();
                 if (country == "US")
                 {
                     if (US_East_Enabled && US_West_Enabled)
@@ -824,13 +832,11 @@ namespace BC.Integration.APICalls
             catch (Exception ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to post allocate site based on state and country");
-                instrumentation.LogGeneralException("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.AllocateBasedOnState.", ex);
-                throw new Exception("An exception occured trying to retrieve correct site allocation. BC.Integration.Utility.BC_API_Calls.AllocateBasedOnState.", ex);
+                throw new Exception("An exception occured trying to retrieve correct site allocation. BC.Integration.Utility.BC_API_Calls.AllocateBasedOnState. The combination of the state:" + state + " and country:" + country + "was not found.", ex);
 
             }
             finally
             {
-                instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and AllocateBasedOnState method complete.");
             }
 
@@ -840,7 +846,7 @@ namespace BC.Integration.APICalls
             return allocateTo;
         }
 
-        #endregion
+        #endregion  
 
 
         #region Inbound Endpoints
@@ -848,7 +854,6 @@ namespace BC.Integration.APICalls
         {
             XmlDocument originalDoc = new XmlDocument();
             originalDoc.LoadXml(value);
-           // instrumentation.LogActivity(originalDoc);
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostOrder start posting order.");
 
             var responseString ="";
@@ -895,31 +900,40 @@ namespace BC.Integration.APICalls
                     responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
                     var jObj = JObject.Parse(responseString);
-                                       
+                    JArray messages = (JArray)jObj.SelectToken("Message");
                     // validates if there are any errors 
                     JArray errors = (JArray)jObj.SelectToken("Errors");
                     string errorDesc = "";
 
-
-                    instrumentation.LogActivity(originalDoc, DESTINATION, 0);
-
-                   
-
+                    if (errors.HasValues)
+                    {
+                        foreach (var item in errors)
+                        {
+                            errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
+                        }
+                        throw new BlueCherryException(errorDesc + " PO Number: " + po_num);
+                    }
+                    else if (messages.HasValues)
+                    {
+                        string a = messages[0].SelectToken("message").ToString();
+                            if (messages[0].SelectToken("message").ToString().Contains("could not be processed due to errors"))
+                            {
+                                throw new BlueCherryException(" PO Number: " + po_num + "could not be processed due to errors");
+                            }
+                        
+                    }
+                    
                 }
-                catch (WebException ex)
+                catch (BlueCherryException ex)
                 {
+                   
                     Trace.WriteLine("BC_API_Calls: Exception occured trying to post an order into BlueCherry");
-                    instrumentation.LogGeneralException("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
                     throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
 
                 }
                 finally
                 {
-
-
                     Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostOrder completed posting order.");
-                    instrumentation.LogActivity(originalDoc, DESTINATION, 0);
-                    instrumentation.FlushActivity();
                     Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and PostOrder method complete.");
                 }
             }
@@ -938,7 +952,6 @@ namespace BC.Integration.APICalls
 
             XmlDocument originalDoc = new XmlDocument();
             originalDoc.LoadXml(value);
-            //instrumentation.LogActivity(originalDoc);
 
             String responseString = "";
             //Turns orderDetail to an Array, even when there's only one line item.
@@ -952,18 +965,14 @@ namespace BC.Integration.APICalls
 
             doc.LoadXml(value);
             string pick_num = doc.DocumentElement.SelectSingleNode("//pick_num").InnerText;
-
-
-
-
+           
             string json = JsonConvert.SerializeXmlNode(doc);
 
             json = json.Replace("http://Schemas.DestinationSchema.BC_ShipmentConfirmation", "");
             json = json.Replace("\"@xmlns:ns0\":\"\",", "");
             json = json.Replace("{\"ns0:Root\":", "[");
             json = json.Replace("}}", "}]");
-
-
+            
             var request = HttpWebRequest.Create(url);
             request.Headers.Add(authKey, authValue);
             var byteData = Encoding.ASCII.GetBytes(json);
@@ -984,9 +993,7 @@ namespace BC.Integration.APICalls
                 // validates if there are any errors 
                 JArray errors = (JArray)jObj.SelectToken("Errors");
                 string errorDesc = "";
-
-
-
+                
                 if (errors.HasValues)
                 {
                     foreach (var item in errors)
@@ -999,20 +1006,15 @@ namespace BC.Integration.APICalls
             catch (BlueCherryException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to post a shipment confirmation into BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
-                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
+               throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
 
             }
             finally
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostShipmentConfirmation completed posting shipment confirmation.");
-                instrumentation.LogActivity(originalDoc, DESTINATION, 0);
-                instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and PostShipmentConfirmation method complete.");
             }
-
-
-
+            
             return responseString;
 
         }
@@ -1020,7 +1022,6 @@ namespace BC.Integration.APICalls
         {
             XmlDocument originalDoc = new XmlDocument();
             originalDoc.LoadXml(value);
-           // instrumentation.LogActivity(originalDoc); ;
 
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE +".PostResturn start posting return.");
 
@@ -1034,8 +1035,7 @@ namespace BC.Integration.APICalls
 
             Uri url = new Uri(RETURN_Iendpoint);
             XmlDocument doc = new XmlDocument();
-
-
+            
             doc.LoadXml(value);
 
             String json = JsonConvert.SerializeXmlNode(doc);
@@ -1065,9 +1065,7 @@ namespace BC.Integration.APICalls
                 // validates if there are any errors 
                 JArray errors = (JArray)jObj.SelectToken("Errors");
                 string errorDesc = "";
-
-
-
+                
                 if (errors.HasValues)
                 {
                     foreach (var item in errors)
@@ -1076,30 +1074,22 @@ namespace BC.Integration.APICalls
                     }
                     throw new BlueCherryException(errorDesc);
                 }
-
-
+                
             }
             catch (BlueCherryException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to post an order into BlueCherry");
-                instrumentation.LogGeneralException("An exception occured trying to post a return into BlueCherry BC.Integration.Utility.BC_API_Calls.PostReturn.", ex);
-
-                instrumentation.LogMessagingException(ex.Message, doc, ex);
                 throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostReturn.", ex);
 
             }
             finally
             {
-
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostResturn completed posting return.");
-                instrumentation.LogActivity(originalDoc, DESTINATION, 0);
-                instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and PostReturn method complete.");
             }
-
-       
+            
             return responseString;
-            // }
+           
         }
         #endregion
         /// <summary>
