@@ -156,6 +156,7 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 CreateDiComponents();
                 try
                 {
+
                     //Log Activation Start
                     instrumentation.LogActivation(serviceId, new Guid(activationGuid.Substring(0, 36)), false);
 
@@ -339,16 +340,17 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
             {
                 using (TextReader sr = new StringReader(data))
                 {
-                    
+
                     Order order = new Order();
 
                     if (type == "New")
                     {
                         var serializer_ = new System.Xml.Serialization.XmlSerializer(typeof(NewOrder.Order));
                         NewOrder.Order response = (NewOrder.Order)serializer_.Deserialize(sr);
+                        docId = response.Header.OrderNumber;
                         order = MapSalesOrdersToCanonical(response);
                     }
-                    else 
+                    else
                     {  //eConnect MSG from DB
 
                         var serializer_ = new System.Xml.Serialization.XmlSerializer(typeof(EConnect));
@@ -356,21 +358,21 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                         order = MapEconnectXMLToCanonical(response);
                     }
 
-                        docId = order.Header.OrderNumber;
-                        //Create envelope and add canonical message to the envelope
-                        HipKeyValuePairCollection filterCol = new HipKeyValuePairCollection(filterKeyValuePairs);
-                        HipKeyValuePairCollection processCol = new HipKeyValuePairCollection(processKeyValuePairs);
-                        outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, topic, filterCol, processCol, order.ConvertOrderToString(order), 1, null, order.Header.OrderNumber.Substring(order.Header.OrderNumber.LastIndexOf('.') + 1));
+                    docId = order.Header.OrderNumber;
+                    //Create envelope and add canonical message to the envelope
+                    HipKeyValuePairCollection filterCol = new HipKeyValuePairCollection(filterKeyValuePairs);
+                    HipKeyValuePairCollection processCol = new HipKeyValuePairCollection(processKeyValuePairs);
+                    outgoingMessage = msgMgr.CreatePostMessage(servicePostOperationId, msgType, messageVersion, messageFormat, topic, filterCol, processCol, order.ConvertOrderToString(order), 1, null, order.Header.OrderNumber.Substring(order.Header.OrderNumber.LastIndexOf('.') + 1));
 
-                        int retryCount = 0;
+                    int retryCount = 0;
 
-                        //Place message on the message bus
-                        PublishMessage(outgoingMessage.InnerXml, filterCol);
+                    //Place message on the message bus
+                    PublishMessage(outgoingMessage.InnerXml, filterCol);
 
 
-                        instrumentation.LogActivity(outgoingMessage, queueUrl, retryCount);
-                        Trace.WriteLineIf(tracingEnabled, tracingPrefix + " End processing: " + docId);
-                    
+                    instrumentation.LogActivity(outgoingMessage, queueUrl, retryCount);
+                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + " End processing: " + docId);
+
                 }
 
             }
@@ -378,24 +380,23 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
             {
                 string exMessage = ex.Message;
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessFile.  The creation of the canonical message failed. The message wasn't sent to the queue. DocumentId: " + docId + " Exception message: " + ex.Message);
-                instrumentation.LogGeneralException("An exception occured while processing a message in the " +
-                "BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId 
-                 , ex);                
+
+                instrumentation.LogMessagingException("An exception occured while processing a message in the " +
+                "BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId, outgoingMessage, ex);
 
                 //Notification Log entry...
-                if (ex.InnerException.Source == "BC_API_Calls")
+                /*instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
+                   "An exception occured while processing a message in the " +
+                "BC.Integration.AppService.EpOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId + ". Error: " +ex.Message, docId);*/
+
+                if (!string.IsNullOrEmpty(ex.InnerException.Message))
                 {
-                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
-                    "DocumentId: " + docId + " failed with the following error: " + ex.InnerException.Message, docId);
-
-                    exMessage = exMessage + " InnerExceptionMessage: "+ ex.InnerException.Message;
+                    exMessage = exMessage + " InnerExceptionMessage: " + ex.InnerException.Message;
                 }
-                else
-                {                   
 
-                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
-                    "CSV filename: " + batchName + " failed with the following error, " + ex.Message, docId);
-                }
+                instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
+                "DocumentId: " + docId + " failed with the following error, " + exMessage, docId);
+
 
                 SaveMessageToFile(ex.Message + "\r\n" + data, serviceId + "." + docId + ".Mapping", true, type);
 
@@ -556,7 +557,7 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Start mapping the BC sales order transaction");
 
                 API_Calls APIcalls = new API_Calls();
-
+                
                 Order order = new Order();
                 order.Header = new OrderHeader();
 
@@ -775,7 +776,7 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
             {
                 
                 Trace.WriteLine(tracingExceptionPrefix + " An error occured while trying to map the EP batch message to the SalesChannelOrder message in MapSalesOrdersToCanonical()");
-                throw new Exception("An error occured while trying to map the EP sales order batch message to the SalesChannelOrder message" +
+                throw new Exception("An error occured while trying to map the EP sales order message to the SalesChannelOrder message " +
                     "in the BC.Integration.AppService.EpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
                     "number is: " + salesOrder.Header.OrderNumber, ex);
             }
