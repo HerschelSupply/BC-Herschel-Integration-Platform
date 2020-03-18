@@ -947,13 +947,15 @@ namespace BC.Integration.APICalls
 
         public string PostShipmentConfirmation(string value)
         {
-
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostShipmentConfirmation start posting shipment confirmation.");
+            String responseString = "";
 
+            try
+            {
             XmlDocument originalDoc = new XmlDocument();
             originalDoc.LoadXml(value);
 
-            String responseString = "";
+           
             //Turns orderDetail to an Array, even when there's only one line item.
             value = value.Replace("<pickDetail>", "<pickDetail xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
             value = value.Replace("<cartonHeader>", "<cartonHeader xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
@@ -979,8 +981,7 @@ namespace BC.Integration.APICalls
             request.ContentType = "application/json";
             request.Method = "POST";
 
-            try
-            {
+            
                 using (var stream = request.GetRequestStream())
                 {
                     stream.Write(byteData, 0, byteData.Length);
