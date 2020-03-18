@@ -97,7 +97,7 @@ namespace BC.Integration.AppService.TigersShippingOffRampBC_OL
         public bool Execute(string receiveMsg)
         {
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + "Starting ProcessSalesDoc workflow activity Execute method...");
-            
+            XmlDocument msgXml = new XmlDocument();
             string msgID = "Message Unread";
             //string errorTrigger = "a";
 
@@ -108,7 +108,7 @@ namespace BC.Integration.AppService.TigersShippingOffRampBC_OL
                 try
                 {
                     //Log receipt of message
-                    XmlDocument msgXml = new XmlDocument();
+                    
                     msgXml.LoadXml(receiveMsg);
                     msgXml = msgMgr.CreateReceiveMessage(msgXml, serviceId, serviceVersion, serviceOperationId);
                     processName = msgMgr.ReceivedEnvelope.Interchange.ProcessName;
@@ -152,10 +152,24 @@ namespace BC.Integration.AppService.TigersShippingOffRampBC_OL
                 }
                 catch (Exception ex)
                 {
+                    string docId = "";
+                    string exMessage = ex.Message;
+
                     Trace.WriteLine(tracingExceptionPrefix + "Occurred: " + ex.Message);
-                    instrumentation.LogGeneralException("Error occurred in the BC.Integration.AppService.TigersShippingOffRampBC_OL.ProcessDoc.Execute method. " +
-                        "The processing of the received message caused the component to fail and processing to stop. Message ID: " + msgID, ex);
-                     return false;
+
+                    instrumentation.LogMessagingException("Error occurred in the BC.Integration.AppService.TigersShippingOffRampBC_OL.ProcessDoc.Execute method. " +
+                        "The processing of the received message caused the component to fail and processing to stop. DocId:" + docId + " Message ID: " + msgID, msgXml, ex);
+
+                    if (!string.IsNullOrEmpty(ex.InnerException.Message))
+                    {
+                        exMessage = exMessage + " InnerExceptionMessage: " + ex.InnerException.Message;
+                    }
+
+                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "PostIntoBC",
+                    "DocumentId: " + docId + "  failed with the following error, " + exMessage, docId);
+
+
+                    return false;
                 }
                 finally
                 {

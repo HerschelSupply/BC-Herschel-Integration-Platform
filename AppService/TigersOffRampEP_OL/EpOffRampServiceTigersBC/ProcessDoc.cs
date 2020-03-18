@@ -105,6 +105,7 @@ namespace BC.Integration.AppService.EpOffRampServiceTigersBC
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + "Starting ProcessSalesDoc workflow activity Execute method...");
             
             string msgID = "Message Unread";
+            XmlDocument msgXml = new XmlDocument();
 
             try
             {
@@ -113,7 +114,7 @@ namespace BC.Integration.AppService.EpOffRampServiceTigersBC
                 try
                 {
                     //Log receipt of message
-                    XmlDocument msgXml = new XmlDocument();
+                   
                     msgXml.LoadXml(receiveMsg);
 
                     msgXml = msgMgr.CreateReceiveMessage(msgXml, serviceId, serviceVersion, serviceOperationId);
@@ -217,9 +218,16 @@ namespace BC.Integration.AppService.EpOffRampServiceTigersBC
                 }
                 catch (Exception ex)
                 {
+                    string docId = "";
+
+                    if (msgXml.SelectSingleNode("/MsgEnvelope/Msg/DocId").InnerText != "")
+                        docId = msgXml.SelectSingleNode("/MsgEnvelope/Msg/DocId").InnerText;
+
                     Trace.WriteLineIf(tracingEnabled, tracingPrefix + "EXCEPTION Occurred: " + ex.Message);
-                    instrumentation.LogGeneralException(tracingPrefix + "Error occurred in the BC.Integration.AppService.EpOffRampServiceTigersBC.ProcessData.Execute (EP) method. " +
-                        "The processing of the received message caused the component to fail and processing to stop. Message ID: " + msgID, ex);
+
+                    instrumentation.LogMessagingException("Error occurred in the BC.Integration.AppService.EpOffRampServiceTigersBC.ProcessData.Execute (EP) method. " +
+                        "The processing of the received message caused the component to fail and processing to stop. DocId:" + docId + " Message ID: " + msgID, msgXml, ex);
+
                     return false;
                 }
                 finally
