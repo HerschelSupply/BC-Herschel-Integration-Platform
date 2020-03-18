@@ -106,6 +106,7 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + "Starting ProcessSalesDoc workflow activity Execute method...");
             
             string msgID = "Message Unread";
+            XmlDocument msgXml = new XmlDocument();
 
             try
             {
@@ -114,7 +115,7 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
                 try
                 {
                     //Log receipt of message
-                    XmlDocument msgXml = new XmlDocument();
+                   
                     msgXml.LoadXml(receiveMsg);
 
                     msgXml = msgMgr.CreateReceiveMessage(msgXml, serviceId, serviceVersion, serviceOperationId);
@@ -147,13 +148,14 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception(tracingPrefix + "Error occurred when calling Mapper.ConvertShipmentConfirm() to create the outgoing message.", ex);
+                        throw new Exception(tracingPrefix + " Error occurred when calling Mapper.ConvertToEPMessage() to create the outgoing message.", ex);
                     }
 
                     //******************************Implement Destination Code*********************************************
 
                     string message = outgoingMessage;
-                    WarehouseSettings wsSettings = Mapper.GetWarehouseCodes(msgBody);
+                    
+                     
 
                     Trace.WriteLineIf(tracingEnabled, tracingPrefix + "Send message to ActiveMQ ( " + queueName + " )...");
                     Uri connecturi = new Uri(destinationUrl);
@@ -163,6 +165,7 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
                     IDestination destination = SessionUtil.GetDestination(session, queueName);
                     try
                     {
+                        WarehouseSettings wsSettings = Mapper.GetWarehouseCodes(msgBody);
                         using (IMessageProducer producer = session.CreateProducer(destination))
                         {
                             // Start the connection so that messages will be processed.
@@ -204,9 +207,20 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
                 }
                 catch (Exception ex)
                 {
+                    string docId = "";
+                    string exMessage = ex.Message;
                     Trace.WriteLineIf(tracingEnabled, tracingPrefix + "EXCEPTION Occurred: " + ex.Message);
-                    instrumentation.LogGeneralException(tracingPrefix + "Error occurred in the BC.Integration.AppService.InventoryOffRampSvc.ProcessData.Execute (EP) method. " +
-                        "The processing of the received message caused the component to fail and processing to stop. Message ID: " + msgID, ex);
+
+                    if (msgXml.SelectSingleNode("/MsgEnvelope/Msg/DocId").InnerText != "")
+                        docId = msgXml.SelectSingleNode("/MsgEnvelope/Msg/DocId").InnerText;
+
+                    instrumentation.LogMessagingException("Error occurred in the BC.Integration.AppService.InventoryOffRampSvc.ProcessData.Execute (EP) method. " +
+                        "The processing of the received message caused the component to fail and processing to stop. DocId:" + docId + " Message ID: " + msgID, msgXml, ex);
+
+                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "InventoryPostIntoEP",
+                   "DocumentId: " + docId + "  failed with the following error, " + exMessage, docId);
+
+
                     return false;
                 }
                 finally
