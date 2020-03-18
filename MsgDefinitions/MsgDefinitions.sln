@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesChannelOrder.Return", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Ep", "Inventory\Inventory.Ep.csproj", "{072F22E7-D567-4875-A8B1-9249AF0361F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesChannelInvoice", "SalesChannelInvoice\SalesChannelInvoice.csproj", "{676BF207-F96B-4F45-9EE7-BF67B94578F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{072F22E7-D567-4875-A8B1-9249AF0361F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{072F22E7-D567-4875-A8B1-9249AF0361F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{072F22E7-D567-4875-A8B1-9249AF0361F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{676BF207-F96B-4F45-9EE7-BF67B94578F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{676BF207-F96B-4F45-9EE7-BF67B94578F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{676BF207-F96B-4F45-9EE7-BF67B94578F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{676BF207-F96B-4F45-9EE7-BF67B94578F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
