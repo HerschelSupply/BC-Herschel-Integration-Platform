@@ -235,19 +235,9 @@ namespace BC.Integration.AppService.EpOffRampServiceBC
                     string siteId = site[0].InnerText;
 
                     //Determine the configuration key for the current message
-                    /* TBD: Set the right maps based on the site id */
-                    if (site.Count > 0)
-                    {
-                        if (siteId == "11" || siteId == "12" || siteId == "21" || siteId == "22")
-                        {
-                            mapKey = "Map." + processName + siteId;
-                        }
-                        else
-                        {
-                            mapKey = "Map." + processName;
-                        }
-                    }
-
+                    
+                    mapKey = "Map." + processName;
+                    
 
                     HipKeyValuePairCollection processConfig = msgMgr.ReceivedEnvelope.Msg.ProcessKeyValuePairs;
                     if (processConfig != null)
