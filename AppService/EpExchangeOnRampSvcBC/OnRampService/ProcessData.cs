@@ -235,10 +235,10 @@ namespace BC.Integration.AppService.EpExchangeOnRampServiceBC
                     Order order = new Order();
 
                    
-                        var serializer_ = new System.Xml.Serialization.XmlSerializer(typeof(ExchangeOrder.Order));
-                        ExchangeOrder.Order response = (ExchangeOrder.Order)serializer_.Deserialize(sr);
-                        docId = response.Header.OrderNumber;
-                        order = MapSalesOrdersToCanonical(response);
+                    var serializer_ = new System.Xml.Serialization.XmlSerializer(typeof(ExchangeOrder.Order));
+                    ExchangeOrder.Order response = (ExchangeOrder.Order)serializer_.Deserialize(sr);
+                    docId = response.Header.OrderNumber;
+                    order = MapSalesOrdersToCanonical(response);
                     
                     
 
@@ -327,6 +327,7 @@ namespace BC.Integration.AppService.EpExchangeOnRampServiceBC
                 order.Header.isStaffOrder = false; 
                 order.Header.itHasDiscount = false;
                 order.Header.itHasGiftCard = false;
+                
 
 
                 order.Header.OrderDate = Convert.ToDateTime(salesOrder.Header.CreatedDate);
@@ -610,7 +611,7 @@ namespace BC.Integration.AppService.EpExchangeOnRampServiceBC
                     instrumentation.WriteMsgToFile(tracing_path, null, fileText, Path.GetFileName(file), null);
                 }
                 //Remove file after processing
-                File.Delete(file);
+              //  File.Delete(file);
 
                 if (!String.IsNullOrEmpty(fileText))
                 {
