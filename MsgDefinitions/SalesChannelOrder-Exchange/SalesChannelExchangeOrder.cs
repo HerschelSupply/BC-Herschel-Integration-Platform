@@ -877,6 +877,8 @@ namespace BC.Integration.Canonical.SaleChannelOrder.Exchange
 
         private int siteIdField;
 
+        private string couponCodeField;
+
         private string discountCodeField;
 
         private string taxExemptField;
@@ -1124,7 +1126,19 @@ namespace BC.Integration.Canonical.SaleChannelOrder.Exchange
                 this.discountCodeField = value;
             }
         }
-
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string CouponCode
+        {
+            get
+            {
+                return this.couponCodeField;
+            }
+            set
+            {
+                this.couponCodeField = value;
+            }
+        }
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string TaxExempt
