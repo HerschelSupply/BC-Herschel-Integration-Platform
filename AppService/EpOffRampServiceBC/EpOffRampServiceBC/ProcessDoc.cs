@@ -131,13 +131,26 @@ namespace BC.Integration.AppService.EpOffRampServiceBC
                         //message to the destination message type.
                         //XSLT is the prefered option as it adds 
                         //additional flexibility.
-
                         outgoingMessage = CreateBCMsg(msgBody);
 
-                        //post the message to BC
-                        
-                        API_Calls APICalls = new API_Calls();
-                        APICalls.PostOrder(outgoingMessage);
+
+                        if (processName == "BCExchangeSalesOrder")
+                        {
+
+                            API_Calls APICalls = new API_Calls();
+                            //post the message to BC
+                            APICalls.PostOrder(outgoingMessage, "exchange");
+                        }
+                        else
+                        {
+                            //post the message to BC
+
+                            API_Calls APICalls = new API_Calls();
+                            APICalls.PostOrder(outgoingMessage, "order");
+                        }
+                      
+
+                       
                     }
                     catch (Exception ex)
                     {

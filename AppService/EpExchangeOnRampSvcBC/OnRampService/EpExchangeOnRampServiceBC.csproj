@@ -49,7 +49,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\0.DLL Bin\AWSSDK.SQS.dll</HintPath>
     </Reference>
-    <Reference Include="BC.Integration.APICalls">
+    <Reference Include="BC.Integration.APICalls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.APICalls.dll</HintPath>
     </Reference>
     <Reference Include="BC.Integration.Canonical.SalesChannelOrder.Exchange, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
