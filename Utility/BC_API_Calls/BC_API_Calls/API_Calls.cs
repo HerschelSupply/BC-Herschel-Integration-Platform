@@ -882,6 +882,7 @@ namespace BC.Integration.APICalls
                 json = json.Replace("\"@xmlns:ns0\":\"\",", "");
                 json = json.Replace("{\"ns0:Root\":", "[");
                 json = json.Replace("}}", "}]");
+                json = json.Replace("{\"?xml\":{\"@version\":\"1.0\",\"@encoding\":\"utf-16\"},\"ns0:Root\":", "[");
 
 
                 var request = HttpWebRequest.Create(url);

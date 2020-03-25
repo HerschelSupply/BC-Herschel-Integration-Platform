@@ -1,0 +1,176 @@
+﻿<WorkflowService mc:Ignorable="sap sap2010 sads" p1:TextExpression.Namespaces="{x:Reference __ReferenceID1}" p1:TextExpression.References="{x:Reference __ReferenceID2}" ConfigurationName="SalesDocOffRamp" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="WorkflowService_1" Name="SalesDocOffRamp"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/servicemodel"
+ xmlns:ciag="clr-namespace:BC.Integration.AppService.BC;assembly=BC.Integration.AppService.BC.SalesDocOffRamp"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:p="http://tempuri.org/"
+ xmlns:p1="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:sd="clr-namespace:System.Diagnostics;assembly=System"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <p1:Sequence DisplayName="ProcessSalesDocument" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <p1:TextExpression.Namespaces>
+      <sco:Collection x:TypeArguments="x:String" x:Name="__ReferenceID1">
+        <x:String>System</x:String>
+        <x:String>System.Collections.Generic</x:String>
+        <x:String>System.Data</x:String>
+        <x:String>System.Linq</x:String>
+        <x:String>System.Text</x:String>
+        <x:String>Microsoft.Practices.Unity</x:String>
+        <x:String>Microsoft.Practices.Unity.Configuration</x:String>
+        <x:String>System.Diagnostics</x:String>
+      </sco:Collection>
+    </p1:TextExpression.Namespaces>
+    <p1:TextExpression.References>
+      <sco:Collection x:TypeArguments="p1:AssemblyReference" x:Name="__ReferenceID2">
+        <p1:AssemblyReference>AutoMapper</p1:AssemblyReference>
+        <p1:AssemblyReference>BC.Integration.BC</p1:AssemblyReference>
+        <p1:AssemblyReference>BC.Integration.Interfaces</p1:AssemblyReference>
+        <p1:AssemblyReference>BC.Integration.MsgEnvelope</p1:AssemblyReference>
+        <p1:AssemblyReference>BC.Integration.SalesDocument</p1:AssemblyReference>
+        <p1:AssemblyReference>Microsoft.CSharp</p1:AssemblyReference>
+        <p1:AssemblyReference>Microsoft.Practices.ServiceLocation</p1:AssemblyReference>
+        <p1:AssemblyReference>Microsoft.Practices.Unity</p1:AssemblyReference>
+        <p1:AssemblyReference>Microsoft.Practices.Unity.Configuration</p1:AssemblyReference>
+        <p1:AssemblyReference>Microsoft.Practices.Unity.RegistrationByConvention</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Configuration</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Web.DynamicData</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Drawing</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Web.Entity</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Web.ApplicationServices</p1:AssemblyReference>
+        <p1:AssemblyReference>System</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Activities</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Core</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Data</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Data.Entity</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Runtime.Serialization</p1:AssemblyReference>
+        <p1:AssemblyReference>System.ServiceModel</p1:AssemblyReference>
+        <p1:AssemblyReference>System.ServiceModel.Activities</p1:AssemblyReference>
+        <p1:AssemblyReference>System.ServiceModel.Channels</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Web</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Xaml</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Xml</p1:AssemblyReference>
+        <p1:AssemblyReference>System.Xml.Linq</p1:AssemblyReference>
+        <p1:AssemblyReference>mscorlib</p1:AssemblyReference>
+        <p1:AssemblyReference>BC.Integration.AppService.BC.SalesDocOffRamp</p1:AssemblyReference>
+      </sco:Collection>
+    </p1:TextExpression.References>
+    <p1:Sequence.Variables>
+      <p1:Variable x:TypeArguments="CorrelationHandle" Name="handle" />
+      <p1:Variable x:TypeArguments="x:String" Name="receivedMsg" />
+      <p1:Variable x:TypeArguments="x:Boolean" Default="True" Name="isSuccessfullyProcessed" />
+    </p1:Sequence.Variables>
+    <Receive x:Name="__ReferenceID0" CanCreateInstance="True" DisplayName="ReceiveSalesDocument" sap2010:WorkflowViewState.IdRef="Receive_1" OperationName="ReceiveMessage" ServiceContractName="p:IService">
+      <Receive.CorrelationInitializers>
+        <RequestReplyCorrelationInitializer>
+          <RequestReplyCorrelationInitializer.CorrelationHandle>
+            <p1:InArgument x:TypeArguments="CorrelationHandle">
+              <mca:CSharpValue x:TypeArguments="CorrelationHandle">handle</mca:CSharpValue>
+            </p1:InArgument>
+          </RequestReplyCorrelationInitializer.CorrelationHandle>
+        </RequestReplyCorrelationInitializer>
+      </Receive.CorrelationInitializers>
+      <ReceiveMessageContent DeclaredMessageType="x:String">
+        <p1:OutArgument x:TypeArguments="x:String">
+          <mca:CSharpReference x:TypeArguments="x:String">receivedMsg</mca:CSharpReference>
+        </p1:OutArgument>
+      </ReceiveMessageContent>
+    </Receive>
+    <p1:TryCatch sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <p1:TryCatch.Try>
+        <p1:Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <p1:InvokeMethod sap2010:WorkflowViewState.IdRef="InvokeMethod_1" MethodName="WriteLine" TargetType="sd:Debug">
+            <p1:InArgument x:TypeArguments="x:String">Start workflow...</p1:InArgument>
+          </p1:InvokeMethod>
+          <ciag:ProcessSalesDoc Configuration="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessSalesDoc_2">
+            <ciag:ProcessSalesDoc.ReceiveMsg>
+              <p1:InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">receivedMsg</mca:CSharpValue>
+              </p1:InArgument>
+            </ciag:ProcessSalesDoc.ReceiveMsg>
+          </ciag:ProcessSalesDoc>
+        </p1:Sequence>
+      </p1:TryCatch.Try>
+      <p1:TryCatch.Catches>
+        <p1:Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <p1:ActivityAction x:TypeArguments="s:Exception">
+            <p1:ActivityAction.Argument>
+              <p1:DelegateInArgument x:TypeArguments="s:Exception" Name="ex" />
+            </p1:ActivityAction.Argument>
+            <p1:Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+              <p1:Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+                <p1:Assign.To>
+                  <p1:OutArgument x:TypeArguments="x:Boolean">
+                    <mca:CSharpReference x:TypeArguments="x:Boolean">isSuccessfullyProcessed</mca:CSharpReference>
+                  </p1:OutArgument>
+                </p1:Assign.To>
+                <p1:Assign.Value>
+                  <p1:InArgument x:TypeArguments="x:Boolean">False</p1:InArgument>
+                </p1:Assign.Value>
+              </p1:Assign>
+              <p1:InvokeMethod sap2010:WorkflowViewState.IdRef="InvokeMethod_2" MethodName="WriteLine" TargetType="sd:Debug">
+                <p1:InArgument x:TypeArguments="x:String">
+                  <mca:CSharpValue x:TypeArguments="x:String">"Exception Occured in the Workflow, exception... " + ex.Message</mca:CSharpValue>
+                </p1:InArgument>
+              </p1:InvokeMethod>
+            </p1:Sequence>
+          </p1:ActivityAction>
+        </p1:Catch>
+      </p1:TryCatch.Catches>
+    </p1:TryCatch>
+    <SendReply Request="{x:Reference __ReferenceID0}" DisplayName="SendResponse" sap2010:WorkflowViewState.IdRef="SendReply_1">
+      <SendMessageContent DeclaredMessageType="x:Boolean">
+        <p1:InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">isSuccessfullyProcessed</mca:CSharpValue>
+        </p1:InArgument>
+      </SendMessageContent>
+    </SendReply>
+    <sads:DebugSymbol.Symbol>d2NDOlxISVAgSGVyc2NoZWwgSW50ZWdyYXRpb24gUGxhdGZvcm1cQXBwU2VydmljZVxHUEFwcFNlcnZpY2VzXFNhbGVzRG9jT2ZmUmFtcFxTYWxlc0RvY09mZlJhbXAueGFtbHgTEAOGAREBAUI4Qj4BAkQFUw8BJ1QFfRMBEH4FhAERAQNQC1BcASxJD0lcAShWCWEXAR9pDXkbARGBAQuBAWEBBFcLWR0BJVoLYCIBIGoPcxsBGHQPeCEBElg3WEgBJl0RXVoBIXE+cUMBHm0VbXMBGXYTdpABARM=</sads:DebugSymbol.Symbol>
+  </p1:Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Receive_1" sap:VirtualizedContainerService.HintSize="414.4,88" />
+      <sap2010:ViewStateData Id="InvokeMethod_1" sap:VirtualizedContainerService.HintSize="217.6,131.2" />
+      <sap2010:ViewStateData Id="ProcessSalesDoc_2" sap:VirtualizedContainerService.HintSize="217.6,22.4" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="240,318.4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="243.2,62.4" />
+      <sap2010:ViewStateData Id="InvokeMethod_2" sap:VirtualizedContainerService.HintSize="243.2,131.2" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="265.6,358.4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="400,428.8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="414.4,593.6" />
+      <sap2010:ViewStateData Id="SendReply_1" sap:VirtualizedContainerService.HintSize="414.4,88" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="436.8,974.4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WorkflowService_1" sap:VirtualizedContainerService.HintSize="466.4,1044" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</WorkflowService>
