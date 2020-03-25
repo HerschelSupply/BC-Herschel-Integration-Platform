@@ -644,6 +644,49 @@ namespace BC.Integration.APICalls
 
         #endregion
 
+        public JArray GetAPIErrors()
+        {
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetInvoiceNumberFromOrder start retrieving invoice number from PO.");
+            JArray data;
+
+            try
+            {
+                string uri = "https://bcmultiws.azure-api.net/HCEL/HCTR/api/850transactionheader";// + " ? " + ORDER_param_po_num + "=" + poNumber;
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.Headers.Add("Ocp-Apim-Subscription-Key", "151def3e976c4798897af920c656390c");
+                /*Servers sometimes compress their responses to save on bandwidth, when this happens, you need to decompress the response before attempting to read it.
+                 Fortunately, the .NET framework can do this automatically, however, we have to turn the setting on. */
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    var jObj = JObject.Parse(reader.ReadToEnd());
+                    // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
+                    data = (JArray)jObj.SelectToken("data");               
+
+                }
+
+            }
+            catch (WebException ex)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the invoice number from BlueCherry");
+                // instrumentation.LogGeneralException("An exception occured trying to get the Invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
+                throw new Exception("An exception occured trying to get the invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
+            }
+            finally
+            {
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetInvoiceNumberFromOrder cmpleted retrieving invoice number from PO.");
+                //instrumentation.FlushActivity();
+                Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetInvoiceNumberFromOrder method complete.");
+            }
+
+            return data;
+        }
+
+
 
         #region Business Logic
         private string GetSecondaryLocation(string primary)
@@ -850,11 +893,12 @@ namespace BC.Integration.APICalls
 
 
         #region Inbound Endpoints
-        public string PostOrder(string value)
+        public string PostOrder(string value, string type)
         {
+            
             XmlDocument originalDoc = new XmlDocument();
             originalDoc.LoadXml(value);
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostOrder start posting order.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostOrder start posting" + type);
 
             var responseString ="";
             /* Turns orderDetail to an Array, even when there's only one line item.*/
@@ -870,8 +914,8 @@ namespace BC.Integration.APICalls
 
             if (OrderExists(po_num))
             {
-                Trace.WriteLine("BC_API_Calls: Exception occured trying to post an order into BlueCherry");
-                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls. The PO_Number:" + po_num + " already exists in BC.");
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to post an " + type + " into BlueCherry");
+                throw new Exception("An exception occured trying to post an " + type + " into BlueCherry BC.Integration.Utility.BC_API_Calls. The PO_Number:" + po_num + " already exists in BC.");
             }
             else
             {
@@ -927,13 +971,13 @@ namespace BC.Integration.APICalls
                 catch (BlueCherryException ex)
                 {
                    
-                    Trace.WriteLine("BC_API_Calls: Exception occured trying to post an order into BlueCherry");
-                    throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
+                    Trace.WriteLine("BC_API_Calls: Exception occured trying to post an " + type + "  into BlueCherry");
+                    throw new Exception("An exception occured trying to post an " + type + " into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
 
                 }
                 finally
                 {
-                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostOrder completed posting order.");
+                    Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostOrder completed posting " + type);
                     Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and PostOrder method complete.");
                 }
             }
