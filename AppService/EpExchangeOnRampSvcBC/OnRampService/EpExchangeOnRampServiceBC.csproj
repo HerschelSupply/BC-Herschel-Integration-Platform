@@ -6,12 +6,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6DD0D56A-1014-4C10-A9C0-5B22661645F0}</ProjectGuid>
+    <ProjectGuid>{A94436F6-9C2C-4BF7-97B4-DB842721CD5B}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Corp.Integration.AppService.EpOffRampReturnServiceBC</RootNamespace>
-    <AssemblyName>Corp.Integration.AppService.EpOffRampReturnServiceBC</AssemblyName>
+    <RootNamespace>BC.Integration.AppService.EpOnRampServiceBC</RootNamespace>
+    <AssemblyName>BC.Integration.AppService.EpOnRampServiceBC</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -41,17 +41,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\HIP Herschel Integration Platform\0.DLL Bin\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.SQS, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\0.DLL Bin\AWSSDK.SQS.dll</HintPath>
+    </Reference>
     <Reference Include="BC.Integration.APICalls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.APICalls.dll</HintPath>
     </Reference>
-    <Reference Include="BC.Integration.Canonical.SalesChannelOrder.Return">
-      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Canonical.SalesChannelOrder.Return.dll</HintPath>
+    <Reference Include="BC.Integration.Canonical.SalesChannelOrder.Exchange, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Canonical.SalesChannelOrder.Exchange.dll</HintPath>
     </Reference>
     <Reference Include="BC.Integration.Interfaces">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="BC.Integration.MsgEnvelope">
+    <Reference Include="BC.Integration.MsgEnvelope, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.MsgEnvelope.dll</HintPath>
     </Reference>
     <Reference Include="BC.Integration.Utilities">
@@ -63,19 +73,25 @@
     <Reference Include="BC.Integration.Utility.InstrumentationDB">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.InstrumentationDB.dll</HintPath>
     </Reference>
+    <Reference Include="BC.Integration.Utility.SqsPublishService">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.SqsPublishService.dll</HintPath>
+    </Reference>
+    <Reference Include="Corp.Integration.MsgEnvelope">
+      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.MsgEnvelope.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\..\..\..\0.DLL Bin\Microsoft.Practices.Unity.dll</HintPath>
+      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\..\..\..\0.DLL Bin\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\0.DLL Bin\Newtonsoft.Json.dll</HintPath>
+      <HintPath>bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -95,22 +111,27 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WcfMessagingService.svc" />
-    <Content Include="Web.config" />
+    <Content Include="OnRamp.svc" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IWcfMessagingService.cs" />
-    <Compile Include="ProcessDoc.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WcfMessagingService.svc.cs">
-      <DependentUpon>WcfMessagingService.svc</DependentUpon>
+    <Compile Include="IOnRamp.cs" />
+    <Compile Include="Mapper.cs" />
+    <Compile Include="ExchangeOrder.cs" />
+    <Compile Include="OnRamp.svc.cs">
+      <DependentUpon>OnRamp.svc</DependentUpon>
     </Compile>
+    <Compile Include="ProcessData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="XSLT\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="HerschelSig.pfx" />
+    <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -118,9 +139,18 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>HerschelSig.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -131,9 +161,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>25519</DevelopmentServerPort>
+          <DevelopmentServerPort>25538</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:25519/</IISUrl>
+          <IISUrl>http://localhost:25538/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

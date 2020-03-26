@@ -6,9 +6,9 @@ using System.Web;
 
 
 // Class for eComm New Order object
-namespace BC.Integration.AppService.EpReturnOnRampServiceBC
+namespace BC.Integration.AppService.EpExchangeOnRampServiceBC
 {
-    public class JMS
+    public class ExchangeOrder
     {
         [XmlRoot(ElementName = "Header", Namespace = "http://com.elasticpath/repo/order")]
         public class Header
@@ -48,11 +48,11 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             [XmlElement(ElementName = "TotalLineItemDiscounts")]
             public string TotalLineItemDiscounts { get; set; }
             [XmlElement(ElementName = "TotalSubtotalDiscount")]
-            public decimal TotalSubtotalDiscount { get; set; }
+            public string TotalSubtotalDiscount { get; set; }
             [XmlElement(ElementName = "TotalDiscountAmount")]
-            public decimal TotalDiscountAmount { get; set; }
+            public string TotalDiscountAmount { get; set; }
             [XmlElement(ElementName = "GrandTotal")]
-            public decimal GrandTotal { get; set; }
+            public string GrandTotal { get; set; }
         }
 
         [XmlRoot(ElementName = "Customer", Namespace = "http://com.elasticpath/repo/order")]
@@ -117,12 +117,12 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             public List<Option> Option { get; set; }
         }
 
-        [XmlRoot(ElementName = "Field", Namespace = "http://com.elasticpath/repo/common")]
+        [XmlRoot(ElementName = "Field", Namespace = "http://com.elasticpath/repo/order")]
         public class Field
         {
-            [XmlElement(ElementName = "Key", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "Key", Namespace = "http://com.elasticpath/repo/order")]
             public string Key { get; set; }
-            [XmlElement(ElementName = "Value", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "Value", Namespace = "http://com.elasticpath/repo/order")]
             public string Value { get; set; }
         }
 
@@ -133,34 +133,50 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             public List<Field> Field { get; set; }
         }
 
-        [XmlRoot(ElementName = "TaxLine", Namespace = "http://com.elasticpath/repo/common")]
+        [XmlRoot(ElementName = "TaxLine", Namespace = "http://com.elasticpath/repo/order")]
         public class TaxLine
         {
-            [XmlElement(ElementName = "JurisdictionId", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "JurisdictionId", Namespace = "http://com.elasticpath/repo/order")]
             public string JurisdictionId { get; set; }
-            [XmlElement(ElementName = "TaxRegionId", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxRegionId", Namespace = "http://com.elasticpath/repo/order")]
             public string TaxRegionId { get; set; }
-            [XmlElement(ElementName = "TaxIsInclusive", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxIsInclusive", Namespace = "http://com.elasticpath/repo/order")]
             public string TaxIsInclusive { get; set; }
-            [XmlElement(ElementName = "TaxName", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxName", Namespace = "http://com.elasticpath/repo/order")]
             public string TaxName { get; set; }
-            [XmlElement(ElementName = "TaxCode", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxCode", Namespace = "http://com.elasticpath/repo/order")]
             public string TaxCode { get; set; }
-            [XmlElement(ElementName = "TaxCodeGP", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxCodeGP", Namespace = "http://com.elasticpath/repo/order")]
             public string TaxCodeGP { get; set; }
-            [XmlElement(ElementName = "TaxAmount", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxAmount", Namespace = "http://com.elasticpath/repo/order")]
             public string TaxAmount { get; set; }
-            [XmlElement(ElementName = "TaxRate", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxRate", Namespace = "http://com.elasticpath/repo/order")]
             public string TaxRate { get; set; }
-            [XmlElement(ElementName = "TaxCalculationDate", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxCalculationDate", Namespace = "http://com.elasticpath/repo/order")]
             public string TaxCalculationDate { get; set; }
         }
 
         [XmlRoot(ElementName = "TaxLines", Namespace = "http://com.elasticpath/repo/order")]
         public class TaxLines
         {
-            [XmlElement(ElementName = "TaxLine", Namespace = "http://com.elasticpath/repo/common")]
+            [XmlElement(ElementName = "TaxLine", Namespace = "http://com.elasticpath/repo/order")]
             public List<TaxLine> TaxLine { get; set; }
+        }
+
+        [XmlRoot(ElementName = "DiscountLine", Namespace = "http://com.elasticpath/repo/common")]
+        public class DiscountLine
+        {
+            [XmlElement(ElementName = "DiscountValue", Namespace = "http://com.elasticpath/repo/common")]
+            public string DiscountValue { get; set; }
+            [XmlElement(ElementName = "DiscountAmount", Namespace = "http://com.elasticpath/repo/common")]
+            public string DiscountAmount { get; set; }
+        }
+
+        [XmlRoot(ElementName = "DiscountLines", Namespace = "http://com.elasticpath/repo/order")]
+        public class DiscountLines
+        {
+            [XmlElement(ElementName = "DiscountLine", Namespace = "http://com.elasticpath/repo/common")]
+            public DiscountLine DiscountLine { get; set; }
         }
 
         [XmlRoot(ElementName = "LineItem", Namespace = "http://com.elasticpath/repo/order")]
@@ -173,27 +189,30 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             [XmlElement(ElementName = "ItemCode")]
             public string ItemCode { get; set; }
             [XmlElement(ElementName = "Quantity")]
-            public decimal Quantity { get; set; }
+            public string Quantity { get; set; }
             [XmlElement(ElementName = "ListUnitPrice")]
-            public decimal ListUnitPrice { get; set; }
+            public string ListUnitPrice { get; set; }
             [XmlElement(ElementName = "UnitPrice")]
-            public decimal UnitPrice { get; set; }
+            public string UnitPrice { get; set; }
             [XmlElement(ElementName = "ItemSubtotalPrice")]
-            public decimal ItemSubtotalPrice { get; set; }
+            public string ItemSubtotalPrice { get; set; }
             [XmlElement(ElementName = "AmountBeforeTax")]
-            public decimal AmountBeforeTax { get; set; }
+            public string AmountBeforeTax { get; set; }
             [XmlElement(ElementName = "ItemTaxes")]
             public string ItemTaxes { get; set; }
             [XmlElement(ElementName = "AmountIncludingTax")]
-            public decimal AmountIncludingTax { get; set; }
+            public string AmountIncludingTax { get; set; }
             [XmlElement(ElementName = "DisplayName")]
             public string DisplayName { get; set; }
             [XmlElement(ElementName = "Options")]
-            public Options Options { get; set; }
+            public DiscountLines Options { get; set; }
+            [XmlElement(ElementName = "DiscountLines")]
+            public DiscountLines DiscountLines { get; set; }
             [XmlElement(ElementName = "Fields")]
             public Fields Fields { get; set; }
             [XmlElement(ElementName = "TaxLines")]
             public TaxLines TaxLines { get; set; }
+
         }
 
         [XmlRoot(ElementName = "LineItems", Namespace = "http://com.elasticpath/repo/order")]
@@ -276,21 +295,21 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             public List<Address> Address { get; set; }
         }
 
-        /* [XmlRoot(ElementName = "PaymentMethod")]
-         [XmlInclude(typeof(TokenPaymentMethod))]
-         public class PaymentMethod
-         {
-             [XmlElement(ElementName = "PaymentType")]
-             public string PaymentType { get; set; }
-             [XmlElement(ElementName = "Provider")]
-             public string Provider { get; set; }
-             [XmlElement(ElementName = "Gateway")]
-             public string Gateway { get; set; }
-            //[XmlAttribute(AttributeName = "xsi", Namespace = "http://www.w3.org/2000/xmlns/")]
-            // public string Xsi { get; set; }
-            // [XmlAttribute(AttributeName = "type", Namespace = "http://www.w3.org/2001/XMLSchema-instance")]
-            // public string Type { get; set; }
-         }*/
+       /* [XmlRoot(ElementName = "PaymentMethod")]
+        [XmlInclude(typeof(TokenPaymentMethod))]
+        public class PaymentMethod
+        {
+            [XmlElement(ElementName = "PaymentType")]
+            public string PaymentType { get; set; }
+            [XmlElement(ElementName = "Provider")]
+            public string Provider { get; set; }
+            [XmlElement(ElementName = "Gateway")]
+            public string Gateway { get; set; }
+           //[XmlAttribute(AttributeName = "xsi", Namespace = "http://www.w3.org/2000/xmlns/")]
+           // public string Xsi { get; set; }
+           // [XmlAttribute(AttributeName = "type", Namespace = "http://www.w3.org/2001/XMLSchema-instance")]
+           // public string Type { get; set; }
+        }*/
 
         [XmlRoot(ElementName = "Payment", Namespace = "http://com.elasticpath/repo/order")]
         public class Payment
@@ -308,7 +327,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             [XmlElement(ElementName = "ReferenceId")]
             public string ReferenceId { get; set; }
             [XmlElement(ElementName = "RequestToken")]
-            public string RequestToken { get; set; }
+             public string RequestToken { get; set; }
             [XmlElement(ElementName = "Reason")]
             public string Reason { get; set; }
             /* [XmlElement(ElementName = "PaymentMethod")]
@@ -331,184 +350,51 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
              // public string Type { get; set; }
          }*/
 
+        [XmlRoot(ElementName = "Coupons", Namespace = "http://com.elasticpath/repo/order")]
+        public class Coupons
+        {
+            [XmlElement(ElementName = "Code", Namespace = "http://com.elasticpath/repo/order")]
+            public string Code { get; set; }
+        }
+
         [XmlRoot(ElementName = "Promotion", Namespace = "http://com.elasticpath/repo/order")]
         public class Promotion
         {
-            [XmlElement(ElementName = "PromoName")]
+            [XmlElement(ElementName = "PromoName", Namespace = "http://com.elasticpath/repo/order")]
             public string PromoName { get; set; }
-            [XmlElement(ElementName = "DisplayName")]
+            [XmlElement(ElementName = "DisplayName", Namespace = "http://com.elasticpath/repo/order")]
             public string DisplayName { get; set; }
-            [XmlElement(ElementName = "DisplayDescription")]
+            [XmlElement(ElementName = "DisplayDescription", Namespace = "http://com.elasticpath/repo/order")]
             public string DisplayDescription { get; set; }
-            [XmlElement(ElementName = "Coupons")]
-            public string Coupons { get; set; }
+            [XmlElement(ElementName = "Coupons", Namespace = "http://com.elasticpath/repo/order")]
+            public Coupons Coupons { get; set; }
         }
 
         [XmlRoot(ElementName = "AppliedPromotions", Namespace = "http://com.elasticpath/repo/order")]
         public class AppliedPromotions
         {
-            [XmlElement(ElementName = "Promotion")]
+            [XmlElement(ElementName = "Promotion", Namespace = "http://com.elasticpath/repo/order")]
             public List<Promotion> Promotion { get; set; }
         }
 
-        [XmlRoot(ElementName = "ReturnSku", Namespace = "http://com.elasticpath/repo/order")]
-        public partial class ReturnSku
-        {
-            [XmlElement(ElementName = "ReturnSkuId")]
-            public string ReturnSkuId { get; set; }
-            [XmlElement(ElementName = "ReturnItemCode")]
-            public string ReturnItemCode { get; set; }
-            [XmlElement(ElementName = "LineItemId")]
-            public string LineItemId { get; set; }
-            [XmlElement(ElementName = "Quantity")]
-            public int Quantity { get; set; }
-            [XmlElement(ElementName = "ReceivedQuantity")]
-            public int ReceivedQuantity { get; set; }
-            [XmlElement(ElementName = "ReturnAmount")]
-            public decimal ReturnAmount { get; set; }
-            [XmlElement(ElementName = "UnitPrice")]
-            public decimal UnitPrice { get; set; }
-            [XmlElement(ElementName = "Tax")]
-            public decimal Tax { get; set; }
-            [XmlElement(ElementName = "ItemSubtotalPrice")]
-            public decimal ItemSubtotalPrice { get; set; }
-            [XmlElement(ElementName = "AmountBeforeTax")]
-            public decimal AmountBeforeTax { get; set; }
-            [XmlElement(ElementName = "AmountIncludingTax")]
-            public decimal AmountIncludingTax { get; set; }
-            [XmlElement(ElementName = "TaxLines")]
-            public TaxLines TaxLines { get; set; }
-            [XmlElement(ElementName = "ReturnReason")]
-            public string ReturnReason { get; set; }
-            [XmlElement(ElementName = "ReceivedState")]
-            public string ReceivedState { get; set; }
-        }
-
-        [XmlRoot(ElementName = "ReturnSkus", Namespace = "http://com.elasticpath/repo/order")]
-        public partial class ReturnSkus
-        {
-            [XmlElement(ElementName = "ReturnSku")]
-            public List <ReturnSku> ReturnSku { get; set; }
-        }
-
-        [XmlRoot(ElementName = "ReturnAddress", Namespace = "http://com.elasticpath/repo/order")]
-        public partial class ReturnAddress
-        {
-            [XmlElement(ElementName = "AddressId", Namespace = "http://com.elasticpath/repo/common")]
-            public string AddressId { get; set; }
-            [XmlElement(ElementName = "AddressType", Namespace = "http://com.elasticpath/repo/common")]
-            public string AddressType { get; set; }
-            [XmlElement(ElementName = "FirstName", Namespace = "http://com.elasticpath/repo/common")]
-            public string FirstName { get; set; }
-            [XmlElement(ElementName = "LastName", Namespace = "http://com.elasticpath/repo/common")]
-            public string LastName { get; set; }
-            [XmlElement(ElementName = "Street1", Namespace = "http://com.elasticpath/repo/common")]
-            public string Street1 { get; set; }
-            [XmlElement(ElementName = "Street2", Namespace = "http://com.elasticpath/repo/common")]
-            public string Street2 { get; set; }
-            [XmlElement(ElementName = "City", Namespace = "http://com.elasticpath/repo/common")]
-            public string City { get; set; }
-            [XmlElement(ElementName = "Region", Namespace = "http://com.elasticpath/repo/common")]
-            public string Region { get; set; }
-            [XmlElement(ElementName = "Country", Namespace = "http://com.elasticpath/repo/common")]
-            public string Country { get; set; }
-            [XmlElement(ElementName = "ZipPostalCode", Namespace = "http://com.elasticpath/repo/common")]
-            public string ZipPostalCode { get; set; }
-            [XmlElement(ElementName = "PhoneNumber", Namespace = "http://com.elasticpath/repo/common")]
-            public string PhoneNumber { get; set; }
-        }
-
-        [XmlRoot(ElementName = "Return", Namespace = "http://com.elasticpath/repo/order")]
-        public partial class Return
-        {
-            [XmlElement(ElementName = "ReturnId")]
-            public string ReturnId { get; set; }
-
-            [XmlElement(ElementName = "CreatedDate")]
-            public string CreatedDate { get; set; }
-
-            [XmlElement(ElementName = "CreatedBy")]
-            public string CreatedBy { get; set; }
-
-            [XmlElement(ElementName = "ReceivedBy")]
-            public string ReceivedBy { get; set; }
-
-            [XmlElement(ElementName = "RmaCode")]
-            public string RmaCode { get; set; }
-
-            [XmlElement(ElementName = "Status")]
-            public string Status { get; set; }
-
-            [XmlElement(ElementName = "ReturnType")]
-            public string ReturnType { get; set; }
-
-            [XmlElement(ElementName = "PhysicalReturn")]
-            public string PhysicalReturn { get; set; }
-
-            [XmlElement(ElementName = "ExchangeOrderId")]
-            public string ExchangeOrderId { get; set; }
-
-            [XmlElement(ElementName = "LessRestockAmount")]
-            public decimal LessRestockAmount { get; set; }
-
-            [XmlElement(ElementName = "ShippingCost")]
-            public decimal ShippingCost { get; set; }
-
-            [XmlElement(ElementName = "ShippingDiscount")]
-            public decimal ShippingDiscount { get; set; }
-
-            [XmlElement(ElementName = "ReturnSkus")]
-            public ReturnSkus ReturnSkus { get; set; }
-
-            [XmlElement(ElementName = "ReturnAddress")]
-            public ReturnAddress ReturnAddress { get; set; }
-
-            [XmlElement(ElementName = "ShippingTaxLines")]
-            public ShippingTaxLines ShippingTaxLines { get; set; }
-        }
-
-        [XmlRoot(ElementName = "Returns", Namespace = "http://com.elasticpath/repo/order")]
-        public partial class Returns
-        {
-            [XmlElement(ElementName = "Return")]
-            public List<Return> Return { get; set; }
-        }
-
         [XmlRoot(ElementName = "Order", Namespace = "http://com.elasticpath/repo/order")]
-        public class ReturnJMS
+        public class Order
         {
             [XmlElement(ElementName = "Header")]
             public Header Header { get; set; }
-
             [XmlElement(ElementName = "Customer")]
             public Customer Customer { get; set; }
-
             [XmlElement(ElementName = "Shipments")]
             public Shipments Shipments { get; set; }
-
             [XmlElement(ElementName = "Addresses", Namespace = "http://com.elasticpath/repo/order")]
             public Addresses Addresses { get; set; }
-
             [XmlElement(ElementName = "Payments")]
             public Payments Payments { get; set; }
-
             [XmlElement(ElementName = "Returns")]
-            public Returns Returns { get; set; }
-
-            [XmlElement(ElementName = "AppliedPromotions")]
-            public AppliedPromotions Promotions { get; set; }
-
-            public string ConvertOrderToString(ReturnJMS jms)
-            {
-
-                using (var stringwriter = new System.IO.StringWriter())
-                {
-                    var serializer = new XmlSerializer(this.GetType());
-                    serializer.Serialize(stringwriter, this);
-                    return stringwriter.ToString();
-                }
-            }
-
+            public string Returns { get; set; }
+            [XmlElement(ElementName = "AppliedPromotions", Namespace = "http://com.elasticpath/repo/order")]
+            public AppliedPromotions AppliedPromotions { get; set; }
+           
         }
 
     }

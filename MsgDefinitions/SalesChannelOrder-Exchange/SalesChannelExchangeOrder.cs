@@ -17,7 +17,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace BC.Integration.Canonical.CanonicalReturn
+namespace BC.Integration.Canonical.SaleChannelOrder.Exchange
 {
 
 
@@ -26,20 +26,20 @@ namespace BC.Integration.Canonical.CanonicalReturn
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-  //  [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder", IsNullable = false)]
-    public partial class Return
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder.Exchange")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder.Exchange", IsNullable = false)]
+    public partial class Order
     {
 
         private string processField;
 
-        private ReturnHeader headerField;
+        private OrderHeader headerField;
 
-        private List<ReturnLine> returnLineItems;
+        private List<OrderLineItem> lineItemsField;
 
-        private List<ReturnAddress> addressesField;
+        private List<OrderAddress> addressesField;
 
-        private List<ReturnDiscounts> discountsField;
+        private List<OrderDiscounts> discountsField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -57,7 +57,7 @@ namespace BC.Integration.Canonical.CanonicalReturn
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ReturnHeader Header
+        public OrderHeader Header
         {
             get
             {
@@ -72,22 +72,22 @@ namespace BC.Integration.Canonical.CanonicalReturn
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("LineItem", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
-        public List<ReturnLine> ReturnLineItems
+        public List<OrderLineItem> LineItems
         {
             get
             {
-                return this.returnLineItems;
+                return this.lineItemsField;
             }
             set
             {
-                this.returnLineItems = value;
+                this.lineItemsField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("Address", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
-        public List<ReturnAddress> Addresses
+        public List<OrderAddress> Addresses
         {
             get
             {
@@ -101,8 +101,8 @@ namespace BC.Integration.Canonical.CanonicalReturn
 
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Discount", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
-        public List<ReturnDiscounts> Discounts
+        [System.Xml.Serialization.XmlArrayItemAttribute("Address", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public List<OrderDiscounts> Discounts
         {
             get
             {
@@ -119,19 +119,19 @@ namespace BC.Integration.Canonical.CanonicalReturn
         /// </summary>
         /// <param name="doc">The invoice document object to be serialized</param>
         /// <returns>XML string representation of the invoice document</returns>
-        public string ConvertReturnToString()
+        public string ConvertOrderToString(Order doc)
         {
             StringWriter sw = new StringWriter();
             XmlTextWriter tw = null;
             try
             {
-                XmlSerializer serializer = new XmlSerializer(this.GetType());
+                XmlSerializer serializer = new XmlSerializer(doc.GetType());
                 tw = new XmlTextWriter(sw);
-                serializer.Serialize(tw, this);
+                serializer.Serialize(tw, doc);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occured serializing the BC.Integration.Canonical.CanonicalReturn Document object model.  The error occured in the ConvertReturnToString method.", ex);
+                throw new Exception("Error occured serializing the BC.Integration.Invoice Document object model.  The error occured in the ConvertInvoiceToString method.", ex);
             }
             finally
             {
@@ -149,12 +149,12 @@ namespace BC.Integration.Canonical.CanonicalReturn
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        public Return ConvertToObjectModel(string doc)
+        public Order ConvertToObjectModel(string doc)
         {
             using (TextReader sr = new StringReader(doc))
             {
-                var serializer = new System.Xml.Serialization.XmlSerializer(typeof(Return));
-                Return obj = (Return)serializer.Deserialize(sr);
+                var serializer = new System.Xml.Serialization.XmlSerializer(typeof(Order));
+                Order obj = (Order)serializer.Deserialize(sr);
                 return obj;
             }
 
@@ -166,8 +166,8 @@ namespace BC.Integration.Canonical.CanonicalReturn
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder")]
-    public partial class ReturnHeader
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder.Exchange")]
+    public partial class OrderHeader
     {
 
         private string orderNumberField;
@@ -240,6 +240,8 @@ namespace BC.Integration.Canonical.CanonicalReturn
 
         private decimal discountField;
 
+        private string discountCodeField;
+
         private string priceCodeField;
 
         private decimal freightField;
@@ -252,10 +254,6 @@ namespace BC.Integration.Canonical.CanonicalReturn
 
         private bool itHasDiscountField;
 
-        private string exchangeOrderIdField;
-
-        private bool isForExchangeOrderField;
-
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string OrderNumber
@@ -267,32 +265,6 @@ namespace BC.Integration.Canonical.CanonicalReturn
             set
             {
                 this.orderNumberField = value;
-            }
-        }
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ExchangeOrderId
-        {
-            get
-            {
-                return this.exchangeOrderIdField;
-            }
-            set
-            {
-                this.exchangeOrderIdField = value;
-            }
-        }
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool IsForExchangeOrder
-        {
-            get
-            {
-                return this.isForExchangeOrderField;
-            }
-            set
-            {
-                this.isForExchangeOrderField = value;
             }
         }
 
@@ -771,6 +743,19 @@ namespace BC.Integration.Canonical.CanonicalReturn
         }
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string DiscountCode
+        {
+            get
+            {
+                return this.discountCodeField;
+            }
+            set
+            {
+                this.discountCodeField = value;
+            }
+        }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string PriceCode
         {
             get
@@ -856,351 +841,123 @@ namespace BC.Integration.Canonical.CanonicalReturn
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder")]
-    public partial class ReturnLine
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder.Exchange")]
+    public partial class OrderLineItem
     {
-        private string returnId;
-        private DateTime createdDate;
-        private string createdBy;
-        private string rmaCode;
-        private string returnStatus;
-        private string returnType;
-        private string physicalReturn;
-        private string exchangeOrderId;
-        private decimal shippingCost;
-        private decimal shippingDiscount;
-        private decimal lessRestockAmount;
-        private string orderInvoiceNumber;
-        private string receivedBy;
-        private List<ReturnSKU> SKUList;
 
+        private string lineSeqNumField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ReturnId
-        {
-            get
-            {
-                return this.returnId;
-            }
-            set
-            {
-                this.returnId = value;
-            }
-        }
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string OrderInvoiceNumber
-        {
-            get
-            {
-                return this.orderInvoiceNumber;
-            }
-            set
-            {
-                this.orderInvoiceNumber = value;
-            }
-        }
+        private string itemNumberField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "date")]
-        public DateTime CreatedDate
-        {
-            get
-            {
-                return this.createdDate;
-            }
-            set
-            {
-                this.createdDate = value;
-            }
-        }
+        private string unitOfMeasureField;
+
+        private int unitQuantityField;
+
+        //private bool unitQuantityFieldSpecified;
+
+        private decimal unitPriceField;
+
+        //private bool unitPriceFieldSpecified;
+
+        private string commentField;
+
+        private System.DateTime shipDateField;
+
+        private bool shipDateFieldSpecified;
+
+        private string categoryField;
+
+        private string productNameField;
+
+        private string sizeField;
+
+        private string colourField;
+
+        private string fabricField;
+
+        private int siteIdField;
+
+        private string couponCodeField;
+
+        private string discountCodeField;
+
+        private string taxExemptField;
+
+        private string upcField;
+
+        private bool isGiftCardField;
+
+        private bool isDiscountField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string CreatedBy
+        public string LineSeqNum
         {
             get
             {
-                return this.createdBy;
+                return this.lineSeqNumField;
             }
             set
             {
-                this.createdBy = value;
+                this.lineSeqNumField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string RmaCode
+        public string ItemNumber
         {
             get
             {
-                return this.rmaCode;
+                return this.itemNumberField;
             }
             set
             {
-                this.rmaCode = value;
-            }
-        }
-
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ReturnStatus
-        {
-            get
-            {
-                return this.returnStatus;
-            }
-            set
-            {
-                this.returnStatus = value;
+                this.itemNumberField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ReturnType
+        public string UnitOfMeasure
         {
             get
             {
-                return this.returnType;
+                return this.unitOfMeasureField;
             }
             set
             {
-                this.returnType = value;
+                this.unitOfMeasureField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string IsPhysicalReturn
+        public int UnitQuantity
         {
             get
             {
-                return this.physicalReturn;
+                return this.unitQuantityField;
             }
             set
             {
-                this.physicalReturn = value;
+                this.unitQuantityField = value;
             }
         }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public string ExchangeOrderId
-        {
-            get
-            {
-                return this.exchangeOrderId;
-            }
-            set
-            {
-                this.exchangeOrderId = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ShippingCost
-        {
-            get
-            {
-                return this.shippingCost;
-            }
-            set
-            {
-                this.shippingCost = value;
-            }
-        }
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal LessRestockAmount
-        {
-            get
-            {
-                return this.lessRestockAmount;
-            }
-            set
-            {
-                this.lessRestockAmount = value;
-            }
-        }
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ReceivedBy
-        {
-            get
-            {
-                return this.receivedBy;
-            }
-            set
-            {
-                this.receivedBy = value;
-            }
-        }
-
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ShippingDiscount
-        {
-            get
-            {
-                return this.shippingDiscount;
-            }
-            set
-            {
-                this.shippingDiscount = value;
-            }
-        }
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public List<ReturnSKU> SKU
-        {
-            get
-            {
-                return this.SKUList;
-            }
-            set
-            {
-                this.SKUList = value;
-            }
-        }
-
-        public void AddSku(ReturnSKU sku)
-        {
-            this.SKUList.Add(sku);
-        }
-    }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder")]
-    public partial class ReturnSKU
-    {
-        private string returnSKUId;
-        private string returnItemCode;
-        private string lineItemId;
-        private int quantity;
-        private int receivedQuantity;
-        private decimal returnAmount;
-        private decimal unitPrice;
-        private decimal tax;
-        private decimal itemSubtotalPrice;
-        private decimal amountBeforeTax;
-        private decimal amountIncludingTax;
-        private string returnReason;
-        private string receivedState;
-
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ReturnSKUId
-        {
-            get
-            {
-                return this.returnSKUId;
-            }
-            set
-            {
-                this.returnSKUId = value;
-            }
-        }
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ReturnReason
-        {
-            get
-            {
-                return this.returnReason;
-            }
-            set
-            {
-                this.returnReason = value;
-            }
-        }
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ReceivedState
-        {
-            get
-            {
-                return this.receivedState;
-            }
-            set
-            {
-                this.receivedState = value;
-            }
-        }
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ReturnItemCode
-        {
-            get
-            {
-                return this.returnItemCode;
-            }
-            set
-            {
-                this.returnItemCode = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string LineItemId
-        {
-            get
-            {
-                return this.lineItemId;
-            }
-            set
-            {
-                this.lineItemId = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public int Quantity
-        {
-            get
-            {
-                return this.quantity;
-            }
-            set
-            {
-                this.quantity = value;
-            }
-        }
-
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public int ReceivedQuantity
-        {
-            get
-            {
-                return this.receivedQuantity;
-            }
-            set
-            {
-                this.receivedQuantity = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ReturnAmount
-        {
-            get
-            {
-                return this.returnAmount;
-            }
-            set
-            {
-                this.returnAmount = value;
-            }
-        }
+        ///// <remarks/>
+        //[System.Xml.Serialization.XmlIgnoreAttribute()]
+        //public bool UnitQuantitySpecified
+        //{
+        //    get
+        //    {
+        //        return this.unitQuantityFieldSpecified;
+        //    }
+        //    set
+        //    {
+        //        this.unitQuantityFieldSpecified = value;
+        //    }
+        //}
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -1208,77 +965,244 @@ namespace BC.Integration.Canonical.CanonicalReturn
         {
             get
             {
-                return this.unitPrice;
+                return this.unitPriceField;
             }
             set
             {
-                this.unitPrice = value;
+                this.unitPriceField = value;
+            }
+        }
+
+        ///// <remarks/>
+        //[System.Xml.Serialization.XmlIgnoreAttribute()]
+        //public bool UnitPriceSpecified
+        //{
+        //    get
+        //    {
+        //        return this.unitPriceFieldSpecified;
+        //    }
+        //    set
+        //    {
+        //        this.unitPriceFieldSpecified = value;
+        //    }
+        //}
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Comment
+        {
+            get
+            {
+                return this.commentField;
+            }
+            set
+            {
+                this.commentField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "date")]
+        public System.DateTime ShipDate
+        {
+            get
+            {
+                return this.shipDateField;
+            }
+            set
+            {
+                this.shipDateField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public decimal Tax
+        public bool ShipDateSpecified
         {
             get
             {
-                return this.tax;
+                return this.shipDateFieldSpecified;
             }
             set
             {
-                this.tax = value;
+                this.shipDateFieldSpecified = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ItemSubtotalPrice
+        public string Category
         {
             get
             {
-                return this.itemSubtotalPrice;
+                return this.categoryField;
             }
             set
             {
-                this.itemSubtotalPrice = value;
+                this.categoryField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal AmountBeforeTax
+        public string ProductName
         {
             get
             {
-                return this.amountBeforeTax;
+                return this.productNameField;
             }
             set
             {
-                this.amountBeforeTax = value;
+                this.productNameField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal AmountInludingTax
+        public string Size
         {
             get
             {
-                return this.amountIncludingTax;
+                return this.sizeField;
             }
             set
             {
-                this.amountIncludingTax = value;
+                this.sizeField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Colour
+        {
+            get
+            {
+                return this.colourField;
+            }
+            set
+            {
+                this.colourField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Fabric
+        {
+            get
+            {
+                return this.fabricField;
+            }
+            set
+            {
+                this.fabricField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int SiteId
+        {
+            get
+            {
+                return this.siteIdField;
+            }
+            set
+            {
+                this.siteIdField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string DiscountCode
+        {
+            get
+            {
+                return this.discountCodeField;
+            }
+            set
+            {
+                this.discountCodeField = value;
+            }
+        }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string CouponCode
+        {
+            get
+            {
+                return this.couponCodeField;
+            }
+            set
+            {
+                this.couponCodeField = value;
+            }
+        }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string TaxExempt
+        {
+            get
+            {
+                return this.taxExemptField;
+            }
+            set
+            {
+                this.taxExemptField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string UPC
+        {
+            get
+            {
+                return this.upcField;
+            }
+            set
+            {
+                this.upcField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool isGiftCard
+        {
+            get
+            {
+                return this.isGiftCardField;
+            }
+            set
+            {
+                this.isGiftCardField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool isDiscount
+        {
+            get
+            {
+                return this.isDiscountField;
+            }
+            set
+            {
+                this.isDiscountField = value;
             }
         }
     }
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder")]
-    public partial class ReturnAddress
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder.Exchange")]
+    public partial class OrderAddress
     {
 
         private string addressIdField;
@@ -1318,24 +1242,7 @@ namespace BC.Integration.Canonical.CanonicalReturn
                 this.addressIdField = value;
             }
         }
-        public ReturnAddress DeepCopy()
-        {
-            ReturnAddress other = (ReturnAddress)this.MemberwiseClone();
-            other.addressIdField = addressIdField;
-            other.customerNameField = customerNameField;
-            other.add1Field = add1Field;
-            other.add2Field = add2Field;
-            other.add3Field = add3Field;
-            other.addCityField = addCityField;
-            other.addPostalCodeField = addPostalCodeField;
-            other.countryField = countryField;
-            other.phoneField = phoneField;
-            other.emailField = emailField;
-            other.addressType = addressType;
-            other.stateField = stateField;
 
-            return other;
-        }
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string CustomerName
@@ -1497,12 +1404,13 @@ namespace BC.Integration.Canonical.CanonicalReturn
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder")]
-    public partial class ReturnDiscounts
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://BC.Integration.Schema.ECommerce.SalesChannelOrder.Exchange")]
+    public partial class OrderDiscounts
     {
         private string discountCodeField;
         private string discountItemNumberField;
         private string displayNameField;
+        private string promoNameField;
 
 
         /// <remarks/>
@@ -1548,5 +1456,19 @@ namespace BC.Integration.Canonical.CanonicalReturn
                 this.displayNameField = value;
             }
         }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PromoName
+        {
+            get
+            {
+                return this.promoNameField;
+            }
+            set
+            {
+                this.promoNameField = value;
+            }
+        }
     }
-}
+    }

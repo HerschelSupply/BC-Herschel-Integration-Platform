@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EpOffRampReturnServiceBC")]
+[assembly: AssemblyTitle("EpExchangeOnRampServiceBC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Herschel Supply Co")]
-[assembly: AssemblyProduct("Herschel Integration Platform")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyProduct("BC Herschel Integration Platform")]
+[assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("064135f8-dc4e-413c-a1a9-5e7d21876cd8")]
+[assembly: Guid("a94436f6-9c2c-4bf7-97b4-db842721cd5b")]
 
 // Version information for an assembly consists of the following four values:
 //
