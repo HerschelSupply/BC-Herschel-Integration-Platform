@@ -314,9 +314,13 @@ namespace BC.Integration.AppService.BaozunOnRamp
                 catch (Exception ex)
                 {
                     Trace.WriteLine(tracingExceptionPrefix + " An exception occured while processing data in BC.Integration.AppService.BaozunOnRamp.Process.ProcessFile. Exception message: " + ex.Message);
+
                     instrumentation.LogMessagingException("An exception occured while processing a message in the " +
                         "BC.Integration.AppService.BaozunOnRamp.Process.ProcessFile method. The current process is - " + processName +
                         " document number being processed is " + transactionNum + ".", outgoingMessage, ex);
+
+                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ProcessFile",
+                    "DocumentId: " + transactionNum + " failed with the following error, " + ex.Message, transactionNum);
                 }
             }
         }
