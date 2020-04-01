@@ -25,7 +25,7 @@ namespace BC.Integration.AppService.InventoryOffRampSvc
             foreach (string val in vals)
             {
                 string[] codes = val.Split('|');
-                if (BCSiteId == codes[0])
+                if (BCSiteId.Trim() == codes[0])
                 {
                     WarehouseSettings whSettings = new WarehouseSettings();
                     

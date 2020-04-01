@@ -926,6 +926,7 @@ namespace BC.Integration.APICalls
                 json = json.Replace("\"@xmlns:ns0\":\"\",", "");
                 json = json.Replace("{\"ns0:Root\":", "[");
                 json = json.Replace("}}", "}]");
+                json = json.Replace("{\"?xml\":{\"@version\":\"1.0\",\"@encoding\":\"utf-16\"},\"ns0:Root\":", "[");
 
 
                 var request = HttpWebRequest.Create(url);
@@ -944,25 +945,26 @@ namespace BC.Integration.APICalls
                     responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
                     var jObj = JObject.Parse(responseString);
-                    JArray messages = (JArray)jObj.SelectToken("Message");
-                    // validates if there are any errors 
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
                     string errorDesc = "";
-
-                    if (errors.HasValues)
+                    
+                    if(jObj.SelectToken("Errors").HasValues)
                     {
+                        JArray errors = (JArray)jObj.SelectToken("Errors");
                         foreach (var item in errors)
-                        {
-                            errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
-                        }
-                        throw new BlueCherryException(errorDesc + " PO Number: " + po_num);
-                    }
-                    else if (messages.HasValues)
-                    {
-                        string a = messages[0].SelectToken("message").ToString();
-                            if (messages[0].SelectToken("message").ToString().Contains("could not be processed due to errors"))
                             {
-                                throw new BlueCherryException(" PO Number: " + po_num + "could not be processed due to errors");
+                                errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
+                            }
+                            throw new BlueCherryException(errorDesc + " PO Number: " + po_num);
+                        
+                        
+                    }
+                    else if(jObj.SelectToken("Message").HasValues)
+                    {
+                        JArray messages = (JArray)jObj.SelectToken("Message");
+
+                            if (messages.First.SelectToken("message").ToString().Contains("could not be processed due to errors."))
+                            {
+                                throw new BlueCherryException(" PO Number: " + po_num + " could not be processed due to errors");
                             }
                         
                     }

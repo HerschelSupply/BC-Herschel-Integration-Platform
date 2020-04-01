@@ -130,7 +130,7 @@ namespace BC.Integration.AppService.BC
                         BCMsg = CreateBCMsg(msgBody);
 
                         API_Calls APICalls = new API_Calls();
-                         APICalls.PostOrder(BCMsg);
+                         APICalls.PostOrder(BCMsg, "Baozun order");  
                     }
                     catch (Exception ex)
                     {

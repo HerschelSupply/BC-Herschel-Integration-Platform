@@ -228,6 +228,9 @@ namespace BC.Integration.AppService.EpOffRampServiceTigersBC
                     instrumentation.LogMessagingException("Error occurred in the BC.Integration.AppService.EpOffRampServiceTigersBC.ProcessData.Execute (EP) method. " +
                         "The processing of the received message caused the component to fail and processing to stop. DocId:" + docId + " Message ID: " + msgID, msgXml, ex);
 
+                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "TigersPostIntoEP",
+                   "DocumentId: " + docId + "  failed with the following error, " + ex.Message, docId);
+
                     return false;
                 }
                 finally
