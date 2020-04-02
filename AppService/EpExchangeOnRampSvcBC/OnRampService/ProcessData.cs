@@ -184,7 +184,7 @@ namespace BC.Integration.AppService.EpExchangeOnRampServiceBC
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process Tigers Local Sales files. (BC.Integration.AppService.GPSalesOrderSvc.Process.ProcessData method)" + ex.ToString(), ex);
+                            throw new Exception("An Exception occurred while trying to retrieve and process Ep Exchange Local Sales files. (BC.Integration.AppService.EpExchangeOnRampSvc.Process.ProcessData method)" + ex.ToString(), ex);
                         }
 
                     }
@@ -269,16 +269,13 @@ namespace BC.Integration.AppService.EpExchangeOnRampServiceBC
                 "BC.Integration.AppService.EpExchangeOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId, outgoingMessage, ex);
 
                 //Notification Log entry...
-                /*instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
-                   "An exception occured while processing a message in the " +
-                "BC.Integration.AppService.EpExchangeOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId + ". Error: " +ex.Message, docId);*/
-
+               
                 if (!string.IsNullOrEmpty(ex.InnerException.Message))
                 {
                     exMessage = exMessage + " InnerExceptionMessage: " + ex.InnerException.Message;
                 }
 
-                instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
+                instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "PostIntoBC",
                 "DocumentId: " + docId + " failed with the following error, " + exMessage, docId);
 
 

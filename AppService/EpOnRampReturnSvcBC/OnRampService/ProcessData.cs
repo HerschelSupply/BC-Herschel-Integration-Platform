@@ -167,7 +167,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process BC data from EP_Integratios database. ('BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method)", ex);
+                            throw new Exception("An Exception occurred while trying to retrieve and process BC data from EP_Integrations database. ('BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method)", ex);
                         }
                     }
                     else
@@ -184,7 +184,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("An Exception occurred while trying to retrieve and process Tigers Local Sales files. (BC.Integration.AppServiceGPSalesOrderSvc.Process.ProcessData method)" + ex.ToString(), ex);
+                            throw new Exception("An Exception occurred while trying to retrieve and process Returns Local Sales files. (BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessData method)" + ex.ToString(), ex);
                         }
 
                     }
@@ -267,24 +267,19 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             {
                 string exMessage = ex.Message;
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + " BC.Integration.AppServiceEpReturn.OnRampServiceBC.Process.ProcessFile.  The creation of the canonical message failed. The message wasn't sent to the queue. DocumentId: " + docId + " Exception message: " + ex.Message);
-                instrumentation.LogGeneralException("An exception occured while processing a message in the " +
-                "'BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId
-                 , ex);
+
+                instrumentation.LogMessagingException("An exception occured while processing a message in the " +
+               "BC.Integration.AppService.EpReturnOnRampServiceBC.Process.ProcessXML method.  DocumentId: " + docId, outgoingMessage, ex);
 
                 //Notification Log entry...
-                if (ex.InnerException.Source == "BC_API_Calls")
+                if (!string.IsNullOrEmpty(ex.InnerException.Message))
                 {
-                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
-                    "DocumentId: " + docId + " failed with the following error: " + ex.InnerException.Message, docId);
-
                     exMessage = exMessage + " InnerExceptionMessage: " + ex.InnerException.Message;
                 }
-                else
-                {
 
-                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
-                    "CSV filename: " + batchName + " failed with the following error, " + ex.Message, docId);
-                }
+                instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromXML",
+                "DocumentId: " + docId + " failed with the following error, " + exMessage, docId);
+
 
                 SaveMessageToFile(ex.Message + "\r\n" + data, serviceId + "." + docId + ".Mapping", true, "Return");
 
@@ -300,7 +295,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
         /// <returns></returns>
         private Return MapReturnJMSToCanonical(JMS.ReturnJMS returnMessage)
         {
-
+            API_Calls APIcalls = new API_Calls();
             Return canonicalReturn = new Return();
 
             try 
@@ -312,16 +307,16 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                 canonicalReturn.Process = processName;
                 canonicalReturn.Header = new ReturnHeader();
                 canonicalReturn.Header.OrderNumber = returnMessage.Header.OrderNumber;
-                canonicalReturn.Header.SiteId = Convert.ToInt32(Mapper.MapStoreNameToSiteId(returnMessage.Header.StoreCode));
+                canonicalReturn.Header.SiteId = Convert.ToInt32(APIcalls.AllocateBasedOnState(returnMessage.Shipments.Shipment.ShippingAddress.Region, returnMessage.Shipments.Shipment.ShippingAddress.Country));
                 canonicalReturn.Header.CurrencyId = returnMessage.Header.Currency;
                 canonicalReturn.Header.TaxRegistrationNumber = "";
-                canonicalReturn.Header.CarrierCode = Mapper.MapShipmentCarrierToCarrierCode(returnMessage.Shipments.Shipment.ShipmentCarrier);
+                canonicalReturn.Header.CarrierCode = APIcalls.GetShipper(APIcalls.ConvertShipmenMethodForEast(canonicalReturn.Header.SiteId.ToString(), returnMessage.Shipments.Shipment.ShipmentCarrier));
                 canonicalReturn.Header.PaymentType = "";
                 try
                 {
 
-                    API_Calls helper = new API_Calls();
-                    canonicalReturn.Header.CustomerId = helper.GetCustomerFromSite(canonicalReturn.Header.SiteId.ToString());
+                    //API_Calls helper = new API_Calls();
+                    canonicalReturn.Header.CustomerId = APIcalls.GetCustomerFromSite(canonicalReturn.Header.SiteId.ToString());
 
                
                 }
@@ -466,7 +461,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
 
                 Trace.WriteLine(tracingExceptionPrefix + " An error occured while trying to map the EP batch message to the SalesChannelOrder message in MapSalesOrdersToCanonical()");
                 throw new Exception("An error occured while trying to map the EP sales order batch message to the SalesChannelOrder message" +
-                    "in the BC.Integration.AppServiceEpOnRampServiceBC.Process.MapSalesOrdersToCanonical method. The EP sales order transaction " +
+                    "in the BC.Integration.EpReturnOnRampServiceBC.Process.MapReturnJMSToCanonical method. The EP sales order transaction " +
                     "number is: " + returnMessage.Header.OrderNumber, ex);
             }
 
