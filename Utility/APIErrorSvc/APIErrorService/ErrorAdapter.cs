@@ -1,15 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
-using System.Xml.Xsl;
-using System.Xml.XPath;
-using Microsoft.Dynamics.GP.eConnect;
-using System.Data.Linq;
-using System.Data.Linq.Mapping;
 using System.Data;
-using System.Globalization;
 using System.Data.Odbc;
 
 namespace BC.Integration.APIError
@@ -36,22 +26,22 @@ namespace BC.Integration.APIError
                     //create command and assign the query and connection from the constructor
                     OdbcCommand cmd = new OdbcCommand();
 
-                    cmd = new OdbcCommand("{Call ErrorInsert(?,?,?,?,?)}", connection.GetConnection());
+                    cmd = new OdbcCommand("{Call ErrorInsert(?,?,?,?,?,?,?)}", connection.GetConnection());
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("errorType", error.ErrorType);
-                    cmd.Parameters.AddWithValue("typeId", error.ErrorTypeId);
-                    cmd.Parameters.AddWithValue("message", error.CreateErrorMsg());
-                    cmd.Parameters.AddWithValue("documentId", error.DocumentId);
-                    cmd.Parameters.AddWithValue("division", error.Division);
-                    cmd.Parameters.AddWithValue("location", error.Location);
-                    cmd.Parameters.AddWithValue("customer", error.Customer);
+                    cmd.Parameters.Add(error.ErrorType, OdbcType.VarChar);
+                    cmd.Parameters.Add(error.ErrorTypeId.ToString(), OdbcType.VarChar);
+                    cmd.Parameters.Add(error.CreateErrorMsg(), OdbcType.VarChar);
+                    cmd.Parameters.Add(error.DocumentId,OdbcType.VarChar);
+                    cmd.Parameters.Add(error.Division, OdbcType.VarChar);
+                    cmd.Parameters.Add(error.Location, OdbcType.VarChar);
+                    cmd.Parameters.Add(error.Customer, OdbcType.VarChar);
 
                     //Execute command
-            
-                    success = Convert.ToBoolean(cmd.ExecuteScalar());
+
+                    int i = cmd.ExecuteNonQuery();
 
                     //close connection
-                    connection.Close();
+                    connection.Close();                                                                                                                                                                                            
 
                 }
 

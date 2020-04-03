@@ -6,12 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.IO;
-using System.Xml;
-using System.Xml.Xsl;
-using Microsoft.Dynamics.GP.eConnect;
-using System.Web;
-using System.Net;
 using Newtonsoft.Json.Linq;
 using BC.Integration.APICalls;
 
