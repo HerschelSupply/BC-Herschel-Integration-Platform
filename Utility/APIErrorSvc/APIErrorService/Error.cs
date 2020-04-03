@@ -8,7 +8,6 @@ namespace BC.Integration.APIError
     public class Error
     {
         private string documentId;
-        private string errorNumber;
         private string errorType;
         private int errorTypeId;
         private string errorId;
@@ -20,9 +19,12 @@ namespace BC.Integration.APIError
         private string season;
         private string customer;
 
+        public  Error()
+        {
+        }
+
         public string DocumentId { get => documentId; set => documentId = value; }
-        public string ErrorNumber { get => ErrorNumber; set => ErrorNumber = value; }
-        public int ErrorTypeId { get => errorTypeId; set => errorTypeId = value; }
+       public int ErrorTypeId { get => errorTypeId; set => errorTypeId = value; }
         public string ErrorId { get => errorId; set => errorId = value; }
         public string ErrorMsg { get => errorMsg; set => errorMsg = value; }
         public string ErrorType { get => errorType; set => errorType = value; }
