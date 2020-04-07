@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{68DD2C55-AE85-4713-B4E4-E332213411E0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CodeTesting</RootNamespace>
+    <AssemblyName>CodeTesting</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Corp.Integration.AppService.Gp.SalesDocWcfOffRamp">
+      <HintPath>..\SalesDocWcfOffRamp\bin\Corp.Integration.AppService.Gp.SalesDocWcfOffRamp.dll</HintPath>
+    </Reference>
+    <Reference Include="Corp.Integration.EConnect">
+      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.EConnect.dll</HintPath>
+    </Reference>
+    <Reference Include="Corp.Integration.SalesDocument">
+      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.SalesDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="Corp.Integration.Utility.InstrumentationDB, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\0.DLL Bin\Corp.Integration.Utility.InstrumentationDB.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Connected Services\SalesDocWcfSvc\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\WcfDestinationService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Connected Services\SalesDocWcfSvc\SalesDocWcfService.wsdl" />
+    <None Include="Connected Services\SalesDocWcfSvc\SalesDocWcfService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SalesDocWcfSvc\SalesDocWcfService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\WcfDestinationService\WcfMessagingService.wsdl" />
+    <None Include="Connected Services\WcfDestinationService\WcfMessagingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\WcfDestinationService\WcfMessagingService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\SalesDocWcfSvc\SalesDocWcfService.disco" />
+    <None Include="Connected Services\SalesDocWcfSvc\configuration91.svcinfo" />
+    <None Include="Connected Services\SalesDocWcfSvc\configuration.svcinfo" />
+    <None Include="Connected Services\SalesDocWcfSvc\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\WcfDestinationService\WcfMessagingService.disco" />
+    <None Include="Connected Services\WcfDestinationService\configuration91.svcinfo" />
+    <None Include="Connected Services\WcfDestinationService\configuration.svcinfo" />
+    <None Include="Connected Services\WcfDestinationService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Sales Receive 24bb3902-ba3d-44b8-ae54-229d88c722eb.xml" />
+    <Content Include="Sales Receive 8f1b6aa3-8465-414b-9350-8e07b342fa35.xml" />
+    <Content Include="Sales Receive be42fb8a-1678-488c-9183-eae21a538c2d.xml" />
+    <Content Include="Sales Receive c67526a2-6472-4155-9be5-a6efaa8e8301.xml" />
+    <Content Include="SalesDoc Post 3cb96880-a389-412c-8731-cd8b01f257f6.xml" />
+    <Content Include="SalesDoc Post f2e37d70-ebf1-4886-8d63-72e5d2364b21.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\SalesDocWcfSvc\" />
+    <WCFMetadataStorage Include="Connected Services\WcfDestinationService\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

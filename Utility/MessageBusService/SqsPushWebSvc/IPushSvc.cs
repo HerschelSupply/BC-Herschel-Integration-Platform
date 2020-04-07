@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 
-namespace Corp.Integration.Utility.SqsPushWebSvc
+namespace BC.Integration.Utility.SqsPushWebSvc
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IPushSvc" in both code and config file together.
     [ServiceContract]

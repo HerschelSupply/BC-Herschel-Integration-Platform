@@ -57,6 +57,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="BC.Integration.Utility.CentralConfiguration">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.CentralConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utility.InstrumentationDB">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.InstrumentationDB.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utility.SqsPublishService">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.SqsPublishService.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>

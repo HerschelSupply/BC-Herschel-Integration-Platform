@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BC_API_Calls")]
+[assembly: AssemblyTitle("BC.Integration.APICalls")]
 [assembly: AssemblyDescription("Contains all the BlueCherry API Calls")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Herschel Supply Co")]
