@@ -270,7 +270,8 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
         }
         private bool Dispatch(string file)
         {
-            bool success = true;
+            bool success = false;
+            bool hasPayment = false;
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + ".Dispatch() method is initializaing.  Filename: " + file);
             XmlDocument JMSFile = new XmlDocument();
 
@@ -289,6 +290,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                     {
                         if (node.Name.Equals("Payments"))
                         {
+                            hasPayment = true;
                             foreach (XmlNode n in node.FirstChild.ChildNodes)
                             {
                                 if (n.Name.Contains("PaymentMethod"))
@@ -304,10 +306,11 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                                 }
                             }
                         }
-                       /* else if(node.Name.Equals("AppliedPromotions")) //if there's no payment node, this is a 100% discounted order
-                        {
-                            success = MoveFileTo(file, inProgressFolderPath); //100% discounted order
-                        }*/
+
+                    }
+                    if (!hasPayment)
+                    {
+                        success = MoveFileTo(file, inProgressFolderPath); //100% discounted order
                     }
                 }
                 else if (status.Contains("CANCELLED"))
