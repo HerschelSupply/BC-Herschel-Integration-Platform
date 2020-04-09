@@ -245,7 +245,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                     success = true;
                 }
             }
-            catch (System.IO.IOException ex)
+            catch (Exception ex)
             {
                 success = false;
                 //Since the implementation of DI raised the exception we can not log the exception using the instrumentation component.
@@ -262,9 +262,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                 {
                     attributes &= ~FileAttributes.ReadOnly;
                     File.SetAttributes(filename, attributes);
-                }
-
-
+                }                
             }
 
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + ".MoveFileTo() method is initializaing.  file : " + filename + " . Destination : " + destination);
@@ -286,8 +284,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                 {
                     XmlElement order = JMSFile.DocumentElement;
                     XmlNodeList xnList = order.ChildNodes;
-                    success = MoveFileTo(file, inProgressFolderPath);
-                    /*
+                    
                     foreach (XmlNode node in xnList)
                     {
                         if (node.Name.Equals("Payments"))
@@ -307,11 +304,11 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                                 }
                             }
                         }
-                        else if(node.Name.Equals("AppliedPromotions")) //if there's no payment node, this is a 100% discounted order
+                       /* else if(node.Name.Equals("AppliedPromotions")) //if there's no payment node, this is a 100% discounted order
                         {
                             success = MoveFileTo(file, inProgressFolderPath); //100% discounted order
-                        }
-                    }*/
+                        }*/
+                    }
                 }
                 else if (status.Contains("CANCELLED"))
                 { //cancelled
@@ -331,15 +328,15 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                             {
                                 foreach (XmlNode n in node.FirstChild.ChildNodes)
                                 {
-                                    success = MoveFileTo(file, returnFolderPath);
-                                 /*   if (n.Name.Contains("ReturnType")) // return type is either exchange or return
+
+                                    if (n.Name.Contains("ReturnType")) // return type is either exchange or return
                                     {
                                         if (!String.IsNullOrEmpty(n.FirstChild.InnerText))
                                         {
                                             //this is a return
                                             success = MoveFileTo(file, returnFolderPath);
                                         }
-                                    }*/
+                                    }
                                 }
                             }
                             else
