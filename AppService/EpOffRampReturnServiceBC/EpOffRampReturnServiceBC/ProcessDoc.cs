@@ -99,10 +99,11 @@ namespace BC.Integration.AppService.EpOffRampReturnServiceBC
             {
                 //Create Unity container for DI and create DI components
                 CreateDiComponents();
+                XmlDocument msgXml = new XmlDocument();
                 try
                 {
                     //Log receipt of message
-                    XmlDocument msgXml = new XmlDocument();
+                    
                     msgXml.LoadXml(receiveMsg);
                     msgXml = msgMgr.CreateReceiveMessage(msgXml, serviceId, serviceVersion, serviceOperationId);
                    // processName = msgMgr.ReceivedEnvelope.Interchange.ProcessName;
@@ -154,9 +155,24 @@ namespace BC.Integration.AppService.EpOffRampReturnServiceBC
                 }
                 catch (Exception ex)
                 {
+                    string docId = "";
+                    string exMessage = ex.Message;
                     Trace.WriteLine(tracingExceptionPrefix + "Occurred: " + ex.Message);
-                    instrumentation.LogGeneralException("Error occurred in the BC.Integration.AppService.EpOffRampReturnServiceBC.ProcessDoc.Execute method. " +
-                        "The processing of the received message caused the component to fail and processing to stop. Message ID: " + msgID, ex);
+
+                    if (msgXml.SelectSingleNode("/MsgEnvelope/Msg/DocId").InnerText != "")
+                        docId = msgXml.SelectSingleNode("/MsgEnvelope/Msg/DocId").InnerText;
+
+                    instrumentation.LogMessagingException("Error occurred in the BC.Integration.AppService.EpOffRampReturnServiceBC.ProcessDoc.Execute method. " +
+                   "The processing of the received message caused the component to fail and processing to stop. DocId:" + docId + " Message ID: " + msgID, msgXml, ex);
+
+
+                    if (!string.IsNullOrEmpty(ex.InnerException.Message))
+                    {
+                        exMessage = exMessage + " InnerExceptionMessage: " + ex.InnerException.Message;
+                    }
+
+                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "PostIntoBC",
+                    "DocumentId: " + docId + "  failed with the following error, " + exMessage, docId);
                      return false;
                 }
                 finally

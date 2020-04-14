@@ -272,9 +272,10 @@ namespace BC.Integration.APICalls
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetUPC start retrieving UPC.");
 
             string upc = "";
+            string uri = "";
             try
             {
-                string uri = UPC_endpoint + "?" + UPC_param_style + "=" + style + "&" + UPC_param_color + "=" + color + "&" + UPC_param_size + "=" + size;
+                uri = UPC_endpoint + "?" + UPC_param_style + "=" + style + "&" + UPC_param_color + "=" + color + "&" + UPC_param_size + "=" + size;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
                 request.Headers.Add(authKey, authValue);
@@ -309,9 +310,11 @@ namespace BC.Integration.APICalls
               
                 throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the UPC value from BlueCherry");
+                throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. Style: " + style + " Color: " + color + " Size: " + size + " URI:" + uri, e);
+
             }
             finally
             {
@@ -330,11 +333,12 @@ namespace BC.Integration.APICalls
         {
 
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".OrderExists started checking if order exists.");
+            string uri = "";
 
             bool exists = false;
             try
             {
-                string uri = ORDER_endpoint + "?" + ORDER_param_po_num + "=" + po_num;
+                uri = ORDER_endpoint + "?" + ORDER_param_po_num + "=" + po_num;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
                 request.Headers.Add(authKey, authValue);
@@ -366,7 +370,7 @@ namespace BC.Integration.APICalls
                                 throw new BlueCherryException(errorDesc);
                             }
                         }
-                        
+
                     }
 
                     else if (jObj.SelectToken("data") != null)
@@ -375,9 +379,9 @@ namespace BC.Integration.APICalls
 
                         //if (data.HasValues)
                         //{
-                            exists = true;
+                        exists = true;
                         //}
-                        
+
                     }
                 }
             }
@@ -387,6 +391,11 @@ namespace BC.Integration.APICalls
                 //  instrumentation.LogGeneralException("An exception occured trying to validate if an order exists in BlueCherry BC.Integration.Utility.BC_API_Calls.OrderExists. ", ex);
                 throw new Exception("An exception occured trying to validate if an order exists in BlueCherry BC.Integration.Utility.BC_API_Calls.OrderExists. ", ex);
 
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to validate if an order exists in BlueCherry");
+                throw new Exception("An exception occured trying to validate if an order exists in BlueCherry BC.Integration.Utility.BC_API_Calls.OrderExists. The PO Num is " + po_num + "and the URI is " + uri , e);
             }
             finally
             {
@@ -405,12 +414,13 @@ namespace BC.Integration.APICalls
         /// </summary>
         public string GetShipper(string ship_name)
         {
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetUPC start retrieving UPC.");
-
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetShipper start retrieving values.");
+            
             string shipper = "";
+            string uri = "";
             try
             {
-                string uri = SHIPPING_endpoint + "?" + SHIPPING_param_name + "=" + ship_name ;
+                uri = SHIPPING_endpoint + "?" + SHIPPING_param_name + "=" + ship_name ;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
                 request.Headers.Add(authKey, authValue);
@@ -441,16 +451,18 @@ namespace BC.Integration.APICalls
                     JArray data = (JArray)jObj.SelectToken("data");
                     shipper = data[0].SelectToken("shipper").ToString();
 
-
-                    //return reader.ReadToEnd();
                 }
 
             }
             catch (BlueCherryException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the Shipper value from BlueCherry");
-                //instrumentation.LogGeneralException("An exception occured trying to get the Shipper value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
-                throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
+                throw new Exception("An exception occured trying to get the Shipper value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the Shipper in BlueCherry");
+                throw new Exception("An exception occured trying to get the Shipper value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. The Shipper name is " + ship_name + " and the URI is " + uri, e);
             }
             finally
             {
@@ -468,12 +480,12 @@ namespace BC.Integration.APICalls
         /// </summary>
         public string GetCutSoldByLocation(string siteId)
         {
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCutSoldByLocation start retrieving UPC.");
-
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCutSoldByLocation start retrieving the values.");
+            string uri = "";
             string data = null;
             try
             {
-                string uri = CUTSOLDBYLOC_endpoint+"?"+ CUTSOLDBYLOC_param_loc+"="+siteId;
+                uri = CUTSOLDBYLOC_endpoint+"?"+ CUTSOLDBYLOC_param_loc+"="+siteId;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
                 request.Headers.Add(authKey, authValue);
@@ -509,12 +521,16 @@ namespace BC.Integration.APICalls
             catch (BlueCherryException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the inventory by location value from BlueCherry.");
-                //instrumentation.LogGeneralException("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
-                throw new Exception("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
+               throw new Exception("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the inventory by location value from BlueCherry.");
+                throw new Exception("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. The SiteId is " + siteId + " and the URI is " + uri, e);
             }
             finally
             {
-                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCutSoldByLocation completed retrieving Shipper code.");
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCutSoldByLocation completed retrieving the values.");
 
                 //instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetCutSoldByLocation method complete.");
@@ -529,14 +545,14 @@ namespace BC.Integration.APICalls
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCustomerFromSite start retrieving customer from site.");
 
             string customer = "";
-
+            string uri = "";
             try
             {
-                string uri = Customer_endpoint + "?" + Customer_param_location + "=" + site;
+                uri = Customer_endpoint + "?" + Customer_param_location + "=" + site;
                 // string uri = "https://bcmultiws.azure-api.net/HCEL/HCTR/api/Customer?location=" + site;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-                request.Headers.Add("Ocp-Apim-Subscription-Key", "151def3e976c4798897af920c656390c");
+                request.Headers.Add(authKey, authValue);
                 /*Servers sometimes compress their responses to save on bandwidth, when this happens, you need to decompress the response before attempting to read it.
                  Fortunately, the .NET framework can do this automatically, however, we have to turn the setting on. */
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
@@ -564,20 +580,21 @@ namespace BC.Integration.APICalls
                     customer = data[0].SelectToken("customer").ToString();
 
 
-                    //return reader.ReadToEnd();
                 }
             }
             catch (WebException ex)
             {
-                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the UPC value from BlueCherry");
-                //instrumentation.LogGeneralException("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. ", ex);
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer value from BlueCherry");
                 throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. ", ex);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer value from BlueCherry");
+                throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. The SiteId is " + site + " and the URI is " + uri, e);
             }
             finally
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCustomerFromSite completed retrieving customer from site.");
-
-                //instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetCustomerFromSite method complete.");
             }
 
@@ -585,17 +602,80 @@ namespace BC.Integration.APICalls
             return customer;
         }
 
+        public string GetCustomerCountryFromSite(string site)
+        {
+
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCustomerCountryFromSite start retrieving customer's country from site.");
+
+            string country = "";
+            string uri = "";
+            try
+            {
+                uri = Customer_endpoint + "?" + Customer_param_location + "=" + site;
+                // string uri = "https://bcmultiws.azure-api.net/HCEL/HCTR/api/Customer?location=" + site;
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.Headers.Add(authKey, authValue);
+                /*Servers sometimes compress their responses to save on bandwidth, when this happens, you need to decompress the response before attempting to read it.
+                 Fortunately, the .NET framework can do this automatically, however, we have to turn the setting on. */
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+
+                    var jObj = JObject.Parse(reader.ReadToEnd());
+                    // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
+                    JArray errors = (JArray)jObj.SelectToken("Errors");
+
+                    if (errors.HasValues)
+                    {
+                        string errorDesc = "";
+                        foreach (JToken error in errors)
+                        {
+                            errorDesc += error.Value<string>("ErrorMessage") + " ";
+                        }
+                        throw new BlueCherryException("ErrorMessage:" + errorDesc + " Location: " + site + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite");
+                    }
+
+                    JArray data = (JArray)jObj.SelectToken("data");
+                    country = data[0].SelectToken("country").ToString().Trim();
+
+
+                }
+            }
+            catch (WebException ex)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer's country from BlueCherry");
+                throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite. ", ex);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer's country from BlueCherry");
+                throw new Exception("An exception occured trying to get the customer's country  from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite. The SiteId is " + site + " and the URI is " + uri, e);
+            }
+            finally
+            {
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCustomerFromSite completed retrieving customer's country from site.");
+                Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetCustomerFromSite method complete.");
+            }
+
+
+            return country;
+        }
+
         public string GetInvoiceNumberFromOrder(string poNumber)
         {
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetInvoiceNumberFromOrder start retrieving invoice number from PO.");
             string invoiceNumber;
-
+            string uri = "";
             try
             {
-                string uri = ORDER_DetailsOEndpoint + "?" + ORDER_param_po_num + "=" + poNumber;
+                uri = ORDER_DetailsOEndpoint + "?" + ORDER_param_po_num + "=" + poNumber;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-                request.Headers.Add("Ocp-Apim-Subscription-Key", "151def3e976c4798897af920c656390c");
+                request.Headers.Add(authKey, authValue);
                 /*Servers sometimes compress their responses to save on bandwidth, when this happens, you need to decompress the response before attempting to read it.
                  Fortunately, the .NET framework can do this automatically, however, we have to turn the setting on. */
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
@@ -629,13 +709,16 @@ namespace BC.Integration.APICalls
             catch (WebException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the invoice number from BlueCherry");
-               // instrumentation.LogGeneralException("An exception occured trying to get the Invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
-                throw new Exception("An exception occured trying to get the invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
+               throw new Exception("An exception occured trying to get the invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer value from BlueCherry");
+                throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. The PO Num. is " + poNumber + " and the URI is " + uri, e);
             }
             finally
             {
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetInvoiceNumberFromOrder cmpleted retrieving invoice number from PO.");
-                //instrumentation.FlushActivity();
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetInvoiceNumberFromOrder method complete.");
             }
 
@@ -646,7 +729,7 @@ namespace BC.Integration.APICalls
 
         public JArray GetAPIErrors()
         {
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetInvoiceNumberFromOrder start retrieving invoice number from PO.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetAPIErrors start retrieving the error details.");
             JArray data;
 
             try
@@ -654,7 +737,7 @@ namespace BC.Integration.APICalls
                 string uri = "https://bcmultiws.azure-api.net/HCEL/HCTR/api/850transactionheader";// + " ? " + ORDER_param_po_num + "=" + poNumber;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-                request.Headers.Add("Ocp-Apim-Subscription-Key", "151def3e976c4798897af920c656390c");
+                request.Headers.Add(authKey, authValue);
                 /*Servers sometimes compress their responses to save on bandwidth, when this happens, you need to decompress the response before attempting to read it.
                  Fortunately, the .NET framework can do this automatically, however, we have to turn the setting on. */
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
@@ -672,15 +755,15 @@ namespace BC.Integration.APICalls
             }
             catch (WebException ex)
             {
-                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the invoice number from BlueCherry");
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the errors from BlueCherry");
                 // instrumentation.LogGeneralException("An exception occured trying to get the Invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
-                throw new Exception("An exception occured trying to get the invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
+                throw new Exception("An exception occured trying to get the invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetAPIErrors. ", ex);
             }
             finally
             {
-                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetInvoiceNumberFromOrder cmpleted retrieving invoice number from PO.");
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetAPIErrors cmpleted retrieving errors");
                 //instrumentation.FlushActivity();
-                Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetInvoiceNumberFromOrder method complete.");
+                Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetAPIErrors method complete.");
             }
 
             return data;
@@ -738,7 +821,7 @@ namespace BC.Integration.APICalls
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("While trying to convert shipment carrier: " + shipmentMethod + " to a Herschel carrier code an error occurred.  Please" +
+                        throw new Exception("While trying to convert shipment carrier: " + shipmentMethod + " to a Herschel carrier code an error occurred. The Site Id is: " + site + ". Please" +
                             " verify the EpOnRampSvcBC  has a configuration for this EP store name.", ex);
                     }
 
@@ -901,16 +984,29 @@ namespace BC.Integration.APICalls
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostOrder start posting" + type);
 
             var responseString ="";
+            string url = "";
+
             /* Turns orderDetail to an Array, even when there's only one line item.*/
             value = value.Replace("<orderDetail>", "<orderDetail xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
 
-            Uri url = new Uri(ORDER_Iendpoint);
+
+            url = ORDER_Iendpoint;
+            //Uri url = new Uri(ORDER_Iendpoint);
             XmlDocument doc = new XmlDocument();
-       
+            string po_num = "";
 
-            doc.LoadXml(value);
-            string po_num = doc.DocumentElement.SelectSingleNode("//po_num").InnerText;
+            try
+            {
+                doc.LoadXml(value);
+                po_num = doc.DocumentElement.SelectSingleNode("//po_num").InnerText;
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls.PostOrder: Exception occured trying to create the XML or get the PoNum");
+                throw new Exception("An exception occured trying to load the  XML and/or retrieve the PO number from it. BlueCherry BC.Integration.Utility.BC_API_Calls.PostOrder. ", e);
 
+            }
+            
 
             if (OrderExists(po_num))
             {
@@ -926,7 +1022,10 @@ namespace BC.Integration.APICalls
                 json = json.Replace("\"@xmlns:ns0\":\"\",", "");
                 json = json.Replace("{\"ns0:Root\":", "[");
                 json = json.Replace("}}", "}]");
+                json = json.Replace("{\"?xml\":{\"@version\":\"1.0\",\"@encoding\":\"utf-16\"},\"ns0:Root\":", "[");
 
+                try
+                {
 
                 var request = HttpWebRequest.Create(url);
                 request.Headers.Add(authKey, authValue);
@@ -934,8 +1033,7 @@ namespace BC.Integration.APICalls
                 request.ContentType = "application/json";
                 request.Method = "POST";
 
-                try
-                {
+                
                     using (var stream = request.GetRequestStream())
                     {
                         stream.Write(byteData, 0, byteData.Length);
@@ -944,25 +1042,26 @@ namespace BC.Integration.APICalls
                     responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
                     var jObj = JObject.Parse(responseString);
-                    JArray messages = (JArray)jObj.SelectToken("Message");
-                    // validates if there are any errors 
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
                     string errorDesc = "";
-
-                    if (errors.HasValues)
+                    
+                    if(jObj.SelectToken("Errors").HasValues)
                     {
+                        JArray errors = (JArray)jObj.SelectToken("Errors");
                         foreach (var item in errors)
-                        {
-                            errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
-                        }
-                        throw new BlueCherryException(errorDesc + " PO Number: " + po_num);
-                    }
-                    else if (messages.HasValues)
-                    {
-                        string a = messages[0].SelectToken("message").ToString();
-                            if (messages[0].SelectToken("message").ToString().Contains("could not be processed due to errors"))
                             {
-                                throw new BlueCherryException(" PO Number: " + po_num + "could not be processed due to errors");
+                                errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
+                            }
+                            throw new BlueCherryException(errorDesc + " PO Number: " + po_num);
+                        
+                        
+                    }
+                    else if(jObj.SelectToken("Message").HasValues)
+                    {
+                        JArray messages = (JArray)jObj.SelectToken("Message");
+
+                            if (messages.First.SelectToken("message").ToString().Contains("could not be processed due to errors."))
+                            {
+                                throw new BlueCherryException(" PO Number: " + po_num + " could not be processed due to errors");
                             }
                         
                     }
@@ -971,9 +1070,15 @@ namespace BC.Integration.APICalls
                 catch (BlueCherryException ex)
                 {
                    
-                    Trace.WriteLine("BC_API_Calls: Exception occured trying to post an " + type + "  into BlueCherry");
-                    throw new Exception("An exception occured trying to post an " + type + " into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
+                    Trace.WriteLine("BC_API_Calls: Exception occured trying to post the " + type + "  into BlueCherry");
+                    instrumentation.LogGeneralException("Exception occured in BlueCherry BC.Integration.Utility.BC_API_Calls.Post. DocumentId:" + po_num + " JSON: "+json, ex);
+                    throw new Exception("An exception occured trying to post the " + type + " into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
 
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine("BC_API_Calls: Exception occured trying to post the " + type + "  into BlueCherry");
+                    throw new Exception("An exception occured trying to post the " + type + " into BlueCherry BC.Integration.Utility.BC_API_Calls.Post. The PO Num. is " + po_num + " and the URI is " + url, e);
                 }
                 finally
                 {
@@ -993,26 +1098,34 @@ namespace BC.Integration.APICalls
         {
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostShipmentConfirmation start posting shipment confirmation.");
             String responseString = "";
+            string pick_num = "";
+            string url = "";
+            string json = "";
+            
 
             try
             {
-            XmlDocument originalDoc = new XmlDocument();
-            originalDoc.LoadXml(value);
-
            
             //Turns orderDetail to an Array, even when there's only one line item.
             value = value.Replace("<pickDetail>", "<pickDetail xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
             value = value.Replace("<cartonHeader>", "<cartonHeader xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
             value = value.Replace("<cartonDetail>", "<cartonDetail xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
 
-            Uri url = new Uri(ORDERSHIPMENT_Iendpoint);
+            url = ORDERSHIPMENT_Iendpoint;
             XmlDocument doc = new XmlDocument();
 
+                try { 
+                doc.LoadXml(value);
+                pick_num = doc.DocumentElement.SelectSingleNode("//pick_num").InnerText;
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine("BC_API_Calls.PostShipmentConfirmation: Exception occured trying to create the XML or get the PickNum");
+                    throw new Exception("An exception occured trying to load the  XML and/or retrieve the Pick number from it. BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation. ", e);
 
-            doc.LoadXml(value);
-            string pick_num = doc.DocumentElement.SelectSingleNode("//pick_num").InnerText;
-           
-            string json = JsonConvert.SerializeXmlNode(doc);
+                }
+
+            json = JsonConvert.SerializeXmlNode(doc);
 
             json = json.Replace("http://Schemas.DestinationSchema.BC_ShipmentConfirmation", "");
             json = json.Replace("\"@xmlns:ns0\":\"\",", "");
@@ -1051,8 +1164,14 @@ namespace BC.Integration.APICalls
             catch (BlueCherryException ex)
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to post a shipment confirmation into BlueCherry");
-               throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
+                instrumentation.LogGeneralException("Exception occured in BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation. PickNum:" + pick_num + " JSON: " + json, ex);
+                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
 
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to post a shipment confirmation into BlueCherry");
+                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation. The Pick num is " + pick_num + " and the URI is " + url, e);
             }
             finally
             {
@@ -1065,10 +1184,11 @@ namespace BC.Integration.APICalls
         }
         public string PostReturn(string value)
         {
-            XmlDocument originalDoc = new XmlDocument();
-            originalDoc.LoadXml(value);
+            
+            string url = "";
+            string ref_num = "";
 
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE +".PostResturn start posting return.");
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE +".PostReturn start posting return.");
 
             String responseString = "";
             /* Turns orderDetail to an Array, even when there's only one line item.*/
@@ -1078,10 +1198,21 @@ namespace BC.Integration.APICalls
             value = value.Replace("<returnsHeaderAddress>", "<returnsHeaderAddress xmlns:json=\"http://james.newtonking.com/projects/json\" json:Array=\"true\">");
 
 
-            Uri url = new Uri(RETURN_Iendpoint);
+            url =RETURN_Iendpoint;
             XmlDocument doc = new XmlDocument();
             
-            doc.LoadXml(value);
+            
+            try
+            {
+                doc.LoadXml(value);
+                ref_num = doc.DocumentElement.SelectSingleNode("//ref_num").InnerText;
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls.PostReturn: Exception occured trying to create the XML or get the Reference num");
+                throw new Exception("An exception occured trying to load the XML and/or retrieve the Reference num from it. BlueCherry BC.Integration.Utility.BC_API_Calls.PostReturn. ", e);
+
+            }
 
             String json = JsonConvert.SerializeXmlNode(doc);
 
@@ -1090,14 +1221,15 @@ namespace BC.Integration.APICalls
             json = json.Replace("{\"ns0:Root\":", "[");
             json = json.Replace("}}", "}]");
 
+            try
+            {
             var request = HttpWebRequest.Create(RETURN_Iendpoint);
-            request.Headers.Add("Ocp-Apim-Subscription-Key", "151def3e976c4798897af920c656390c");
+            request.Headers.Add(authKey, authValue);
             var byteData = Encoding.ASCII.GetBytes(json);
             request.ContentType = "application/json";
             request.Method = "POST";
 
-            try
-            {
+           
                 using (var stream = request.GetRequestStream())
                 {
                     stream.Write(byteData, 0, byteData.Length);
@@ -1123,13 +1255,18 @@ namespace BC.Integration.APICalls
             }
             catch (BlueCherryException ex)
             {
-                Trace.WriteLine("BC_API_Calls: Exception occured trying to post an order into BlueCherry");
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to post a return into BlueCherry");
                 throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostReturn.", ex);
 
             }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to post a return into BlueCherry");
+                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostReturn.The Reference num is " + ref_num + " and the URI is " + url, e);
+            }
             finally
             {
-                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostResturn completed posting return.");
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".PostReturn completed posting return.");
                 Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and PostReturn method complete.");
             }
             

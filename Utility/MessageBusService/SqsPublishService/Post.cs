@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Amazon.SQS;
+using Amazon.SQS.Model;
 using BC.Integration.Interfaces;
 using System.Diagnostics;
-using Amazon.SQS.Model;
-using Amazon.SQS;
 
 namespace BC.Integration.Utility
 {

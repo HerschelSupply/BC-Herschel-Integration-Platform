@@ -97,6 +97,7 @@
   <ItemGroup>
     <Content Include="WcfMessagingService.svc" />
     <Content Include="Web.config" />
+    <Content Include="XSLT\HerschelToBC_Return.xsl" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IWcfMessagingService.cs" />
@@ -108,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="XSLT\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Web.Debug.config">

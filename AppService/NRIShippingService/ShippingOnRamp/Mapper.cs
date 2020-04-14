@@ -141,7 +141,7 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                 }
                 else
                 {
-                    canonicalItem.ItemNbr = "828432276264"; //line.ItemNumber; **UPC HARDCODED
+                    canonicalItem.ItemNbr = line.ItemNumber; 
                 }
 
                 canonicalItem.QtyOrdered = line.QuantityOrdered;
@@ -166,7 +166,7 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                 {
                     CartonItem canonicalCartonItem = new CartonItem();
                     canonicalCartonItem.CartonNbr = shpCart.Sscc;
-                    canonicalCartonItem.ItemNumber = "10076-02838-OS"; // shpCartItem.ItemNumber; ***UPC HARDCODED
+                    canonicalCartonItem.ItemNumber =  shpCartItem.ItemNumber; 
                     canonicalCartonItem.ItemUom = shpCartItem.UomDescription;
                     canonicalCartonItem.QtyShipped = Convert.ToInt32(shpCartItem.Quantity);
 
@@ -279,13 +279,12 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                 }
                 else
                 {
-                    canonicalItem.ItemNbr = "828432276264"; //line.ItemNumber; **UPC HARDCODED
+                    canonicalItem.ItemNbr = line.ItemNumber; 
                 }
 
                 canonicalItem.QtyOrdered = line.QuantityOrdered;
                 canonicalItem.QtyShipped = 0;
                 canonicalItem.CancellationReason = ""; //**TBD
-                //canonicalItem.ItemPrice = Convert.ToDecimal(line.NetPrice); //**TBD is this the right price?
                 canonical.LineItems.Add(canonicalItem);
             }
 

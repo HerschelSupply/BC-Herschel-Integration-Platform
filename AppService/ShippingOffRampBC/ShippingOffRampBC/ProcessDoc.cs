@@ -99,7 +99,7 @@ namespace BC.Integration.AppService.ShippingOffRampBC
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + "Starting ProcessSalesDoc workflow activity Execute method...");
             
             string msgID = "Message Unread";
-            //string errorTrigger = "a";
+            XmlDocument msgXml = new XmlDocument();
 
             try
             {
@@ -108,7 +108,7 @@ namespace BC.Integration.AppService.ShippingOffRampBC
                 try
                 {
                     //Log receipt of message
-                    XmlDocument msgXml = new XmlDocument();
+                    
                     msgXml.LoadXml(receiveMsg);
                     msgXml = msgMgr.CreateReceiveMessage(msgXml, serviceId, serviceVersion, serviceOperationId);
                     processName = msgMgr.ReceivedEnvelope.Interchange.ProcessName;
@@ -133,15 +133,14 @@ namespace BC.Integration.AppService.ShippingOffRampBC
                         outgoingMessage = CreateBCMsg(msgBody);
 
                         //post the message to BC
-                        API_Calls.PostShipmentConfirmation(outgoingMessage);
+                        API_Calls API_calls = new API_Calls();
+                        API_calls.PostShipmentConfirmation(outgoingMessage);
                     }
                     catch (Exception ex)
                     {
                         Trace.WriteLine(tracingExceptionPrefix + "Occurred when calling Mapper.Convert() to create the outgoing message. Exception message: " + ex.Message);
                         throw new Exception("Error occurred when calling Mapper.Convert() to create the outgoing message.", ex);
                     }
-
-                   
 
                     //Instrument OffRamp activity
                     msgXml = msgMgr.CreateOffRampMessage(servicePostOperationId, outgoingMessageType, messageVersion, messageFormat, outgoingMessage, null, null, ""); 
@@ -150,10 +149,25 @@ namespace BC.Integration.AppService.ShippingOffRampBC
                 }
                 catch (Exception ex)
                 {
+                    string docId = "";
+                    string exMessage = ex.Message;
                     Trace.WriteLine(tracingExceptionPrefix + "Occurred: " + ex.Message);
-                    instrumentation.LogGeneralException("Error occurred in the BC.Integration.AppService.ShippingOffRampBC.ProcessDoc.Execute method. " +
-                        "The processing of the received message caused the component to fail and processing to stop. Message ID: " + msgID, ex);
-                     return false;
+
+                    if (msgXml.SelectSingleNode("/MsgEnvelope/Msg/DocId").InnerText != "")
+                        docId = msgXml.SelectSingleNode("/MsgEnvelope/Msg/DocId").InnerText;
+
+                    instrumentation.LogMessagingException("Error occurred in the BC.Integration.AppService.ShippingOffRampBC.ProcessDoc.Execute method. " +
+                        "The processing of the received message caused the component to fail and processing to stop. DocId:"+ docId + " Message ID: " + msgID, msgXml, ex);
+
+                    if (!string.IsNullOrEmpty(ex.InnerException.Message))
+                    {
+                        exMessage = exMessage + " InnerExceptionMessage: " + ex.InnerException.Message;
+                    }
+
+                    instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "PostIntoBC",
+                    "DocumentId: " + docId + " failed with the following error, " + exMessage, docId);
+
+                    return false;
                 }
                 finally
                 {

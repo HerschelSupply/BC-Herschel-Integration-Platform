@@ -20,7 +20,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
         /// </summary>
         /// <param name="storeName">Shop ID from the message.</param>
         /// <returns></returns>
-        public static string MapStoreNameToSiteId(string storeName)
+       /* public static string MapStoreNameToSiteId(string storeName)
         {
             try
             {
@@ -39,11 +39,11 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             catch (Exception ex)
             {
                 throw new Exception("While trying to convert store: " + storeName + " to a Herschel site ID an error occurred.  Please" +
-                    " verify the EpOnRampSvcBC  has a configuration for this EP store name.", ex);
+                    " verify the EpReturnOnRampSvcBC  has a configuration for this EP store name.", ex);
             }
 
             return storeNameToSiteId[storeName];
-        }
+        }*/
 
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
         /// </summary>
         /// <param name="shipmentCarrier">ShipmentCarrier from the message.</param>
         /// <returns></returns>
-        public static string MapShipmentCarrierToCarrierCode(string shipmentCarrier)
+        /*public static string MapShipmentCarrierToCarrierCode(string shipmentCarrier)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             catch (Exception ex)
             {
                 throw new Exception("While trying to convert shipment carrier: " + shipmentCarrier + " to a Herschel carrier code an error occurred.  Please" +
-                    " verify the EpOnRampSvcBC  has a configuration for this EP store name.", ex);
+                    " verify the EpReturnOnRampSvcBC  has a configuration for this EP store name.", ex);
             }
 
             string value;
@@ -84,7 +84,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
             }
 
             return value;
-        }
+        }*/
 
     }
 }

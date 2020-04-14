@@ -247,12 +247,19 @@ namespace BC.Integration.AppService.BCSalesOrderSvc
             catch (Exception ex)
             {
                 //If we get a badly formed line, we need to make sure all lines for that transaction number are removed. Identify transaction number of failed line
-                string failedTransNum = orders.salesOrders[orders.salesOrders.Count - 1].orderNumber;
-                failedTransNums.Add(failedTransNum);
+                string failedTransNum = "null";
+                string errorMsg = "An exception occured while processing a message in the BC.Integration.AppService.BCSalesOrderSvc.Process.ProcessFile method. ";
+                
+
+                if (orders.salesOrders != null)
+                {
+                    failedTransNum = orders.salesOrders[orders.salesOrders.Count - 1].orderNumber;
+                    errorMsg += "The current Tigers file being processed is -" + batchName +
+                    ", transaction number being processed is " + failedTransNum + " and the error occured on line " + orders.salesOrders[orders.salesOrders.Count - 1].salesOrderLineItem + " in the file. This transaction in the file has not been processed.";
+                }
+                                   
                 Trace.WriteLineIf(tracingEnabled, tracingPrefix + " Transaction Number: " + failedTransNum + " failed to be converted from the CSV data.  Exception message: " + ex.Message);
-                instrumentation.LogGeneralException("An exception occured while processing a message in the " +
-                    "BC.Integration.AppService.BCSalesOrderSvc.Process.ProcessFile method. The current Tigers file being processed is - " + batchName +
-                    ", transaction number being processed is " + failedTransNum + " and the error occured on line " + orders.salesOrders[orders.salesOrders.Count - 1].salesOrderLineItem + " in the file.  This transaction in the file has not been processed.", ex);
+                instrumentation.LogGeneralException(errorMsg, ex);
                 //Notification Log entry...
                 instrumentation.LogNotification(processName, serviceId, msgMgr.EntryPointEnvelope.Msg.Id, "ConversionFromCSVToObject",
                     "CSV filename: " + batchName + " failed with the following error, " + ex.Message, failedTransNum);
