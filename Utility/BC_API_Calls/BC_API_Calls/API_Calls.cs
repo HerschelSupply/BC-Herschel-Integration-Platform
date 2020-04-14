@@ -602,6 +602,69 @@ namespace BC.Integration.APICalls
             return customer;
         }
 
+        public string GetCustomerCountryFromSite(string site)
+        {
+
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCustomerCountryFromSite start retrieving customer's country from site.");
+
+            string country = "";
+            string uri = "";
+            try
+            {
+                uri = Customer_endpoint + "?" + Customer_param_location + "=" + site;
+                // string uri = "https://bcmultiws.azure-api.net/HCEL/HCTR/api/Customer?location=" + site;
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.Headers.Add(authKey, authValue);
+                /*Servers sometimes compress their responses to save on bandwidth, when this happens, you need to decompress the response before attempting to read it.
+                 Fortunately, the .NET framework can do this automatically, however, we have to turn the setting on. */
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+
+                    var jObj = JObject.Parse(reader.ReadToEnd());
+                    // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
+                    JArray errors = (JArray)jObj.SelectToken("Errors");
+
+                    if (errors.HasValues)
+                    {
+                        string errorDesc = "";
+                        foreach (JToken error in errors)
+                        {
+                            errorDesc += error.Value<string>("ErrorMessage") + " ";
+                        }
+                        throw new BlueCherryException("ErrorMessage:" + errorDesc + " Location: " + site + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite");
+                    }
+
+                    JArray data = (JArray)jObj.SelectToken("data");
+                    country = data[0].SelectToken("country").ToString().Trim();
+
+
+                }
+            }
+            catch (WebException ex)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer's country from BlueCherry");
+                throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite. ", ex);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer's country from BlueCherry");
+                throw new Exception("An exception occured trying to get the customer's country  from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite. The SiteId is " + site + " and the URI is " + uri, e);
+            }
+            finally
+            {
+                Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetCustomerFromSite completed retrieving customer's country from site.");
+                Debug.WriteLineIf(tracingEnabled, tracingPrefix + "Finally block called and GetCustomerFromSite method complete.");
+            }
+
+
+            return country;
+        }
+
         public string GetInvoiceNumberFromOrder(string poNumber)
         {
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".GetInvoiceNumberFromOrder start retrieving invoice number from PO.");

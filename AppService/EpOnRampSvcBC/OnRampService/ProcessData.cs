@@ -320,7 +320,8 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 order.Header.TaxRegistrationNumber = "";               
                 order.Header.CarrierCode = APIcalls.GetShipper(APIcalls.ConvertShipmenMethodForEast(order.Header.SiteId.ToString(), salesOrder.Shipments.Shipment.ShipmentCarrier));
                 order.Header.PaymentType = "";
-                order.Header.CustomerId = salesOrder.Customer.CustomerId;
+                //order.Header.CustomerId = salesOrder.Customer.CustomerId;
+                order.Header.CustomerId = APIcalls.GetCustomerCountryFromSite(order.Header.SiteId.ToString());
                 order.Header.CustomerPONum = salesOrder.Customer.CustomerId;
                 order.Header.CustEmail = salesOrder.Customer.Email;
                 order.Header.isStaffOrder = false; 
