@@ -35,6 +35,9 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
         private string tracingPrefix = ConfigurationManager.AppSettings["TracingPrefix"] + ": ";
         private string prefix = ConfigurationManager.AppSettings["TracingPrefix"] + ".EXCEPTION : ";
 
+        //carrier code
+        private string OrderStatusToDestinationMapping = ConfigurationManager.AppSettings["OrderStatusToDestinationMapping"];
+        private Dictionary<string, string> OrderStatusToDestination;
         //These rest of the properties could be overridden by the central config store at the service ot process level
 
 
@@ -211,10 +214,11 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                 //adding comment
             }
         }
-        private bool MoveFileTo(string filename, string destination)
+        private bool MoveFileTo(string filename, string status)
         {
             bool success = false;
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + ".MoveFileTo() method is initializaing.  file : " + filename + " . Destination : " + destination);
+            string destination = "";
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + ".MoveFileTo() method is initializaing.  file : " + filename + " . order status : " + status);
             var fileNames = Directory.EnumerateFiles(pickupFileFolderPath.Replace("#ProcessName#", processName));
             string jms = Path.GetFileName(filename);
             FileAttributes attributes = File.GetAttributes(filename);
@@ -227,8 +231,8 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                     File.SetAttributes(filename, attributes);
                     FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
                     fs.Lock(0, filename.Length);
-
-                    FileStream fsCopy = new FileStream(destination.Replace("#ProcessName#", processName) + "/" + jms, FileMode.OpenOrCreate);
+                    destination = pickupFileFolderPath.Replace("#ProcessName#", GetDestinationProcessName(status)) + "/" + jms;
+                    FileStream fsCopy = new FileStream(destination, FileMode.OpenOrCreate);
                     fs.CopyTo(fsCopy);
 
                     fs.Unlock(0, filename.Length);
@@ -265,7 +269,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                 }                
             }
 
-            Trace.WriteLineIf(tracingEnabled, tracingPrefix + ".MoveFileTo() method is initializaing.  file : " + filename + " . Destination : " + destination);
+            Trace.WriteLineIf(tracingEnabled, tracingPrefix + ".MoveFileTo() method is initializaing.  file : " + filename + " . Order Status : " + destination);
             return success;
         }
         private bool Dispatch(string file)
@@ -295,11 +299,11 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                                 {
                                     if (n.FirstChild.InnerText == "EXCHANGE") //if the payment method is exchange
                                     {
-                                        success = MoveFileTo(file, exchangeFolderPath);
+                                        success = MoveFileTo(file, "EXCHANGE");
                                     }
                                     else
                                     {
-                                        success = MoveFileTo(file, inProgressFolderPath); //this is a regular new order
+                                        success = MoveFileTo(file, "IN_PROGRESS"); //this is a regular new order
                                     }
                                 }
                             }
@@ -313,7 +317,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                 else if (status.Contains("CANCELLED"))
                 { //cancelled
 
-                    success = MoveFileTo(file, cancelledFolderPath);
+                    success = MoveFileTo(file, "CANCELLED");
                 }
                 else //completed or return
                 {
@@ -334,7 +338,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                                         if (!String.IsNullOrEmpty(n.FirstChild.InnerText))
                                         {
                                             //this is a return
-                                            success = MoveFileTo(file, returnFolderPath);
+                                            success = MoveFileTo(file, "RETURN");
                                         }
                                     }
                                 }
@@ -342,7 +346,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                             else
                             {
                                 //this is a regular completed message
-                                success = MoveFileTo(file, completedFolderPath);
+                                success = MoveFileTo(file, "COMPLETED");
                             }
                         }
                     }
@@ -365,6 +369,38 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
 
             Trace.WriteLineIf(tracingEnabled, prefix + ".Dispatch() method completed.");
             return success;
+        }
+
+        public string GetDestinationProcessName(string status)
+        {
+            string destination = "";
+            try
+                {
+                    if (OrderStatusToDestination == null)
+                    {
+                        OrderStatusToDestination = new Dictionary<string, string>();
+                        string[] paths = OrderStatusToDestinationMapping.Split(',');
+                        foreach (string path in paths)
+                        {
+                            string[] vals = path.Split('|');
+                            OrderStatusToDestination.Add(vals[0], vals[1]);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("While trying to retrieve the destination for order status: " + status + ". Please" +
+                        " verify the JMSDispatcher  has a configuration for this status.", ex);
+                }
+
+                string value;
+                if (OrderStatusToDestination.TryGetValue(status, out value))
+                {
+                    destination = value;
+                }
+                      
+
+            return destination;
         }
 
         /// <summary>
