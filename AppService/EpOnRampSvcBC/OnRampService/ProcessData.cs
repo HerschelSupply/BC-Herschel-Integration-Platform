@@ -337,8 +337,8 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 order.Header.Comment = "";
                 order.Header.IncoTerms = "";
                 order.Header.PriceCode = "OL";
-                order.Header.Freight = 0;
-                order.Header.TaxAmount = 0; //Convert.ToDecimal(salesOrder.Header.TotalTaxes);
+                order.Header.Freight = Convert.ToDecimal(salesOrder.Header.TotalShippingCostBeforeTax);
+                order.Header.TaxAmount = Convert.ToDecimal(salesOrder.Header.TotalTaxes);
                 order.Header.Discount = 0; //Convert.ToDecimal(salesOrder.Header.TotalDiscountAmount);
 
 
