@@ -341,13 +341,15 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 order.Header.TaxAmount = Convert.ToDecimal(salesOrder.Header.TotalTaxes);
                 order.Header.Discount = 0; //Convert.ToDecimal(salesOrder.Header.TotalDiscountAmount);
 
-
-                foreach (var payment in salesOrder.Payments.Payment)
+                if (salesOrder.Payments != null) //if it got a 100% discount, the JMS won't have payment node
                 {
-                    if (payment.Reason == "Staff Allowance")
+                    foreach (var payment in salesOrder.Payments.Payment)
                     {
-                        order.Header.isStaffOrder = true;
-                        break;
+                        if (payment.Reason == "Staff Allowance")
+                        {
+                            order.Header.isStaffOrder = true;
+                            break;
+                        }
                     }
                 }
 
@@ -357,36 +359,39 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 List<int> orderDiscounts = new List<int>();
                 string discPattern = @"(\d+)%"; // takes the discount percentage. 
 
-                foreach (NewOrder.Promotion promos in salesOrder.AppliedPromotions.Promotion)
+                if (salesOrder.AppliedPromotions != null)
                 {
-                    
-                    if (order.Header.itHasDiscount == false)
+                    foreach (NewOrder.Promotion promos in salesOrder.AppliedPromotions.Promotion)
                     {
-                        order.Header.itHasDiscount = true;
+
+                        if (order.Header.itHasDiscount == false)
+                        {
+                            order.Header.itHasDiscount = true;
+                        }
+
+                        OrderDiscounts discount = new OrderDiscounts();
+
+                        Match m = Regex.Match(promos.PromoName, discPattern);
+                        if (m.Success)
+                        { orderDiscounts.Add(Convert.ToInt32(m.Value.Replace("%", ""))); }
+
+
+                        discount.PromoName = promos.PromoName;
+                        discount.DisplayName = promos.DisplayName;
+
+                        if (promos.PromoName.Substring(0, 3).Contains("GWP"))
+                        {
+                            discount.DiscountItemNumber = promos.PromoName.Substring(4, 14);
+                        }
+
+                        if (promos.Coupons.Code != null)
+                        {
+                            discount.DiscountCode = promos.Coupons.Code;
+                            orderCouponCode += promos.Coupons.Code + ", ";
+                        }
+
+                        order.Discounts.Add(discount);
                     }
-
-                    OrderDiscounts discount = new OrderDiscounts();
-
-                    Match m = Regex.Match(promos.PromoName, discPattern);
-                    if (m.Success)
-                    { orderDiscounts.Add(Convert.ToInt32(m.Value.Replace("%", ""))); }
-                    
-
-                    discount.PromoName = promos.PromoName;
-                    discount.DisplayName = promos.DisplayName;
-
-                    if (promos.PromoName.Substring(0, 3).Contains("GWP"))
-                    {
-                        discount.DiscountItemNumber = promos.PromoName.Substring(4, 14);
-                    }
-
-                    if (promos.Coupons.Code != null)
-                    {
-                        discount.DiscountCode = promos.Coupons.Code;
-                        orderCouponCode += promos.Coupons.Code + ", ";
-                    }
-
-                    order.Discounts.Add(discount);
                 }
 
                 orderCouponCode = orderCouponCode == "" ? "" : orderCouponCode.Substring(0, orderCouponCode.Length - 2);
