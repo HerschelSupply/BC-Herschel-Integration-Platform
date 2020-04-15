@@ -530,7 +530,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
               //This is setup for JSON data...
               string fileText = "";
 
-              string path = pickupMessageFolderPath;
+              string path = pickupMessageFolderPath.Replace("#ProcessName#",processName);
               string tracing_path = tracingMessageFolderPath.Replace("#ProcessName#", processName);
 
               var fileNames = Directory.EnumerateFiles(path);
