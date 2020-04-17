@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Corp.Integration.Utility.OnRampService {
+namespace BC.Integration.Utility.OnRampService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -23,12 +23,12 @@ namespace Corp.Integration.Utility.OnRampService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IOnRampSvcChannel : Corp.Integration.Utility.OnRampService.IOnRampSvc, System.ServiceModel.IClientChannel {
+    public interface IOnRampSvcChannel : BC.Integration.Utility.OnRampService.IOnRampSvc, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class OnRampSvcClient : System.ServiceModel.ClientBase<Corp.Integration.Utility.OnRampService.IOnRampSvc>, Corp.Integration.Utility.OnRampService.IOnRampSvc {
+    public partial class OnRampSvcClient : System.ServiceModel.ClientBase<BC.Integration.Utility.OnRampService.IOnRampSvc>, BC.Integration.Utility.OnRampService.IOnRampSvc {
         
         public OnRampSvcClient() {
         }

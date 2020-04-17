@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="489b4220-4b39-44af-96e2-d2f424cfda7b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="56a14ff3-58de-445e-8fa9-d2757a52468a" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,10 +22,10 @@
     <MetadataSource Address="http://localhost:55810/OnRampSvc.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="OnRampSvc.xsd" MetadataType="Schema" ID="98baed29-ef44-49d1-966a-cf116f1f3046" SourceId="1" SourceUrl="http://localhost:55810/OnRampSvc.svc?xsd=xsd1" />
-    <MetadataFile FileName="OnRampSvc1.xsd" MetadataType="Schema" ID="bf6467f7-aee6-45b4-baa8-5a146f0ee3df" SourceId="1" SourceUrl="http://localhost:55810/OnRampSvc.svc?xsd=xsd0" />
-    <MetadataFile FileName="OnRampSvc.disco" MetadataType="Disco" ID="b4f43e46-cbe4-41a6-9609-3497a1cf2674" SourceId="1" SourceUrl="http://localhost:55810/OnRampSvc.svc?disco" />
-    <MetadataFile FileName="OnRampSvc.wsdl" MetadataType="Wsdl" ID="e616a3cf-d792-481e-90cc-8eb014cdc132" SourceId="1" SourceUrl="http://localhost:55810/OnRampSvc.svc?wsdl" />
+    <MetadataFile FileName="OnRampSvc.xsd" MetadataType="Schema" ID="2493098a-4fbc-425f-9d32-f7cdf0f7e606" SourceId="1" SourceUrl="http://localhost:55810/OnRampSvc.svc?xsd=xsd1" />
+    <MetadataFile FileName="OnRampSvc1.xsd" MetadataType="Schema" ID="d092ffe0-2f22-4127-87af-4dfde2455392" SourceId="1" SourceUrl="http://localhost:55810/OnRampSvc.svc?xsd=xsd0" />
+    <MetadataFile FileName="OnRampSvc.disco" MetadataType="Disco" ID="3db2c2b0-67b9-49e7-ae91-399a7350943a" SourceId="1" SourceUrl="http://localhost:55810/OnRampSvc.svc?disco" />
+    <MetadataFile FileName="OnRampSvc.wsdl" MetadataType="Wsdl" ID="34d8a20a-c64f-442f-b337-6240067747e5" SourceId="1" SourceUrl="http://localhost:55810/OnRampSvc.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

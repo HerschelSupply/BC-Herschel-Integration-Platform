@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Corp.Integration.Utility.NotificationService {
+namespace BC.Integration.Utility.NotificationService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -23,12 +23,12 @@ namespace Corp.Integration.Utility.NotificationService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface INotificationServiceChannel : Corp.Integration.Utility.NotificationService.INotificationService, System.ServiceModel.IClientChannel {
+    public interface INotificationServiceChannel : BC.Integration.Utility.NotificationService.INotificationService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class NotificationServiceClient : System.ServiceModel.ClientBase<Corp.Integration.Utility.NotificationService.INotificationService>, Corp.Integration.Utility.NotificationService.INotificationService {
+    public partial class NotificationServiceClient : System.ServiceModel.ClientBase<BC.Integration.Utility.NotificationService.INotificationService>, BC.Integration.Utility.NotificationService.INotificationService {
         
         public NotificationServiceClient() {
         }

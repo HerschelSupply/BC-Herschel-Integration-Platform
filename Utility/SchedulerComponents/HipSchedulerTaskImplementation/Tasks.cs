@@ -4,7 +4,7 @@ using System.Configuration;
 using System.ServiceModel;
 using System.Data.Odbc;
 
-namespace Corp.Integration.Utility
+namespace BC.Integration.Utility
 {
     /// <summary>
     /// These methods are used to simplify the scheduler implementation by placing the complexity in the C# code controled by the company.
@@ -23,10 +23,10 @@ namespace Corp.Integration.Utility
         /// <returns>Returns 'Complete' or throws and exception</returns>
         public string PushInitializer(string activationGuid, string queueName, decimal maxRate, bool isBatch, int maxBatchSize)
         {
-            Trace.WriteLine("HIP Scheduler Component: Start the HIP Push Initializer");
+            Trace.WriteLine("BC HIP Scheduler Component: Start the HIP Push Initializer");
             string url = ConfigurationManager.AppSettings["PushServiceUrl"];
 
-            Trace.WriteLine("HIP Scheduler Component: Call Service from client. URL: '" + url + "', Max Rate '" + maxRate + "', Queue Name: '" + queueName +
+            Trace.WriteLine("BC HIP Scheduler Component: Call Service from client. URL: '" + url + "', Max Rate '" + maxRate + "', Queue Name: '" + queueName +
                                 "', Is Batch: '" + isBatch + ", Max Batch Size: '" + maxBatchSize + "'.");
 
             try
@@ -37,11 +37,11 @@ namespace Corp.Integration.Utility
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Exception occured whilst running the HIP Push Initializer.");
+                Trace.WriteLine("BC HIP Scheduler Component: Exception occured whilst running the HIP Push Initializer.");
                 throw new Exception("An error occurred trying to call the Push service at '" + url + "'. Please review the inner exception for details of the error.", ex);
             }
 
-            Trace.WriteLine("HIP Scheduler Component: Push Servcie call complete.");
+            Trace.WriteLine("BC HIP Scheduler Component: Push Servcie call complete.");
             return "Completed";
         }
 
@@ -56,7 +56,7 @@ namespace Corp.Integration.Utility
         /// <returns>Returns 'Complete' or throws and exception</returns>
         public string PushSingletonInitializer(string activationGuid, string queueName, decimal maxRate, bool isBatch, int maxBatchSize)
         {
-            Trace.WriteLine("HIP Scheduler Component: Start the HIP Push Singleton Initializer");
+            Trace.WriteLine("BC HIP Scheduler Component: Start the HIP Push Singleton Initializer");
             string url = ConfigurationManager.AppSettings["PushServiceUrl"];
 
             //Get the IP of the top IIS server from the Server Status table. The IP will be used to determine the final URL
@@ -73,14 +73,14 @@ namespace Corp.Integration.Utility
             }
             string updatedUrl = url.Replace(stringToReplace, serverIp);
 
-            Trace.WriteLine("HIP Scheduler Component: Call Service from client. URL: '" + url + "', Max Rate '" + maxRate + "', Queue Name: '" + queueName +
+            Trace.WriteLine("BC HIP Scheduler Component: Call Service from client. URL: '" + url + "', Max Rate '" + maxRate + "', Queue Name: '" + queueName +
                                 "', Is Batch: '" + isBatch + ", Max Batch Size: '" + maxBatchSize + "'.");
             //Adjust maxRate.  The push servise spreads the max rate out accross all available servers, but in a singleton
             //only one push server will be activated (not one on each server)  The max rate needs to be increased by the number 
             //of servers, so that when the push service calculates the rate it will be correct for a single server.
             int svrCount = GetHipIisServerCount();
             maxRate = maxRate * svrCount;
-            Trace.WriteLine("HIP Scheduler Component: Singleton adjusted max rate: '" + maxRate);
+            Trace.WriteLine("BC HIP Scheduler Component: Singleton adjusted max rate: '" + maxRate);
 
             try
             {
@@ -90,11 +90,11 @@ namespace Corp.Integration.Utility
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Exception occured whilst running the HIP Push Singleton Initializer.");
+                Trace.WriteLine("BC HIP Scheduler Component: Exception occured whilst running the HIP Push Singleton Initializer.");
                 throw new Exception("An error occurred trying to call the Push service at '" + url + "'. Please review the inner exception for details of the error.", ex);
             }
 
-            Trace.WriteLine("HIP Scheduler Component: Singleton Push Servcie call complete.");
+            Trace.WriteLine("BC HIP Scheduler Component: Singleton Push Servcie call complete.");
             return "Completed";
         }
 
@@ -106,9 +106,9 @@ namespace Corp.Integration.Utility
         /// <returns>Returns 'Complete' or throws and exception</returns>
         public string OnRampInitializer(string activationGuid, string url)
         {
-            Trace.WriteLine("HIP Scheduler Component: Start the HIP On-Ramp Initializer");
+            Trace.WriteLine("BC HIP Scheduler Component: Start the HIP On-Ramp Initializer");
 
-            Trace.WriteLine("HIP Scheduler Component: OnRampInitializer method parameters. URL: '" + url + "', Activation GUID: '" + activationGuid + "'.");
+            Trace.WriteLine("BC HIP Scheduler Component: OnRampInitializer method parameters. URL: '" + url + "', Activation GUID: '" + activationGuid + "'.");
 
             try
             {
@@ -118,11 +118,11 @@ namespace Corp.Integration.Utility
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Exception occured whilst running the HIP On-Ramp Initializer.");
+                Trace.WriteLine("BC HIP Scheduler Component: Exception occured whilst running the HIP On-Ramp Initializer.");
                 throw new Exception("An error occurred trying to call the On-Ramp service at '" + url + "'. Please review the inner exception for details of the error.", ex);
             }
 
-            Trace.WriteLine("HIP Scheduler Component: On-Ramp Servcie call complete.");
+            Trace.WriteLine("BC HIP Scheduler Component: On-Ramp Servcie call complete.");
             return "Completed";
         }
 
@@ -134,9 +134,9 @@ namespace Corp.Integration.Utility
         /// <returns>Returns 'Complete' or throws and exception</returns>
         public string OnRampSingletonInitializer(string activationGuid, string url)
         {
-            Trace.WriteLine("HIP Scheduler Component: Start the HIP On-Ramp Singleton Initializer");
+            Trace.WriteLine("BC HIP Scheduler Component: Start the HIP On-Ramp Singleton Initializer");
 
-            Trace.WriteLine("HIP Scheduler Component: OnRampSingletonInitializer method parameters. URL: '" + url + "', Activation GUID: '" + activationGuid + "'.");
+            Trace.WriteLine("BC HIP Scheduler Component: OnRampSingletonInitializer method parameters. URL: '" + url + "', Activation GUID: '" + activationGuid + "'.");
 
             //Get the IP of the top IIS server from the Server Status table. The IP will be used to determine the final URL
             //Get base URL form config and substitute IP address then add on the service name.
@@ -152,7 +152,7 @@ namespace Corp.Integration.Utility
             }
             string updatedUrl = url.Replace(stringToReplace, serverIp);
 
-            Trace.WriteLine("HIP Scheduler Component: Updated URL for the OnRamp Singleton Initializer: " + updatedUrl);
+            Trace.WriteLine("BC HIP Scheduler Component: Updated URL for the OnRamp Singleton Initializer: " + updatedUrl);
 
             try
             {
@@ -162,11 +162,11 @@ namespace Corp.Integration.Utility
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Exception occured whilst running the HIP On-Ramp Singleton Initializer.");
+                Trace.WriteLine("BC HIP Scheduler Component: Exception occured whilst running the HIP On-Ramp Singleton Initializer.");
                 throw new Exception("An error occurred trying to call the On-Ramp singleton service at '" + url + "'. Please review the inner exception for details of the error.", ex);
             }
 
-            Trace.WriteLine("HIP Scheduler Component: On-Ramp Singleton Servcie call complete.");
+            Trace.WriteLine("BC HIP Scheduler Component: On-Ramp Singleton Servcie call complete.");
             return "Completed";
         }
 
@@ -179,10 +179,10 @@ namespace Corp.Integration.Utility
         /// <returns>Returns 'Complete' or throws and exception</returns>
         public string NotificationInitializer(string processName, string serviceId, string issueCategory)
         {
-            Trace.WriteLine("HIP Scheduler Component: Start the HIP Notification Initializer");
+            Trace.WriteLine("BC HIP Scheduler Component: Start the HIP Notification Initializer");
             string url = ConfigurationManager.AppSettings["NotificationServiceUrl"];
 
-            Trace.WriteLine("HIP Scheduler Component: Call Service from client. URL: '" + url + "', Process Name '" + processName + "', Service ID: '" + serviceId +
+            Trace.WriteLine("BC HIP Scheduler Component: Call Service from client. URL: '" + url + "', Process Name '" + processName + "', Service ID: '" + serviceId +
                                 "', Issue Category: '" + issueCategory + "'.");
 
             EndpointAddress add = new EndpointAddress(url);
@@ -190,28 +190,28 @@ namespace Corp.Integration.Utility
             try
             {
                 NotificationService.NotificationServiceClient client = new NotificationService.NotificationServiceClient();
-                Trace.WriteLine("HIP Scheduler Component: Client created");
+                Trace.WriteLine("BC HIP Scheduler Component: Client created");
                 client.Endpoint.Address = new EndpointAddress(url);
-                Trace.WriteLine("HIP Scheduler Component: Endpoint updated");
+                Trace.WriteLine("BC HIP Scheduler Component: Endpoint updated");
                 bool result = client.InitializeNotification(processName, serviceId, issueCategory);
 
                 if(result)
                 {
-                    Trace.WriteLine("HIP Scheduler Component: HIP Notification Web Service returned true.");
+                    Trace.WriteLine("BC HIP Scheduler Component: HIP Notification Web Service returned true.");
                 }
                 else
                 {
-                    Trace.WriteLine("HIP Scheduler Component: HIP Notification Web Service returned false.");
+                    Trace.WriteLine("BC HIP Scheduler Component: HIP Notification Web Service returned false.");
                     throw new Exception("HIP Notification Web Service returned false.");
                 }
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Exception occured whilst running the HIP Notification Initializer. Exception message: " + ex.Message);
+                Trace.WriteLine("BC HIP Scheduler Component: Exception occured whilst running the HIP Notification Initializer. Exception message: " + ex.Message);
                 throw new Exception("An error occurred trying to call the Notification service at " + url + ". Please review the inner exception for details of the error.", ex);
             }
 
-            Trace.WriteLine("HIP Scheduler Component: Notification Servcie call complete.");
+            Trace.WriteLine("BC HIP Scheduler Component: Notification Servcie call complete.");
             return "Completed";
 
         }
@@ -227,7 +227,7 @@ namespace Corp.Integration.Utility
         /// <returns>Activation Status</returns>
         public string CheckForActivation(string activationGuid)
         {
-            Trace.WriteLine("HIP Scheduler Component: CheckForActivation method parameter value. Guid: '" + activationGuid + "'.");
+            Trace.WriteLine("BC HIP Scheduler Component: CheckForActivation method parameter value. Guid: '" + activationGuid + "'.");
 
             string status = CallActivationLog(activationGuid);
 
@@ -248,7 +248,7 @@ namespace Corp.Integration.Utility
         /// <returns>Activation Status</returns>
         public string CheckForLongRunningActivation(string activationGuid)
         {
-            Trace.WriteLine("HIP Scheduler Component: CheckForLongRunningActivation method parameter value. Guid: '" + activationGuid + "'.");
+            Trace.WriteLine("BC HIP Scheduler Component: CheckForLongRunningActivation method parameter value. Guid: '" + activationGuid + "'.");
 
             string status = CallActivationLog(activationGuid);
 
@@ -273,13 +273,13 @@ namespace Corp.Integration.Utility
             try
             {
                 connString = ConfigurationManager.AppSettings["DbConnectionString"];
-                Trace.WriteLine("HIP Scheduler Component: CheckForActivation method connection string value: '" + connString + "'.");
+                Trace.WriteLine("BC HIP Scheduler Component: CheckForActivation method connection string value: '" + connString + "'.");
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Corp.Integration.Utility.Tasks.CheckForActivation could not connect to the activation history as the" +
+                Trace.WriteLine("BC HIP Scheduler Component: BC.Integration.Utility.Tasks.CheckForActivation could not connect to the activation history as the" +
                     " DbConnectionString appsetting is not set in the configuration file.");
-                throw new Exception("Corp.Integration.Utility.Tasks.CheckForActivation could not connect to the activation history as the" +
+                throw new Exception("BC.Integration.Utility.Tasks.CheckForActivation could not connect to the activation history as the" +
                     " DbConnectionString appsetting is not set in the configuration file.", ex);
             }
             OdbcConnection conn = new OdbcConnection(connString);
@@ -299,8 +299,8 @@ namespace Corp.Integration.Utility
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Exception occurred trying to connect to the DB Corp.Integration.Utility.Tasks.CheckForActivation. Exception message: " + ex.Message);
-                throw new Exception("Exception occurred trying to connect to the DB Corp.Integration.Utility.Tasks.CheckForActivation. Exception message: ", ex);
+                Trace.WriteLine("BC HIP Scheduler Component: Exception occurred trying to connect to the DB BC.Integration.Utility.Tasks.CheckForActivation. Exception message: " + ex.Message);
+                throw new Exception("Exception occurred trying to connect to the DB BC.Integration.Utility.Tasks.CheckForActivation. Exception message: ", ex);
             }
             finally
             {
@@ -322,13 +322,13 @@ namespace Corp.Integration.Utility
             try
             {
                 connString = ConfigurationManager.AppSettings["DbConnectionString"];
-                Trace.WriteLine("HIP Scheduler Component: GetIisServerIp method connection string value: '" + connString + "'.");
+                Trace.WriteLine("BC HIP Scheduler Component: GetIisServerIp method connection string value: '" + connString + "'.");
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Corp.Integration.Utility.Tasks.GetIisServerIp could not connect to Server Status table as the" +
+                Trace.WriteLine("BC HIP Scheduler Component: BC.Integration.Utility.Tasks.GetIisServerIp could not connect to Server Status table as the" +
                     " DbConnectionString appsetting is not set in the configuration file.");
-                throw new Exception("Corp.Integration.Utility.Tasks.GetIisServerIp could not connect to the Server Status table as the" +
+                throw new Exception("BC.Integration.Utility.Tasks.GetIisServerIp could not connect to the Server Status table as the" +
                     " DbConnectionString appsetting is not set in the configuration file.", ex);
             }
             OdbcConnection conn = new OdbcConnection(connString);
@@ -348,8 +348,8 @@ namespace Corp.Integration.Utility
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Exception occurred trying to connect to the DB Corp.Integration.Utility.Tasks.GetIisServerIp. Exception message: " + ex.Message);
-                throw new Exception("Exception occurred trying to connect to the DB Corp.Integration.Utility.Tasks.GetIisServerIp. Exception message: ", ex);
+                Trace.WriteLine("BC HIP Scheduler Component: Exception occurred trying to connect to the DB BC.Integration.Utility.Tasks.GetIisServerIp. Exception message: " + ex.Message);
+                throw new Exception("Exception occurred trying to connect to the DB BC.Integration.Utility.Tasks.GetIisServerIp. Exception message: ", ex);
             }
             finally
             {
@@ -371,13 +371,13 @@ namespace Corp.Integration.Utility
             try
             {
                 connString = ConfigurationManager.AppSettings["DbConnectionString"];
-                Trace.WriteLine("HIP Scheduler Component: GetHipIisServerCount method connection string value: '" + connString + "'.");
+                Trace.WriteLine("BC HIP Scheduler Component: GetHipIisServerCount method connection string value: '" + connString + "'.");
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Corp.Integration.Utility.Tasks.GetHipIisServerCount could not connect to Server Status table as the" +
+                Trace.WriteLine("BC HIP Scheduler Component: BC.Integration.Utility.Tasks.GetHipIisServerCount could not connect to Server Status table as the" +
                     " DbConnectionString appsetting is not set in the configuration file.");
-                throw new Exception("Corp.Integration.Utility.Tasks.GetHipIisServerCount could not connect to the Server Status table as the" +
+                throw new Exception("BC.Integration.Utility.Tasks.GetHipIisServerCount could not connect to the Server Status table as the" +
                     " DbConnectionString appsetting is not set in the configuration file.", ex);
             }
             OdbcConnection conn = new OdbcConnection(connString);
@@ -397,8 +397,8 @@ namespace Corp.Integration.Utility
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("HIP Scheduler Component: Exception occurred trying to connect to the DB Corp.Integration.Utility.Tasks.GetHipIisServerCount. Exception message: " + ex.Message);
-                throw new Exception("Exception occurred trying to connect to the DB Corp.Integration.Utility.Tasks.GetHipIisServerCount. Exception message: ", ex);
+                Trace.WriteLine("BC HIP Scheduler Component: Exception occurred trying to connect to the DB BC.Integration.Utility.Tasks.GetHipIisServerCount. Exception message: " + ex.Message);
+                throw new Exception("Exception occurred trying to connect to the DB BC.Integration.Utility.Tasks.GetHipIisServerCount. Exception message: ", ex);
             }
             finally
             {

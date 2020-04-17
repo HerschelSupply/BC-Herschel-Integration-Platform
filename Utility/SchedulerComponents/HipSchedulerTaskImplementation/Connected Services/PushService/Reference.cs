@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Corp.Integration.Utility.PushService {
+namespace BC.Integration.Utility.PushService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -23,12 +23,12 @@ namespace Corp.Integration.Utility.PushService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IPushSvcChannel : Corp.Integration.Utility.PushService.IPushSvc, System.ServiceModel.IClientChannel {
+    public interface IPushSvcChannel : BC.Integration.Utility.PushService.IPushSvc, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class PushSvcClient : System.ServiceModel.ClientBase<Corp.Integration.Utility.PushService.IPushSvc>, Corp.Integration.Utility.PushService.IPushSvc {
+    public partial class PushSvcClient : System.ServiceModel.ClientBase<BC.Integration.Utility.PushService.IPushSvc>, BC.Integration.Utility.PushService.IPushSvc {
         
         public PushSvcClient() {
         }

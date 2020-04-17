@@ -7,8 +7,8 @@
     <ProjectGuid>{38F24622-3E8F-4774-A25E-809994F9E2A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Corp.Integration.Utility</RootNamespace>
-    <AssemblyName>Corp.Integration.Utility.HipSchedulerTaskImplementation</AssemblyName>
+    <RootNamespace>BC.Integration.Utility</RootNamespace>
+    <AssemblyName>BC.Integration.Utility.HipSchedulerTaskImplementation</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -95,21 +95,6 @@
     <WCFMetadataStorage Include="Connected Services\PushService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\OnRampService\OnRampSvc.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\OnRampService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\OnRampService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\OnRampService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Connected Services\PushService\PushSvc.disco" />
   </ItemGroup>
   <ItemGroup>
@@ -132,11 +117,18 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Connected Services\OnRampService\OnRampSvc.disco" />
+    <None Include="Connected Services\OnRampService\configuration91.svcinfo" />
+    <None Include="Connected Services\OnRampService\configuration.svcinfo" />
+    <None Include="Connected Services\OnRampService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="SQL Scripts\Activation Table SQL scripts.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-copy /y bin\debug\*.* "C:\HIP Herschel Integration Platform\0.DLL Bin"</PostBuildEvent>
+copy /y bin\debug\*.* "C:\BC Herschel Integration Platform\0.DLL Bin"</PostBuildEvent>
   </PropertyGroup>
 </Project>
