@@ -92,7 +92,8 @@ namespace BC.Integration.APICalls
         //carrier code
         private static string ShipmentCarrierToCarrierCodeMapping;
         private static Dictionary<string, string> shipmentCarrierToCarrierCode;
-
+        private static string StoreToLocationMapping;
+        private static Dictionary<string, string> storeToLocation;
         //Inventory
         private static string CUTSOLDBYLOC_endpoint;
         private static string CUTSOLDBYLOC_param_loc;
@@ -161,6 +162,9 @@ namespace BC.Integration.APICalls
 
                 //carrier code
                 ShipmentCarrierToCarrierCodeMapping = localConfig.AppSettings.Settings["ShipmentCarrierToCarrierCodeMapping"].Value;
+
+                //location by store
+                StoreToLocationMapping = localConfig.AppSettings.Settings["StoreToLocationMapping"].Value;
 
                 //Inventory
                 CUTSOLDBYLOC_endpoint = localConfig.AppSettings.Settings["CUTSOLDBYLOC_endpoint"].Value;
@@ -911,20 +915,55 @@ namespace BC.Integration.APICalls
         }
 
         ///
+        ///
+        ///
+        private string GetDefaultSiteForStore(string storeName)
+        {
+            string site = "";
+            storeName = storeName.Trim();
+                try
+                {
+                    if (storeToLocation == null)
+                    {
+                        storeToLocation = new Dictionary<string, string>();
+                        string[] stores = StoreToLocationMapping.Split(',');
+                        foreach (string store in stores)
+                        {
+                            string[] vals = store.Split('|');
+                            storeToLocation.Add(vals[0], vals[1]);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("While trying to get the site for store name: " + storeName +". " +
+                        "Please verify the BC_API_Calls  has a configuration for this EP store name.", ex);
+                }
+
+                string value;
+                if (storeToLocation.TryGetValue(storeName, out value))
+                {
+                    site = value;
+                }            
+  
+            return site;
+        }
+
+        ///
         /// 
         /// 
-        public string AllocateBasedOnState(string state, string country)
+        public string AllocateBasedOnState(string store, string state)
         {
 
             Trace.WriteLineIf(tracingEnabled, tracingPrefix + NAMESPACE + ".AllocateBasedOnState start allocating site.");
 
-            string allocateTo = state;
+            string allocateTo = "";
             Dictionary<string, string> warehousePairs;
 
             try
             {
                 warehousePairs = InitializeWarehousePairs();
-                if (country == "US")
+                if (store == "herschel_usa")
                 {
                     if (US_East_Enabled && US_West_Enabled)
                     {
@@ -939,7 +978,7 @@ namespace BC.Integration.APICalls
                         allocateTo = "21";
                     }
                 }
-                else
+                else if(store == "herschel_ca")
                 {
                     if (CA_East_Enabled && CA_West_Enabled)
                     {
@@ -954,11 +993,15 @@ namespace BC.Integration.APICalls
                         allocateTo = "11";
                     }
                 }
+                else
+                {
+                    allocateTo = GetDefaultSiteForStore(store);
+                }
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("BC_API_Calls: Exception occured trying to post allocate site based on state and country");
-                throw new Exception("An exception occured trying to retrieve correct site allocation. BC.Integration.Utility.BC_API_Calls.AllocateBasedOnState. The combination of the state:" + state + " and country:" + country + "was not found.", ex);
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to post allocate site based on state and store name");
+                throw new Exception("An exception occured trying to retrieve correct site allocation. BC.Integration.Utility.BC_API_Calls.AllocateBasedOnState. state:" + state + " for store name:" + store + "was not found.", ex);
 
             }
             finally
