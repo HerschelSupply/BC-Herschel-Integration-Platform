@@ -315,7 +315,7 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 //Populate the message header
                 order.Process = processName;
                 order.Header.OrderNumber = salesOrder.Header.OrderNumber;
-                order.Header.SiteId = Convert.ToInt32(APIcalls.AllocateBasedOnState(salesOrder.Shipments.Shipment.ShippingAddress.Region, salesOrder.Shipments.Shipment.ShippingAddress.Country));
+                order.Header.SiteId = Convert.ToInt32(APIcalls.AllocateBasedOnState(salesOrder.Header.StoreCode, salesOrder.Shipments.Shipment.ShippingAddress.Region));
                 order.Header.CurrencyId = salesOrder.Header.Currency;
                 order.Header.TaxRegistrationNumber = "";               
                 order.Header.CarrierCode = APIcalls.GetShipper(APIcalls.ConvertShipmenMethodForEast(order.Header.SiteId.ToString(), salesOrder.Shipments.Shipment.ShipmentCarrier));
