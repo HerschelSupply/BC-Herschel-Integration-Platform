@@ -186,6 +186,8 @@ namespace BC.Integration.Canonical.SaleChannelOrder.Exchange
 
         private string customerPONumField;
 
+        private string storeCode;
+
         //private string shipAddIdField;
 
         //private string shipCustNameField;
@@ -265,6 +267,19 @@ namespace BC.Integration.Canonical.SaleChannelOrder.Exchange
             set
             {
                 this.orderNumberField = value;
+            }
+        }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string StoreCode
+        {
+            get
+            {
+                return this.storeCode;
+            }
+            set
+            {
+                this.storeCode = value;
             }
         }
 
