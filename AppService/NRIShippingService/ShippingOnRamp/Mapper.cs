@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BC.Integration.Canonical.NRI;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using BC.Integration.APICalls;
 
 namespace BC.Integration.AppService.NriShippingOnRampService
 {
@@ -18,7 +19,7 @@ namespace BC.Integration.AppService.NriShippingOnRampService
         {
             //Add code to convert message to the canonical format
             CanonicalShippingConfirmation canonical = new CanonicalShippingConfirmation();
-
+            API_Calls APIcalls = new API_Calls();
 
             canonical.PickNum = "1166";//message.PickNumber;
             canonical.OrderStatus = "Shipped";
@@ -101,7 +102,8 @@ namespace BC.Integration.AppService.NriShippingOnRampService
                 canonical.Bol = message.ShipmentPin;
             }
 
-            canonical.Customer = message.ShipToCustomerCode;
+            //canonical.Customer = message.ShipToCustomerCode;
+            //canonical.Customer = APIcalls.GetCustomerCountryFromSite(canonical.Site);
             canonical.ShipmentType = message.CarrierServiceName;
 
             if (message.ClientCarrierCode == null || message.ClientCarrierCode == "")

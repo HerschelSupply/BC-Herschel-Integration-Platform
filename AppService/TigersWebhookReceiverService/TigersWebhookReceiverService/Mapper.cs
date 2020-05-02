@@ -1,6 +1,7 @@
 ﻿using BC.Integration.Canonical.Tigers;
 using System;
 using System.Collections.Generic;
+using BC.Integration.APICalls;
 
 namespace BC.Integration.AppService.TigersWebhookReceiverService
 {
@@ -15,6 +16,7 @@ namespace BC.Integration.AppService.TigersWebhookReceiverService
         {
             //Add code to convert message to the canonical format
             CanonicalShippingConfirmation canonical = new CanonicalShippingConfirmation();
+            API_Calls APIcalls = new API_Calls();
 
             canonical.OrderStatus = "Shipped";
 
@@ -83,7 +85,8 @@ namespace BC.Integration.AppService.TigersWebhookReceiverService
                 canonical.Bol = message.trackingRef;
             }
 
-            canonical.Customer = message.consigneeRef;
+            //canonical.Customer = message.consigneeRef;
+            canonical.Customer = APIcalls.GetCustomerCountryFromSite(canonical.Site);
             canonical.ShipmentType = message.deliveryCompany;
 
             if  (string.IsNullOrEmpty(message.deliveryService))

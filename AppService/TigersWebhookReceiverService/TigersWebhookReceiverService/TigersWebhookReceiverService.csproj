@@ -43,6 +43,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BC.Integration.APICalls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.APICalls.dll</HintPath>
+    </Reference>
     <Reference Include="BC.Integration.CanonicalShippingConfirmation.Tigers">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.CanonicalShippingConfirmation.Tigers.dll</HintPath>
     </Reference>
