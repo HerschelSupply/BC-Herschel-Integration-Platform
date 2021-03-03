@@ -307,7 +307,7 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                 canonicalReturn.Process = processName;
                 canonicalReturn.Header = new ReturnHeader();
                 canonicalReturn.Header.OrderNumber = returnMessage.Header.OrderNumber;
-                canonicalReturn.Header.SiteId = Convert.ToInt32(APIcalls.AllocateBasedOnState(returnMessage.Shipments.Shipment.ShippingAddress.Region, returnMessage.Shipments.Shipment.ShippingAddress.Country));
+                canonicalReturn.Header.SiteId = Convert.ToInt32(APIcalls.AllocateBasedOnState(returnMessage.Header.StoreCode, returnMessage.Shipments.Shipment.ShippingAddress.Region));
                 canonicalReturn.Header.CurrencyId = returnMessage.Header.Currency;
                 canonicalReturn.Header.TaxRegistrationNumber = "";
                 canonicalReturn.Header.CarrierCode = APIcalls.GetShipper(APIcalls.ConvertShipmenMethodForEast(canonicalReturn.Header.SiteId.ToString(), returnMessage.Shipments.Shipment.ShipmentCarrier));
@@ -544,14 +544,17 @@ namespace BC.Integration.AppService.EpReturnOnRampServiceBC
                   {
                       instrumentation.WriteMsgToFile(tracing_path, null, fileText, Path.GetFileName(file), null);
                   }
-                  //Remove file after processing
-                  File.Delete(file);
+                  
 
                   if (!String.IsNullOrEmpty(fileText))
                   {
                       ProcessXML(fileText, activationGuid);
+                     
                   }
-              }          
+
+                //Remove file after processing
+                File.Delete(file);
+            }          
 
 
             }

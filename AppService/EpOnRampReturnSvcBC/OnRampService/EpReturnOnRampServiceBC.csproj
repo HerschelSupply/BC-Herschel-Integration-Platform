@@ -70,6 +70,9 @@
     <Reference Include="BC.Integration.Utility.InstrumentationDB">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.InstrumentationDB.dll</HintPath>
     </Reference>
+    <Reference Include="BC.Integration.Utility.SqsPublishService">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.SqsPublishService.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,7 +84,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\0.DLL Bin\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\0.DLL Bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Security" />
