@@ -294,12 +294,12 @@ namespace BC.Integration.APICalls
 
                     var jObj = JObject.Parse(reader.ReadToEnd());
                     // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
+                   /* JArray errors = (JArray)jObj.SelectToken("Errors");
 
-                    if (errors.HasValues)
+                    if (errors != null && errors.HasValues)
                     {
                         throw new BlueCherryException("The UPC  was not found. Style: " + style + " Color: " + color + " Size: " + size + ". BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC");
-                    }
+                    }*/
 
                     JArray data = (JArray)jObj.SelectToken("data");
                     upc = data[0].SelectToken("upc").ToString();
@@ -313,6 +313,18 @@ namespace BC.Integration.APICalls
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the UPC value from BlueCherry");
               
                 throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC. ", ex);
+            }
+            catch (WebException ex)
+            {
+                string details = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                     details = reader.ReadToEnd();
+                   
+                }
+
+                throw new Exception("An exception occured trying to get the UPC value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetUPC.Error Details:"+ details +" Style: " + style + " Color: " + color + " Size: " + size + " URI:" + uri, ex);
             }
             catch (Exception e)
             {
@@ -357,10 +369,10 @@ namespace BC.Integration.APICalls
 
                     var jObj = JObject.Parse(reader.ReadToEnd());
                     // validates if there are any errors in the "Error Array".
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
+                    /*JArray errors = (JArray)jObj.SelectToken("Errors");
                     string errorDesc = "";
 
-                    if (errors.HasValues)
+                    if (errors != null && errors.HasValues)
                     {
                         foreach (var item in errors)
                         {
@@ -375,16 +387,16 @@ namespace BC.Integration.APICalls
                             }
                         }
 
-                    }
+                    } else */
 
-                    else if (jObj.SelectToken("data") != null)
+                    if (jObj.SelectToken("data") != null)
                     {
-                        //JArray data = (JArray)jObj.SelectToken("data");
+                        JArray data = (JArray)jObj.SelectToken("data");
 
-                        //if (data.HasValues)
-                        //{
+                        if (data.HasValues)
+                        {
                         exists = true;
-                        //}
+                        }
 
                     }
                 }
@@ -394,6 +406,41 @@ namespace BC.Integration.APICalls
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to validate if an order exists in BlueCherry");
                 //  instrumentation.LogGeneralException("An exception occured trying to validate if an order exists in BlueCherry BC.Integration.Utility.BC_API_Calls.OrderExists. ", ex);
                 throw new Exception("An exception occured trying to validate if an order exists in BlueCherry BC.Integration.Utility.BC_API_Calls.OrderExists. ", ex);
+
+            }
+            catch (WebException ex)
+            {
+                string errorDesc = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    var jObj = JObject.Parse(reader.ReadToEnd());
+                    // validates if there are any errors in the "Error Array".
+                    JArray errors = (JArray)jObj.SelectToken("errors");
+                    
+
+                    if (errors != null && errors.HasValues)
+                    {
+                        foreach (var item in errors)
+                        {
+                            if (item.SelectToken("errorMessage").ToString() == "No Data Found")
+                            {
+                                exists = false;
+                            }
+                            else
+                            {
+                                errorDesc += item.SelectToken("errorMessage").ToString() + Environment.NewLine;
+                          
+                            }
+                        }
+
+                    }
+                }
+
+                if (string.IsNullOrEmpty(errorDesc) == false)
+                {
+                    throw new Exception("An exception occured trying to validate if an order exists in BlueCherry BC.Integration.Utility.BC_API_Calls.OrderExists.Error Details:" + errorDesc + " The PO Num is " + po_num + "and the URI is " + uri, ex);
+                }
 
             }
             catch (Exception e)
@@ -439,9 +486,9 @@ namespace BC.Integration.APICalls
 
                     var jObj = JObject.Parse(reader.ReadToEnd());
                     // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
+                    /*JArray errors = (JArray)jObj.SelectToken("Errors");
 
-                    if (errors.HasValues)
+                    if (errors !=null && errors.HasValues)
                     {
                         string errorDesc="";
                         //return "";
@@ -450,7 +497,7 @@ namespace BC.Integration.APICalls
                             errorDesc += error.Value<string>("ErrorMessage") + " ";
                         }
                         throw new BlueCherryException("ErrorMessage:" + errorDesc + " Ship_name: " + ship_name + ". BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper");
-                    }
+                    }*/
 
                     JArray data = (JArray)jObj.SelectToken("data");
                     shipper = data[0].SelectToken("shipper").ToString();
@@ -462,6 +509,18 @@ namespace BC.Integration.APICalls
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the Shipper value from BlueCherry");
                 throw new Exception("An exception occured trying to get the Shipper value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper. ", ex);
+            }
+            catch (WebException ex)
+            {
+                string details = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    details = reader.ReadToEnd();
+
+                }
+
+                throw new Exception("An exception occured trying to get the Shipper value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetShipper.Error Details: "+ details+" The Shipper name is " + ship_name + " and the URI is " + uri, ex);
             }
             catch (Exception e)
             {
@@ -504,9 +563,9 @@ namespace BC.Integration.APICalls
 
                     var jObj = JObject.Parse(reader.ReadToEnd());
                     // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
+                   /* JArray errors = (JArray)jObj.SelectToken("Errors");
 
-                    if (errors.HasValues)
+                    if (errors != null && errors.HasValues)
                     {
                         string errorDesc = "";
                         foreach (JToken error in errors)
@@ -514,7 +573,7 @@ namespace BC.Integration.APICalls
                             errorDesc += error.Value<string>("ErrorMessage") + " ";
                         }
                         throw new BlueCherryException("ErrorMessage: " + errorDesc + " BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation");
-                    }
+                    }*/
 
                     data = jObj.SelectToken("data").ToString();
 
@@ -526,6 +585,18 @@ namespace BC.Integration.APICalls
             {
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the inventory by location value from BlueCherry.");
                throw new Exception("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation. ", ex);
+            }
+            catch (WebException ex)
+            {
+                string details = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    details = reader.ReadToEnd();
+
+                }
+
+                throw new Exception("An exception occured trying to get the inventory by location from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCutSoldByLocation.Error details: "+details+" The SiteId is " + siteId + " and the URI is " + uri, ex);
             }
             catch (Exception e)
             {
@@ -568,9 +639,9 @@ namespace BC.Integration.APICalls
 
                     var jObj = JObject.Parse(reader.ReadToEnd());
                     // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
+                    /*JArray errors = (JArray)jObj.SelectToken("Errors");
 
-                    if (errors.HasValues)
+                    if (errors != null && errors.HasValues)
                     {
                         string errorDesc = "";
                         foreach (JToken error in errors)
@@ -578,7 +649,7 @@ namespace BC.Integration.APICalls
                             errorDesc += error.Value<string>("ErrorMessage") + " ";
                         }
                         throw new BlueCherryException("ErrorMessage:"+ errorDesc+" Location: " + site + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite");
-                    }
+                    }*/
 
                     JArray data = (JArray)jObj.SelectToken("data");
                     customer = data[0].SelectToken("customer").ToString();
@@ -588,8 +659,16 @@ namespace BC.Integration.APICalls
             }
             catch (WebException ex)
             {
+                string details = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    details = reader.ReadToEnd();
+
+                }
+
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer value from BlueCherry");
-                throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. ", ex);
+                throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerFromSite. Error details: "+details, ex);
             }
             catch (Exception e)
             {
@@ -631,9 +710,9 @@ namespace BC.Integration.APICalls
 
                     var jObj = JObject.Parse(reader.ReadToEnd());
                     // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
+                    /*JArray errors = (JArray)jObj.SelectToken("Errors");
 
-                    if (errors.HasValues)
+                    if (errors != null && errors.HasValues)
                     {
                         string errorDesc = "";
                         foreach (JToken error in errors)
@@ -642,7 +721,7 @@ namespace BC.Integration.APICalls
                         }
                         throw new BlueCherryException("ErrorMessage:" + errorDesc + " Location: " + site + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite");
                     }
-
+                    */
                     JArray data = (JArray)jObj.SelectToken("data");
                     country = data[0].SelectToken("country").ToString().Trim();
 
@@ -651,8 +730,16 @@ namespace BC.Integration.APICalls
             }
             catch (WebException ex)
             {
+                string details = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    details = reader.ReadToEnd();
+
+                }
+
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the customer's country from BlueCherry");
-                throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite. ", ex);
+                throw new Exception("An exception occured trying to get the Customer value from BlueCherry BC.Integration.Utility.BC_API_Calls.GetCustomerCountryFromSite. Error details: "+details, ex);
             }
             catch (Exception e)
             {
@@ -691,9 +778,9 @@ namespace BC.Integration.APICalls
 
                     var jObj = JObject.Parse(reader.ReadToEnd());
                     // validates if there are any errors in the "Error Array". HTTP Response of 200-OK
-                    JArray errors = (JArray)jObj.SelectToken("Errors");
+                    /*JArray errors = (JArray)jObj.SelectToken("Errors");
 
-                    if (errors.HasValues)
+                    if (errors != null && errors.HasValues)
                     {
                         string errorDesc = "";
                         foreach (JToken error in errors)
@@ -701,7 +788,7 @@ namespace BC.Integration.APICalls
                             errorDesc += error.Value<string>("ErrorMessage") + " ";
                         }
                         throw new BlueCherryException("ErrorMessage:"+ errorDesc +" Order Number: " + poNumber + " . BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder");
-                    }
+                    }*/
 
                     JArray data = (JArray)jObj.SelectToken("data");
                     invoiceNumber = data[0].SelectToken("inv_num").ToString();
@@ -712,8 +799,16 @@ namespace BC.Integration.APICalls
             }
             catch (WebException ex)
             {
+                string details = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    details = reader.ReadToEnd();
+
+                }
+
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to get the invoice number from BlueCherry");
-               throw new Exception("An exception occured trying to get the invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. ", ex);
+                throw new Exception("An exception occured trying to get the invoice number from BlueCherry BC.Integration.Utility.BC_API_Calls.GetInvoiceNumberFromOrder. Error details: "+details, ex);
             }
             catch (Exception e)
             {
@@ -1085,9 +1180,9 @@ namespace BC.Integration.APICalls
                     responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
                     var jObj = JObject.Parse(responseString);
-                    string errorDesc = "";
+                    /*string errorDesc = "";
                     
-                    if(jObj.SelectToken("Errors").HasValues)
+                    if(jObj.SelectToken("Errors") != null && jObj.SelectToken("Errors").HasValues)
                     {
                         JArray errors = (JArray)jObj.SelectToken("Errors");
                         foreach (var item in errors)
@@ -1097,10 +1192,10 @@ namespace BC.Integration.APICalls
                             throw new BlueCherryException(errorDesc + " PO Number: " + po_num);
                         
                         
-                    }
-                    else if(jObj.SelectToken("Message").HasValues)
+                    }*/
+                     if(jObj.SelectToken("message").HasValues)
                     {
-                        JArray messages = (JArray)jObj.SelectToken("Message");
+                        JArray messages = (JArray)jObj.SelectToken("message");
 
                             if (messages.First.SelectToken("message").ToString().Contains("could not be processed due to errors."))
                             {
@@ -1117,6 +1212,19 @@ namespace BC.Integration.APICalls
                     instrumentation.LogGeneralException("Exception occured in BlueCherry BC.Integration.Utility.BC_API_Calls.Post. DocumentId:" + po_num + " JSON: "+json, ex);
                     throw new Exception("An exception occured trying to post the " + type + " into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.", ex);
 
+                }
+                catch (WebException ex)
+                {
+                    string details = "";
+                    using (var stream = ex.Response.GetResponseStream())
+                    using (var reader = new StreamReader(stream))
+                    {
+                        details = reader.ReadToEnd();
+
+                    }
+
+                    Trace.WriteLine("BC_API_Calls: Exception occured trying to post the " + type + "  into BlueCherry");
+                    throw new Exception("An exception occured trying to post the " + type + " into BlueCherry BC.Integration.Utility.BC_API_Calls.Post.Error details: "+details+" The PO Num. is " + po_num + " and the URI is " + url, ex);
                 }
                 catch (Exception e)
                 {
@@ -1192,17 +1300,17 @@ namespace BC.Integration.APICalls
                 var jObj = JObject.Parse(responseString);
 
                 // validates if there are any errors 
-                JArray errors = (JArray)jObj.SelectToken("Errors");
+                /*JArray errors = (JArray)jObj.SelectToken("Errors");
                 string errorDesc = "";
                 
-                if (errors.HasValues)
+                if (errors!=null && errors.HasValues)
                 {
                     foreach (var item in errors)
                     {
                         errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
                     }
                     throw new BlueCherryException(errorDesc + " Pick Number: " + pick_num);
-                }
+                }*/
             }
             catch (BlueCherryException ex)
             {
@@ -1210,6 +1318,19 @@ namespace BC.Integration.APICalls
                 instrumentation.LogGeneralException("Exception occured in BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation. PickNum:" + pick_num + " JSON: " + json, ex);
                 throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.", ex);
 
+            }
+            catch (WebException ex)
+            {
+                string details = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    details = reader.ReadToEnd();
+
+                }
+
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to post a shipment confirmation into BlueCherry");
+                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostShipmentConfirmation.Error details: "+details+" The Pick num is " + pick_num + " and the URI is " + url, ex);
             }
             catch (Exception e)
             {
@@ -1283,17 +1404,17 @@ namespace BC.Integration.APICalls
                 var jObj = JObject.Parse(responseString);
 
                 // validates if there are any errors 
-                JArray errors = (JArray)jObj.SelectToken("Errors");
+                /*JArray errors = (JArray)jObj.SelectToken("Errors");
                 string errorDesc = "";
                 
-                if (errors.HasValues)
+                if (errors != null && errors.HasValues)
                 {
                     foreach (var item in errors)
                     {
                         errorDesc += item.SelectToken("ErrorMessage").ToString() + Environment.NewLine;
                     }
                     throw new BlueCherryException(errorDesc);
-                }
+                }*/
                 
             }
             catch (BlueCherryException ex)
@@ -1301,6 +1422,19 @@ namespace BC.Integration.APICalls
                 Trace.WriteLine("BC_API_Calls: Exception occured trying to post a return into BlueCherry");
                 throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostReturn.", ex);
 
+            }
+            catch (WebException ex)
+            {
+                string details = "";
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    details = reader.ReadToEnd();
+
+                }
+
+                Trace.WriteLine("BC_API_Calls: Exception occured trying to post a return into BlueCherry");
+                throw new Exception("An exception occured trying to post an order into BlueCherry BC.Integration.Utility.BC_API_Calls.PostReturn.Error details: "+details+" The Reference num is " + ref_num + " and the URI is " + url, ex);
             }
             catch (Exception e)
             {
