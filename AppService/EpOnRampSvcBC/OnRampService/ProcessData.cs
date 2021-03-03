@@ -614,12 +614,13 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 {
                     instrumentation.WriteMsgToFile(tracing_path, null, fileText, Path.GetFileName(file), null);
                 }
-                //Remove file after processing
-                File.Delete(file);
+               
 
                 if (!String.IsNullOrEmpty(fileText))
                 {
                     ProcessXML(fileText, activationGuid);
+                    //Remove file after processing
+                    File.Delete(file);
                 }
             }          
 
