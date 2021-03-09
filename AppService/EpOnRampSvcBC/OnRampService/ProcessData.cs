@@ -619,9 +619,11 @@ namespace BC.Integration.AppService.EpOnRampServiceBC
                 if (!String.IsNullOrEmpty(fileText))
                 {
                     ProcessXML(fileText, activationGuid);
-                    //Remove file after processing
-                    File.Delete(file);
+                    
                 }
+
+                //Remove file after processing
+                File.Delete(file);
             }          
 
            
