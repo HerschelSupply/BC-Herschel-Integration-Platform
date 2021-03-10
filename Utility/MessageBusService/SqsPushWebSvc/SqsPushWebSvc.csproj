@@ -56,6 +56,9 @@
     <Reference Include="BC.Integration.Utilities">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="BC.Integration.Utility.InstrumentationDB">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.InstrumentationDB.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\0.DLL Bin\Microsoft.Practices.ServiceLocation.dll</HintPath>

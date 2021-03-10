@@ -43,11 +43,15 @@
     <Reference Include="AWSSDK.SQS, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.SQS.3.3.2.7\lib\net45\AWSSDK.SQS.dll</HintPath>
     </Reference>
-    <Reference Include="BC.Integration.Interfaces">
+    <Reference Include="BC.Integration.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="BC.Integration.Utilities">
       <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="BC.Integration.Utility.CentralConfiguration">
+      <HintPath>..\..\..\0.DLL Bin\BC.Integration.Utility.CentralConfiguration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
