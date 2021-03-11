@@ -41,6 +41,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Apache.NMS">
+      <HintPath>..\..\..\0.DLL Bin\Apache.NMS.dll</HintPath>
+    </Reference>
+    <Reference Include="Apache.NMS.ActiveMQ">
+      <HintPath>..\..\..\0.DLL Bin\Apache.NMS.ActiveMQ.dll</HintPath>
+    </Reference>
     <Reference Include="BC.Integration.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcedabc31c4978dc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BC Herschel Integration Platform\0.DLL Bin\BC.Integration.Interfaces.dll</HintPath>

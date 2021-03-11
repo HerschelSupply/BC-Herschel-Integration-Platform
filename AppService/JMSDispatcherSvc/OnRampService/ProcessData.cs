@@ -10,6 +10,8 @@ using System.Xml;
 using System.IO;
 using BC.Integration.AppService.DispatcherSvcOnRamp;
 using System.Security.AccessControl;
+using Apache.NMS;
+using Apache.NMS.Util;
 
 namespace BC.Integration.AppService.JMSDispatcherSvc
 {
@@ -67,6 +69,8 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
         private string archiveFolderPath = "";
         private string process = "";
         private string activationGuid_ = "";
+        private string sourceUrl = "";
+        private string queueName = "";
 
         #endregion
 
@@ -107,6 +111,9 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
             topic = Utilities.GetConfigurationValue(configuration, "Topic");
             queueUrl = Utilities.GetConfigurationValue(configuration, "QueueUrl");
             process = Utilities.GetConfigurationValue(configuration, "ProcessName");
+
+            sourceUrl = Utilities.GetConfigurationValue(configuration, "SourceUrl");
+            queueName = Utilities.GetConfigurationValue(configuration, "QueueName");
 
             prefix = process + ": ";
 
@@ -168,7 +175,75 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                         success = ProcessFiles(pickupFileFolderPath);
                     }
                     else
-                    {
+                    { // get the file from the queue
+
+                        Trace.WriteLineIf(tracingEnabled, tracingPrefix + "Get messages from ActiveMQ ( " + queueName + " )...");
+                        Uri connecturi = new Uri(sourceUrl);
+                        IConnectionFactory factory = new Apache.NMS.ActiveMQ.ConnectionFactory(connecturi);
+                        IConnection connection = factory.CreateConnection();
+                        ISession session = connection.CreateSession();
+                        IDestination destination = SessionUtil.GetDestination(session, queueName);
+
+                        XmlDocument doc = null;
+                        string orderNumber = "";
+                        try
+                        {
+                            
+                            using (IMessageConsumer consumer = session.CreateConsumer(destination))
+                            {
+                                connection.Start();
+                                // int msgcounter = 1;
+                                // Consume a message
+                                // create a file to put it in
+                                
+                                ITextMessage JMSmessage;
+
+                                // the following puts the message into a file
+                                while (((JMSmessage = consumer.Receive(TimeSpan.FromMilliseconds(2000)) as ITextMessage) != null)) // && (msgcounter <= 10) )
+                                {
+                                    doc = new XmlDocument();
+                                    //Create the XmlDocument.
+                                    doc.LoadXml(JMSmessage.Text.ToString());
+
+                                    XmlNodeList elemList = doc.GetElementsByTagName("OrderNumber");
+                                    orderNumber = elemList[0].InnerXml;
+
+                                    
+
+                                    string fullFileName = pickupFileFolderPath.Replace("#ProcessName#", processName) + "\\" +orderNumber+"_"+ DateTime.Now.ToString("yyyyMMddHHmmssfff")+".xml";
+                                    System.IO.File.WriteAllText(@fullFileName, JMSmessage.Text);
+                                    //msgcounter++;
+
+                                }
+
+                                consumer.Dispose();
+
+                            }
+
+
+                            success = ProcessFiles(pickupFileFolderPath);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            if (doc != null)
+                            {
+                                string fullFileName = exceptionMessageFolderPath.Replace("#ProcessName#", processName) + "\\JMS_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".xml";
+                                System.IO.File.WriteAllText(@fullFileName, ex.Message + doc.InnerXml);
+                            }
+
+                            instrumentation.LogNotification(processName, serviceId, new Guid(activationGuid_), "JMS", "JMS",orderNumber );
+
+                            throw new Exception(tracingPrefix + "Error occurred in the BC.Integration.AppService.JMSDispatcherSvc.ProcessData.Execute method, when reading the message from the ActiveMQ. Exception message: " + ex.Message, ex);
+                        }
+                        finally
+                        {
+                            session.Close();
+                            session.Dispose();
+                            destination.Dispose();
+                            connection.Close();
+                            connection.Dispose();
+                        }
 
                     }
 
@@ -177,7 +252,7 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
                 {
                     Trace.WriteLine(prefix + "An exception was raised when calling the BC.Integration.AppService.JMSDispatcherSvc.Process.ProcessData method. Exception message: " + ex.Message);
                     instrumentation.LogGeneralException("An exception was raised when calling the BC.Integration.AppService.JMSDispatcherSvc.Process.ProcessData method.", ex);
-                }
+   }
                 finally
                 {
                     instrumentation.FlushActivity();
@@ -253,10 +328,10 @@ namespace BC.Integration.AppService.JMSDispatcherSvc
             {
                 success = false;
                 //Since the implementation of DI raised the exception we can not log the exception using the instrumentation component.
-                Trace.WriteLine(prefix + "An exception was raised when calling the BC.Integration.AppService.JMSDispatcherSvc2.Process.MoveFileTo method" +
+                Trace.WriteLine(prefix + "An exception was raised when calling the BC.Integration.AppService.JMSDispatcherSvc.Process.MoveFileTo method" +
                     "trying to resolve the Unity DI components. Exception message: " + ex.Message);
                 instrumentation.LogGeneralException(prefix +
-                    "An exception was raised when calling the BC.Integration.AppService.JMSDispatcherSvc2.Process.MoveFileTo method", ex);
+                    "An exception was raised when calling the BC.Integration.AppService.JMSDispatcherSvc.Process.MoveFileTo method", ex);
                 instrumentation.LogNotification(processName, serviceId, new Guid(activationGuid_), "JMS", "JMS", filename);
 
             }
